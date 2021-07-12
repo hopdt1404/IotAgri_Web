@@ -18,6 +18,9 @@ $config = [
   <title>{{ config('app.name') }}</title>
 
   <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+  <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+  <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+  <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
 </head>
 <body>
   <div id="app"></div>
