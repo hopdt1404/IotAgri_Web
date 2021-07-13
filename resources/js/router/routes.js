@@ -27,6 +27,11 @@ export default [
     name: 'farm',
     component: page('farm')
   },
+  {
+    path: 'device',
+    name: 'device',
+    component: page('device')
+  },
 
   { path: '*', component: page('errors/404.vue') }
 ]

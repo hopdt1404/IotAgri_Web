@@ -10,6 +10,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\FarmAPIController;
+use App\Http\Controllers\API\DeviceAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
     Route::resource('farm', FarmAPIController::class);
+    Route::resource('device', DeviceAPIController::class);
 });
 
 Route::middleware('guest:sanctum')->group(function () {

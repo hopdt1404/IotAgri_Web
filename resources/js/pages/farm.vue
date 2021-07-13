@@ -22,7 +22,7 @@
           </template>
         </b-table>
       </div>
-      <div class="overflow-auto">
+      <div class="overflow-auto" v-if="rows > 0">
         <b-pagination
         v-model="currentPage"
         :total-rows="rows"
