@@ -36,19 +36,16 @@
 
     <div>
 
-      <Modal
-        v-model="modal"
-        title="Form Info"
-        ok-text="Save"
-        @on-ok="save($event)"
-        cancel-text="Cancel">
+      <vs-popup name="form-info"
+                :active.sync="modal"
+                title="Form Info">
         <div class="dialog-content">
           <div class="dialog-item">
-            <b-row>
-              <b-col cols="12">
+            <vs-row>
+              <vs-col cols="12">
                 <label class="input-title" for="name">{{ $t('name') }}</label>
-              </b-col>
-              <b-col cols="12">
+              </vs-col>
+              <vs-col cols="12">
                 <Input id="name"
                        v-model="name"
                        clearable
@@ -57,47 +54,50 @@
                        show-word-limit
                        placeholder="Enter something..."
                        />
-              </b-col>
-            </b-row>
+              </vs-col>
+            </vs-row>
           </div>
           <div class="dialog-item">
-            <b-row>
-              <b-col class="" cols="12">
+            <vs-row>
+              <vs-col class="" cols="12">
                 <label class="input-title" for="area">{{ $t('area') }}</label>
-              </b-col>
-              <b-col cols="12">
+              </vs-col>
+              <vs-col cols="12">
                 <Input id="area"
                        v-model="area"
                        type="number"
                        placeholder="Enter something..."/>
-              </b-col>
-            </b-row>
+              </vs-col>
+            </vs-row>
           </div>
           <div class="dialog-item">
-            <b-row>
-              <b-col class="" cols="12">
+            <vs-row>
+              <vs-col class="" cols="12">
                 <label class="input-title" for="location">{{ $t('location') }}</label>
-              </b-col>
-              <b-col cols="12">
+              </vs-col>
+              <vs-col cols="12">
                 <b-form-select id="location" v-model="location" :options="null"></b-form-select>
-              </b-col>
-            </b-row>
+              </vs-col>
+            </vs-row>
           </div>
           <div class="dialog-item">
-            <b-row>
-              <b-col cols="12">
+            <vs-row>
+              <vs-col cols="12">
                 <label class="input-title"> {{ $t('farm_type') }} </label>
-              </b-col>
-              <b-col cols="12">
+              </vs-col>
+              <vs-col cols="12">
                 <b-form-select v-model="farm_type" :options="null"></b-form-select>
-              </b-col>
-            </b-row>
+              </vs-col>
+            </vs-row>
           </div>
-
+          <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
+            <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+            <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
+          </vs-row>
         </div>
 
 
-      </Modal>
+      </vs-popup>
 
     </div>
 
@@ -107,7 +107,6 @@
 </template>
 
 <script>
-// import ButtonComponent from './../components/Button'
 
 export default {
 
@@ -188,14 +187,14 @@ export default {
       let response = await this.$store.dispatch(dispatch,params);
       if (response.status === 200) {
         this.resetForm()
-        console.log(response)
         this.$Notice.success({title: 'Success', desc: response.data.message})
         await this.getFarm()
+        this.modal = !this.modal
       } else {
-        console.log('response')
-        console.log(response)
         this.$Notice.error({title: 'Error', desc: response})
-        // event.preventDefault();
+        document.getElementById("modal-form").addEventListener("click", function(event){
+          event.preventDefault()
+        });
       }
 
     },
@@ -226,9 +225,9 @@ export default {
       let params = {
         id : record.FarmID
       }
-      let reponse = await this.$store.dispatch('farm/getFarmDetail', params)
-      if (reponse.status === 200) {
-        let data = reponse.data.data;
+      let response = await this.$store.dispatch('farm/getFarmDetail', params)
+      if (response.status === 200) {
+        let data = response.data.data;
         this.id = data.FarmID
         this.name = data.name
         this.farm_type = data.FarmTypeID
@@ -236,6 +235,10 @@ export default {
         this.area = data.Area
       }
 
+    },
+    cancel() {
+      this.resetForm();
+      this.modal = !this.modal
     }
   }
 
