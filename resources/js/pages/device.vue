@@ -79,7 +79,11 @@
             <label class="input-title" for="status">{{ $t('status') }}</label>
           </vs-col>
           <vs-col cols="12">
-            <b-form-select id="status" v-model="status" :options="null"></b-form-select>
+              <b-form-radio-group v-model="status">
+                <b-form-radio value="1">Activate</b-form-radio>
+                <b-form-radio value="2">Deactivate</b-form-radio>
+                <b-form-radio value="-1">Trouble</b-form-radio>
+              </b-form-radio-group>
           </vs-col>
         </vs-row>
       </div>
@@ -100,11 +104,12 @@ export default {
       name: '',
       device_type: '',
       plot_type: '',
-      status: '',
+      status: 1,
       listDevice: [],
       currentPage: 1,
       perPage: 10,
       rows: 0,
+      modal: false,
       columnsShow: [
         {
           label: 'Name',
@@ -158,6 +163,28 @@ export default {
         this.rows = 0
       }
     },
+    showModal() {
+      this.modal = true
+    },
+    resetForm () {
+      if (this.id) {
+        this.id = null
+      }
+      this.plot_type = ''
+      this.name = ''
+      this.status = 1
+      this.device_type = ''
+    },
+    cancel() {
+      this.resetForm();
+      this.modal = !this.modal
+    },
+    async myRowClickHandler(record, index) {
+
+    },
+    async save() {
+
+    }
   }
 }
 </script>
