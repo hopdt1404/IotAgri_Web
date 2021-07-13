@@ -6,21 +6,30 @@
           <Button type="info" @click="showModal">{{ $t('add-button')}}</Button>
         </div>
       </div>
-      <div class="table-content">
-        <b-table :fields="columnsShow"
-                 :items="listFarm"
-                 @row-clicked="myRowClickHandler">
+      <div class="table-content mt-3">
+        <b-table id="table-data"
+                :fields="columnsShow"
+                 :items="listFarm" outlined
+                 @row-clicked="myRowClickHandler"
+                 :current-page="currentPage"
+                 :per-page="perPage">
 
-          <template #cell(created_at)="data">
+          <template #cell(created_at)="data" class="width-15">
               {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
-
           </template>
           <template #cell(updated_at)="data">
             {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
           </template>
         </b-table>
       </div>
-      <div class="pagination">
+      <div class="overflow-auto">
+        <b-pagination
+        v-model="currentPage"
+        :total-rows="rows"
+        :per-page="perPage"
+        aria-controls="my-table"
+        align="center"
+        ></b-pagination>
       </div>
 
     </div>
@@ -111,18 +120,24 @@ export default {
       farm_type: '',
       modal: false,
       listFarm: [],
+      currentPage: 1,
+      perPage: 10,
+      rows: 0,
       columnsShow: [
         {
           label: 'Name',
-          key: 'name'
+          key: 'name',
+          sortable: true
         },
         {
           label: 'Area',
-          key: 'Area'
+          key: 'Area',
+          sortable: true
         },
         {
           label: 'Farm type',
-          key: 'FarmTypeID'
+          key: 'FarmTypeID',
+          sortable: true
         },
         {
           label: 'Location',
@@ -130,15 +145,18 @@ export default {
         },
         {
           label: 'Created at',
-          key: 'created_at'
+          key: 'created_at',
+          sortable: true
         },
         {
           label: 'Updated at',
-          key: 'updated_at'
+          key: 'updated_at',
+          sortable: true
         },
         {
           label: 'Status',
-          key: 'Status'
+          key: 'Status',
+          sortable: true
         },
       ]
     }
@@ -197,8 +215,10 @@ export default {
       let response = await this.$store.dispatch('farm/getFarm')
       if (response.status === 200) {
         this.listFarm = response.data.data
+        this.rows = this.listFarm.length
       } else {
         this.listFarm = []
+        this.rows = 0
       }
     },
     async myRowClickHandler(record, index) {
