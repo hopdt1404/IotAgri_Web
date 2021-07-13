@@ -17,5 +17,15 @@ export const actions = {
     } catch (e) {
       return e
     }
+  },
+  async getFarmDetail({ commit }, payload) {
+    try {
+      if (payload.id != 0) {
+        const data = await axios.get('/api/farm/' + payload.id )
+        return data
+      }
+    } catch (e) {
+
+    }
   }
 }

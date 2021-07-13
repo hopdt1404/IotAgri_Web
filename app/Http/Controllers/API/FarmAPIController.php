@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Models\Farm;
 use App\Http\Requests\API\CreateFarmAPIRequest;
@@ -24,12 +25,17 @@ class FarmAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        $farm = $this->model->where(
-            ['UserID' => $user->id]
-        )->get();
-        Log::info('FarmAPIController');
-        return $this->sendResponse($farm, 'FarmAPIController');
+        try {
+            $user = $request->user();
+            $farm = $this->model->where(
+                ['UserID' => $user->id]
+            )->get();
+            return $this->sendResponse($farm, 'FarmAPIController');
+        } catch (\Exception $ex) {
+            Log::error('FarmAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -73,9 +79,20 @@ class FarmAPIController extends AppBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        try {
+            $user = $request->user();
+            $data = $this->model->where([
+                'FarmID' => $id,
+                'UserID' => $user->id
+            ])->first();
+            return $this->sendResponse($data, 'Get farm detail success');
+        } catch (\Exception $ex) {
+            Log::error('FarmAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**

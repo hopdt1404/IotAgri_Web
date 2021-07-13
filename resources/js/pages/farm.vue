@@ -7,8 +7,12 @@
         </div>
       </div>
       <div class="table-content">
-        <b-table :fields="columnsShow" :items="listFarm">
-          <template #cell(created_at)="data">
+        <b-table :fields="columnsShow"
+                 :items="listFarm"
+                 @row-clicked="myRowClickHandler"
+        >
+
+          <template #cell(created_at)="data" sortable="true">
               {{ moment(data['created_at']).format("YYYY-MM-DD HH:mm:ss")}}
           </template>
         </b-table>
@@ -25,8 +29,7 @@
         title="Form Info"
         ok-text="Save"
         @on-ok="save($event)"
-        cancel-text="Cancel"
-        @on-cancel="cancel()">
+        cancel-text="Cancel">
         <div class="dialog-content">
           <div class="dialog-item">
             <b-row>
@@ -192,6 +195,21 @@ export default {
       } else {
         this.listFarm = []
       }
+    },
+    async myRowClickHandler(record, index) {
+      this.showModal()
+      let params = {
+        id : record.FarmID
+      }
+      let reponse = await this.$store.dispatch('farm/getFarmDetail', params)
+      if (reponse.status === 200) {
+        let data = reponse.data.data;
+        this.id = data.FarmID
+        this.name = data.name
+        this.farm_type = data.FarmTypeID
+        this.location = data.LocateID
+      }
+
     }
   }
 
