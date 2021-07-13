@@ -115,7 +115,22 @@ class FarmAPIController extends AppBaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = $request->user();
+        $data = $request->all();
+        $data['updated_at'] = Carbon::now();
+        try {
+            $data['updated_user'] = $user->name;
+            $this->model->where([
+                'FarmID' => $id,
+                'UserID' => $user->id
+            ])->update($data);
+            return $this->sendSuccess('Success update data');
+        } catch (Exception $ex) {
+            Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
     /**

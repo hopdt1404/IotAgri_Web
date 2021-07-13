@@ -9,11 +9,14 @@
       <div class="table-content">
         <b-table :fields="columnsShow"
                  :items="listFarm"
-                 @row-clicked="myRowClickHandler"
-        >
+                 @row-clicked="myRowClickHandler">
 
-          <template #cell(created_at)="data" sortable="true">
-              {{ moment(data['created_at']).format("YYYY-MM-DD HH:mm:ss")}}
+          <template #cell(created_at)="data">
+              {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
+
+          </template>
+          <template #cell(updated_at)="data">
+            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
           </template>
         </b-table>
       </div>
@@ -135,7 +138,7 @@ export default {
         },
         {
           label: 'Status',
-          key: 'status'
+          key: 'Status'
         },
       ]
     }
@@ -159,6 +162,7 @@ export default {
       }
       let dispatch
       if (this.id) {
+        params.FarmID = this.id
         dispatch = 'farm/update'
       } else {
         dispatch = 'farm/create'
@@ -168,6 +172,7 @@ export default {
         this.resetForm()
         console.log(response)
         this.$Notice.success({title: 'Success', desc: response.data.message})
+        await this.getFarm()
       } else {
         console.log('response')
         console.log(response)
@@ -208,6 +213,7 @@ export default {
         this.name = data.name
         this.farm_type = data.FarmTypeID
         this.location = data.LocateID
+        this.area = data.Area
       }
 
     }

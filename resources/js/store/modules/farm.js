@@ -25,7 +25,17 @@ export const actions = {
         return data
       }
     } catch (e) {
-
+      return e
+    }
+  },
+  async update({ commit }, payload) {
+    try {
+      if (payload.FarmID != 0) {
+        const data = await axios.put('/api/farm/' + payload.FarmID, payload)
+        return data
+      }
+    } catch (e) {
+      return e
     }
   }
 }

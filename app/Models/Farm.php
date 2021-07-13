@@ -9,4 +9,7 @@ class Farm extends Model
 {
     use HasFactory;
     protected $table = 'Farms';
+
+    protected $casts = [
+    ];
 }
