@@ -47,5 +47,6 @@
   "list_farm": "List farm",
   "created_at": "Created at",
   "updated_at": "Updated at",
-  "status": "Status"
+  "status": "Status",
+  "no_data": "No data"
 }

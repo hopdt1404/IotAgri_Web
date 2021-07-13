@@ -33,6 +33,9 @@ import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css' //Vuesax styles
 Vue.use(Vuesax)
 
+import moment from 'moment'
+Vue.prototype.moment = moment
+
 /* eslint-disable no-new */
 new Vue({
   i18n,

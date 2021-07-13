@@ -7,46 +7,13 @@
         </div>
       </div>
       <div class="table-content">
-        <vs-table :data="listFarm">
-          <template slot="header">
-            <h4>{{ $t('list_farm')}} </h4>
+        <b-table :fields="columnsShow" :items="listFarm">
+          <template #cell(created_at)="data">
+              {{ moment(data['created_at']).format("YYYY-MM-DD HH:mm:ss")}}
           </template>
-          <template slot="thead">
-            <vs-th>
-              {{ $t('name')}}
-            </vs-th>
-            <vs-th>
-              {{ $t('area')}}
-            </vs-th>
-            <vs-th>
-              {{ $t('farm_type')}}
-            </vs-th>
-            <vs-th>
-              {{ $t('created_at')}}
-            </vs-th>
-            <vs-th>
-              {{ $t('update_at')}}
-            </vs-th>
-            <vs-th>
-              {{ $t('status')}}
-            </vs-th>
-
-          </template>
-
-        </vs-table>
-
+        </b-table>
       </div>
       <div class="pagination">
-<!--        <paginate-->
-<!--          :page-count="20"-->
-<!--          :page-range="3"-->
-<!--          :margin-pages="2"-->
-<!--          :click-handler="clickCallback"-->
-<!--          :prev-text="'Prev'"-->
-<!--          :next-text="'Next'"-->
-<!--          :container-class="'pagination'"-->
-<!--          :page-class="'page-item'">-->
-<!--        </paginate>-->
       </div>
 
     </div>
@@ -140,31 +107,31 @@ export default {
       listFarm: [],
       columnsShow: [
         {
-          title: 'Name',
+          label: 'Name',
           key: 'name'
         },
         {
-          title: 'Area',
+          label: 'Area',
           key: 'Area'
         },
         {
-          title: 'Farm type',
+          label: 'Farm type',
           key: 'FarmTypeID'
         },
         {
-          title: 'Location',
+          label: 'Location',
           key: 'LocateID'
         },
         {
-          title: 'Created at',
+          label: 'Created at',
           key: 'created_at'
         },
         {
-          title: 'Updated at',
+          label: 'Updated at',
           key: 'updated_at'
         },
         {
-          title: 'Status',
+          label: 'Status',
           key: 'status'
         },
       ]
