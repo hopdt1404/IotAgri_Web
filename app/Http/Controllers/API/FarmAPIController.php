@@ -113,7 +113,7 @@ class FarmAPIController extends AppBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateFarmAPIRequest $request, $id)
     {
         $user = $request->user();
         $data = $request->all();

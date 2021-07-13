@@ -12,10 +12,9 @@ export const actions = {
 
   async create({ commit }, payload) {
     try {
-      const data = await axios.post('/api/farm', payload)
-      return data
+     return await axios.post('/api/farm', payload)
     } catch (e) {
-      return e
+      return JSON.stringify(e)
     }
   },
   async getFarmDetail({ commit }, payload) {

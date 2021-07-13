@@ -144,6 +144,11 @@ export default {
           key: 'LocateID'
         },
         {
+          label: 'Status',
+          key: 'Status',
+          sortable: true
+        },
+        {
           label: 'Created at',
           key: 'created_at',
           sortable: true
@@ -153,11 +158,7 @@ export default {
           key: 'updated_at',
           sortable: true
         },
-        {
-          label: 'Status',
-          key: 'Status',
-          sortable: true
-        },
+
       ]
     }
   },
@@ -170,7 +171,7 @@ export default {
     this.getFarm()
   },
   methods: {
-    async save(event) {
+    async save() {
 
       let params = {
         LocateID: this.location,
@@ -192,7 +193,7 @@ export default {
         await this.getFarm()
         this.modal = !this.modal
       } else {
-        this.$Notice.error({title: 'Error', desc: response})
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
 
     },

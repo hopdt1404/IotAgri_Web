@@ -48,5 +48,7 @@
   "created_at": "Created at",
   "updated_at": "Updated at",
   "status": "Status",
-  "no_data": "No data"
+  "no_data": "No data",
+  "device_type": "Device type",
+  "plot_type": "Plot type"
 }
