@@ -7,15 +7,33 @@
         </div>
       </div>
       <div class="table-content">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-          </thead>
-        </table>
+        <vs-table :data="listFarm">
+          <template slot="header">
+            <h4>{{ $t('list_farm')}} </h4>
+          </template>
+          <template slot="thead">
+            <vs-th>
+              {{ $t('name')}}
+            </vs-th>
+            <vs-th>
+              {{ $t('area')}}
+            </vs-th>
+            <vs-th>
+              {{ $t('farm_type')}}
+            </vs-th>
+            <vs-th>
+              {{ $t('created_at')}}
+            </vs-th>
+            <vs-th>
+              {{ $t('update_at')}}
+            </vs-th>
+            <vs-th>
+              {{ $t('status')}}
+            </vs-th>
+
+          </template>
+
+        </vs-table>
 
       </div>
       <div class="pagination">
@@ -39,7 +57,7 @@
         v-model="modal"
         title="Form Info"
         ok-text="Save"
-        @on-ok="save()"
+        @on-ok="save($event)"
         cancel-text="Cancel"
         @on-cancel="cancel()">
         <div class="dialog-content">
@@ -119,6 +137,37 @@ export default {
       location: '',
       farm_type: '',
       modal: false,
+      listFarm: [],
+      columnsShow: [
+        {
+          title: 'Name',
+          key: 'name'
+        },
+        {
+          title: 'Area',
+          key: 'Area'
+        },
+        {
+          title: 'Farm type',
+          key: 'FarmTypeID'
+        },
+        {
+          title: 'Location',
+          key: 'LocateID'
+        },
+        {
+          title: 'Created at',
+          key: 'created_at'
+        },
+        {
+          title: 'Updated at',
+          key: 'updated_at'
+        },
+        {
+          title: 'Status',
+          key: 'status'
+        },
+      ]
     }
   },
 
@@ -126,14 +175,14 @@ export default {
     // ButtonComponent
   },
 
-  async created() {
-    await this.$store.dispatch('farm/getFarm')
+  created() {
+    this.getFarm()
   },
   methods: {
-    async save() {
+    async save(event) {
 
       let params = {
-        LocationID: this.location,
+        LocateID: this.location,
         name: this.name,
         Area: this.area,
         FarmTypeId: this.farm_type
@@ -144,12 +193,38 @@ export default {
       } else {
         dispatch = 'farm/create'
       }
-      let data = await this.$store.dispatch(dispatch,{params});
-      console.log(data)
+      let response = await this.$store.dispatch(dispatch,params);
+      if (response.status === 200) {
+        this.resetForm()
+        console.log(response)
+        this.$Notice.success({title: 'Success', desc: response.data.message})
+      } else {
+        console.log('response')
+        console.log(response)
+        this.$Notice.error({title: 'Error', desc: response})
+        // event.preventDefault();
+      }
 
     },
     showModal() {
       this.modal = true
+    },
+    resetForm () {
+      if (this.id) {
+        this.id = null
+      }
+      this.location = ''
+      this.name = ''
+      this.area = ''
+      this.farm_type = ''
+    },
+    async getFarm () {
+      let response = await this.$store.dispatch('farm/getFarm')
+      if (response.status === 200) {
+        this.listFarm = response.data.data
+      } else {
+        this.listFarm = []
+      }
     }
   }
 

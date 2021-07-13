@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
+use http\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Log;
@@ -50,10 +52,19 @@ class FarmAPIController extends AppBaseController
     {
         $user = $request->user();
         $data = $request->all();
-        Log::info('$user');
-        Log::info($user);
-        Log::info('$data');
-        Log::info($data);
+        try {
+            $data['created_user'] = $user->name;
+            $data['created_at'] = Carbon::now();
+            $data['UserID'] = $user->id;
+            $this->model->insert($data);
+            return $this->sendSuccess('Success create data');
+        } catch (Exception $ex) {
+            Log::error('FarmAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
+
     }
 
     /**
