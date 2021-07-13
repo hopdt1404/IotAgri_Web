@@ -38,7 +38,8 @@
 
       <vs-popup name="form-info"
                 :active.sync="modal"
-                title="Form Info">
+                title="Form Info"
+                icon-close="x">
         <div class="dialog-content">
           <div class="dialog-item">
             <vs-row>
@@ -192,9 +193,6 @@ export default {
         this.modal = !this.modal
       } else {
         this.$Notice.error({title: 'Error', desc: response})
-        document.getElementById("modal-form").addEventListener("click", function(event){
-          event.preventDefault()
-        });
       }
 
     },
