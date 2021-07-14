@@ -89,7 +89,7 @@ class DeviceAPIController extends AppBaseController
      * @return \Illuminate\Http\Response
      */
     // Todd: Coding
-    public function update(CreateFarmAPIRequest $request, $id)
+    public function update(CreateDeviceAPIRequest $request, $id)
     {
         $user = $request->user();
         $data = $request->all();
@@ -97,15 +97,13 @@ class DeviceAPIController extends AppBaseController
         try {
             $data['updated_user'] = $user->name;
             $this->model->where([
-                'FarmID' => $id,
-                'UserID' => $user->id
+                'DeviceID' => $id,
+                'user_id' => $user->id
             ])->update($data);
             return $this->sendSuccess('Success update data');
         } catch (Exception $ex) {
-            Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('DeviceAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-
     }
 }
