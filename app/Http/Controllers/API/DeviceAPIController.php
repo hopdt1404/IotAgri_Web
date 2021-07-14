@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
+use http\Exception;
 use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\API\CreateDeviceAPIRequest;
 
 class DeviceAPIController extends AppBaseController
 {
@@ -33,6 +36,76 @@ class DeviceAPIController extends AppBaseController
             Log::error('DeviceAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CreateDeviceAPIRequest $request)
+    {
+        $user = $request->user();
+        $data = $request->all();
+        try {
+            $data['created_user'] = $user->name;
+            $data['created_at'] = Carbon::now();
+            $data['user_id'] = $user->id;
+            $this->model->insert($data);
+            return $this->sendSuccess('Success create data');
+        } catch (Exception $ex) {
+            Log::error('DeviceAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        try {
+            $user = $request->user();
+            $data = $this->model->where([
+                'DeviceID' => $id,
+                'user_id' => $user->id
+            ])->first();
+            return $this->sendResponse($data, 'Get device detail success');
+        } catch (\Exception $ex) {
+            Log::error('DeviceAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    // Todd: Coding
+    public function update(CreateFarmAPIRequest $request, $id)
+    {
+        $user = $request->user();
+        $data = $request->all();
+        $data['updated_at'] = Carbon::now();
+        try {
+            $data['updated_user'] = $user->name;
+            $this->model->where([
+                'FarmID' => $id,
+                'UserID' => $user->id
+            ])->update($data);
+            return $this->sendSuccess('Success update data');
+        } catch (Exception $ex) {
+            Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
 
     }
 }

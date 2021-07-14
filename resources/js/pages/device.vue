@@ -174,16 +174,52 @@ export default {
       this.name = ''
       this.status = 1
       this.device_type = ''
+      console.log('reset')
     },
     cancel() {
       this.resetForm();
       this.modal = !this.modal
     },
     async myRowClickHandler(record, index) {
-
+      this.showModal()
+      let params = {
+        id : record.DeviceID
+      }
+      let response = await this.$store.dispatch('device/getDeviceDetail', params)
+      if (response.status === 200) {
+        let data = response.data.data
+        this.id = data.DeviceID
+        this.name = data.DeviceName
+        this.device_type = data.DeviceTypeID
+        this.status = data.Status
+        this.plot_type = data.PlotId
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     },
     async save() {
-
+      let params = {
+        DeviceName: this.name,
+        DeviceTypeID: this.device_type,
+        Status: this.status,
+        PlotId: this.plot_type
+      }
+      let dispatch
+      if (this.id) {
+        params.DeviceID = this.id
+        dispatch = 'device/update'
+      } else {
+        dispatch = 'device/create'
+      }
+      let response = await this.$store.dispatch(dispatch, params)
+      if (response.status === 200) {
+        this.$Notice.success({title: 'Success', desc: response.data.message})
+        await this.getDevice()
+        this.modal = !this.modal
+        this.resetForm()
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     }
   }
 }
