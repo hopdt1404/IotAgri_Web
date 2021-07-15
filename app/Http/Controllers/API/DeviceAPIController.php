@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\API\CreateDeviceAPIRequest;
 
@@ -28,9 +29,14 @@ class DeviceAPIController extends AppBaseController
     {
         try {
             $user = $request->user();
-            $device = $this->model->where(
-                ['user_id' => $user->id]
-            )->get();
+//            $device = $this->model->where(
+//                ['user_id' => $user->id]
+//            )->get();
+            $device = DB::table('Devices')
+                ->leftJoin('DeviceTypes', 'Devices.DeviceTypeID',
+                    '=', 'DeviceTypes.DeviceTypeID')
+                ->where(['user_id' => $user->id])
+                ->select('Devices.*', 'DeviceTypes.DeviceType')->get();
             return $this->sendResponse($device, 'Get device success');
         } catch (\Exception $ex) {
             Log::error('DeviceAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());

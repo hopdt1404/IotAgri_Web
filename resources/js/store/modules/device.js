@@ -32,5 +32,12 @@ export const actions = {
     } catch (e) {
       return e
     }
-  }
+  },
+  async getDeviceType({ commit }, payload) {
+    try {
+      return await axios.get('/api/device_type')
+    } catch (e) {
+      return e
+    }
+  },
 }

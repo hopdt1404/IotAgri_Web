@@ -59,7 +59,7 @@
             <label class="input-title" for="device_type">{{ $t('device_type') }}</label>
           </vs-col>
           <vs-col cols="12">
-            <b-form-select id="device_type" v-model="device_type" :options="null"></b-form-select>
+            <b-form-select id="device_type" v-model="device_type" :options="listDeviceType"></b-form-select>
           </vs-col>
         </vs-row>
       </div>
@@ -118,7 +118,7 @@ export default {
         },
         {
           label: 'Device Type',
-          key: 'DeviceTypeID',
+          key: 'DeviceType',
           sortable: true
         },
         {
@@ -142,7 +142,8 @@ export default {
           sortable: true
         },
 
-      ]
+      ],
+      listDeviceType: [],
     }
   },
   components: {
@@ -150,6 +151,7 @@ export default {
   },
   created() {
     this.getDevice()
+    this.getDeviceType()
   },
   methods: {
 
@@ -220,6 +222,22 @@ export default {
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
+    },
+    async getDeviceType() {
+      let response = await this.$store.dispatch('device/getDeviceType')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listDeviceType = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.DeviceTypeID
+          elementResult.text = element.DeviceType
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listDeviceType = []
+      }
+
     }
   }
 }

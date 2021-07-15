@@ -20,8 +20,7 @@ export const actions = {
   async getFarmDetail({ commit }, payload) {
     try {
       if (payload.id != 0) {
-        const data = await axios.get('/api/farm/' + payload.id )
-        return data
+        return await axios.get('/api/farm/' + payload.id )
       }
     } catch (e) {
       return e
@@ -30,8 +29,7 @@ export const actions = {
   async update({ commit }, payload) {
     try {
       if (payload.FarmID != 0) {
-        const data = await axios.put('/api/farm/' + payload.FarmID, payload)
-        return data
+        return await axios.put('/api/farm/' + payload.FarmID, payload)
       }
     } catch (e) {
       return e
@@ -39,8 +37,7 @@ export const actions = {
   },
   async getFarmType({ commit }, payload) {
     try {
-      const data = await axios.get('/api/farm_type')
-      return data
+      return await axios.get('/api/farm_type')
     } catch (e) {
       return e
     }
