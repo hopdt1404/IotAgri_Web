@@ -7,6 +7,7 @@ use http\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Farm;
 use App\Http\Requests\API\CreateFarmAPIRequest;
@@ -27,9 +28,12 @@ class FarmAPIController extends AppBaseController
     {
         try {
             $user = $request->user();
-            $farm = $this->model->where(
-                ['UserID' => $user->id]
-            )->get();
+            $farm = DB::table('Farms')
+                ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
+                    '=', 'FarmTypes.FarmTypeID')
+                ->where(['UserID' => $user->id])
+                ->select('Farms.*','FarmTypes.FarmType')
+                ->get();
             return $this->sendResponse($farm, 'FarmAPIController');
         } catch (\Exception $ex) {
             Log::error('FarmAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
@@ -129,7 +133,6 @@ class FarmAPIController extends AppBaseController
             Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
 
     }
 

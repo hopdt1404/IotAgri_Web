@@ -87,7 +87,7 @@
                 <label class="input-title"> {{ $t('farm_type') }} </label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select v-model="farm_type" :options="null"></b-form-select>
+                <b-form-select v-model="farm_type" :options="listFarmType"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -120,6 +120,7 @@ export default {
       farm_type: '',
       modal: false,
       listFarm: [],
+      listFarmType: [],
       currentPage: 1,
       perPage: 10,
       rows: 0,
@@ -136,7 +137,7 @@ export default {
         },
         {
           label: 'Farm type',
-          key: 'FarmTypeID',
+          key: 'FarmType',
           sortable: true
         },
         {
@@ -169,6 +170,7 @@ export default {
 
   created() {
     this.getFarm()
+    this.getFarmType()
   },
   methods: {
     async save() {
@@ -217,6 +219,7 @@ export default {
       } else {
         this.listFarm = []
         this.rows = 0
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
     },
     async myRowClickHandler(record, index) {
@@ -232,12 +235,30 @@ export default {
         this.farm_type = data.FarmTypeID
         this.location = data.LocateID
         this.area = data.Area
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
 
     },
     cancel() {
       this.resetForm();
       this.modal = !this.modal
+    },
+    async getFarmType() {
+      let response = await this.$store.dispatch('farm/getFarmType')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listFarmType = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.FarmTypeID
+          elementResult.text = element.FarmType
+          return elementResult
+        })
+
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listFarmType = []
+      }
     }
   }
 
