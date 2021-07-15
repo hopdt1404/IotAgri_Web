@@ -36,5 +36,13 @@ export const actions = {
     } catch (e) {
       return e
     }
-  }
+  },
+  async getFarmType({ commit }, payload) {
+    try {
+      const data = await axios.get('/api/farm_type')
+      return data
+    } catch (e) {
+      return e
+    }
+  },
 }
