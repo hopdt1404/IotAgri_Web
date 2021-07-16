@@ -37,6 +37,11 @@ export default [
     name: 'plant',
     component: page('plant')
   },
+  // {
+  //   path: 'plant-state',
+  //   name: 'plant-state',
+  //   component: page('plantState')
+  // },
 
   { path: '*', component: page('errors/404.vue') }
 ]

@@ -62,5 +62,8 @@
   "row_spacing": "Row spacing",
   "tree_spacing": "Tree spacing",
   "soil_type": "Soil type",
-  "info": "Info"
+  "info": "Info",
+  "plant_info": "Plant info",
+  "plant_state": "Plant state",
+  "detail": "Detail"
 }

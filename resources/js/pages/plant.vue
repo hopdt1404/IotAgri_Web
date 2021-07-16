@@ -10,7 +10,6 @@
         <b-table id="table-data"
                  :fields="columnsShow"
                  :items="listPlant" outlined
-                 @row-clicked="myRowClickHandler"
                  :current-page="currentPage"
                  :per-page="perPage">
           <template #cell(created_at)="data" class="width-15">
@@ -19,6 +18,16 @@
           <template #cell(updated_at)="data">
             {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
           </template>
+          <template #cell(actions)="data">
+            <b-button variant="primary"
+              @click="myRowClickHandler(data['item'])">
+              {{ $t('detail') }}
+            </b-button>
+            <b-button variant="warning">
+              {{ $t('plant_state') }}
+            </b-button>
+          </template>
+
         </b-table>
       </div>
 
@@ -292,10 +301,14 @@ export default {
           key: 'created_at',
           sortable: true
         },
+        // {
+        //   label: 'Updated at',
+        //   key: 'updated_at',
+        //   sortable: true
+        // },
         {
-          label: 'Updated at',
-          key: 'updated_at',
-          sortable: true
+          label: 'Actions',
+          key: 'actions'
         },
 
       ],
