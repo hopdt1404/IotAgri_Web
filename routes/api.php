@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\FarmAPIController;
 use App\Http\Controllers\API\DeviceAPIController;
 use App\Http\Controllers\API\FarmTypeAPIController;
+use App\Http\Controllers\API\DeviceTypeAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('farm', FarmAPIController::class);
     Route::resource('device', DeviceAPIController::class);
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
+    Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
 });
 
 Route::middleware('guest:sanctum')->group(function () {

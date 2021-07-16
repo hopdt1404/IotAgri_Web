@@ -16,6 +16,13 @@
               </i>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" active-class="active" :to="{name: 'plant'}">
+              <i class="fa fa-first-order" aria-hidden="true">
+                {{ $t('plant_nav')}}
+              </i>
+            </router-link>
+          </li>
         </ul>
     </nav>
   </div>

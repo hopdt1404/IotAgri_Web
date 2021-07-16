@@ -50,5 +50,6 @@
   "status": "Status",
   "no_data": "No data",
   "device_type": "Device type",
-  "plot_type": "Plot type"
+  "plot_type": "Plot type",
+  "plant_nav": "Plant"
 }
