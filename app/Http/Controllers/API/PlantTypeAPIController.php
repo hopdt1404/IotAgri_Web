@@ -8,7 +8,7 @@ use App\Models\PlantType;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class PlantTypeAPIController extends Controller
+class PlantTypeAPIController extends AppBaseController
 {
     protected $model;
     public function __construct(PlantType $plantType)
@@ -24,9 +24,11 @@ class PlantTypeAPIController extends Controller
     {
         try {
             $data = $this->model->get();
-            return $this->sendResponse($data, 'Get device_type success');
+            return $this->sendResponse($data, 'Get plant_type success');
         } catch (\Exception $ex) {
             Log::error('PlantTypeAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }}
+    }
+
+}

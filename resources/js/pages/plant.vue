@@ -260,6 +260,7 @@ export default {
       listSoilType: [],
       currentPage: 1,
       perPage: 10,
+      rows: 0,
       columnsShow: [
         {
           label: 'Name',
@@ -278,12 +279,12 @@ export default {
         },
         {
           label: 'Plant type',
-          key: 'plant_type_id',
+          key: 'plant_type',
           sortable: true
         },
         {
           label: 'Soil type',
-          key: 'soil_type_id',
+          key: 'soil_type',
           sortable: true
         },
         {
@@ -302,8 +303,40 @@ export default {
   },
   created() {
     this.getPlant()
+    this.getPlantType()
+    this.getSoilType()
   },
   methods: {
+    async getPlantType() {
+      let response = await this.$store.dispatch('plant/getPlantType')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listPlantType = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listPlantType = []
+      }
+    },
+    async getSoilType() {
+      let response = await this.$store.dispatch('plant/getSoilType')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listSoilType = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listSoilType = []
+      }
+    },
     showModal() {
       this.modal = true
     },
