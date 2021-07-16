@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             FarmTypeSeeder::class,
             DeviceTypeSeeder::class,
+            PlantTypeSeeder::class,
         ]);
     }
 }

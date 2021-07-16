@@ -51,5 +51,16 @@
   "no_data": "No data",
   "device_type": "Device type",
   "plot_type": "Plot type",
-  "plant_nav": "Plant"
+  "plant_nav": "Plant",
+  "cultivars": "Cultivars",
+  "plant_type": "Plant type",
+  "growth_period_form": "Growth period (days)",
+  "planting_time": "Planting time",
+  "plant_density": "Plant density",
+  "width_bed": "Width bed",
+  "height_bed": "Height bed",
+  "row_spacing": "Row spacing",
+  "tree_spacing": "Tree spacing",
+  "soil_type": "Soil type",
+  "info": "Info"
 }
