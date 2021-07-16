@@ -55,7 +55,7 @@ class DeviceAPIController extends AppBaseController
         $user = $request->user();
         $data = $request->all();
         try {
-            $data['created_user'] = $user->name;
+            $data['created_user'] = $user->email;
             $data['created_at'] = Carbon::now();
             $data['user_id'] = $user->id;
             $this->model->insert($data);
@@ -101,7 +101,7 @@ class DeviceAPIController extends AppBaseController
         $data = $request->all();
         $data['updated_at'] = Carbon::now();
         try {
-            $data['updated_user'] = $user->name;
+            $data['updated_user'] = $user->email;
             $this->model->where([
                 'DeviceID' => $id,
                 'user_id' => $user->id

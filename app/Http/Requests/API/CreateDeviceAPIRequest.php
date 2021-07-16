@@ -24,7 +24,7 @@ class CreateDeviceAPIRequest extends FormRequest
     public function rules()
     {
         return [
-            'DeviceName' => 'required|string|max:128',
+            'DeviceName' => 'required|string|max:50',
             'DeviceTypeID' => 'nullable|numeric',
             'Status' => 'required|numeric',
             'PlotId' => 'nullable|numeric',

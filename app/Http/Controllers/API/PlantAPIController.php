@@ -6,50 +6,35 @@ use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Plant;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\Farm;
-use App\Http\Requests\API\CreateFarmAPIRequest;
+use App\Http\Requests\API\CreatePlantAPIRequest;
 
-class FarmAPIController extends AppBaseController
+class PlantAPIController extends AppBaseController
 {
     protected $model;
-    public function __construct(Farm $farm)
+    public function __construct(Plant $plant)
     {
-        $this->model = $farm;
+        $this->model = $plant;
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
-            $user = $request->user();
-            $farm = DB::table('Farms')
-                ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
-                    '=', 'FarmTypes.FarmTypeID')
-                ->where(['UserID' => $user->id])
-                ->select('Farms.*','FarmTypes.FarmType')
-                ->get();
-            return $this->sendResponse($farm, 'FarmAPIController');
+            $plant = DB::table('plants')
+                ->orderby('created_at', 'desc')->get();
+            return $this->sendResponse($plant, 'Get plant success');
         } catch (\Exception $ex) {
-            Log::error('FarmAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('PlantAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -58,25 +43,20 @@ class FarmAPIController extends AppBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateFarmAPIRequest $request)
+    public function store(Request $request)
     {
         $user = $request->user();
         $data = $request->all();
         try {
             $data['created_user'] = $user->email;
             $data['created_at'] = Carbon::now();
-            $data['UserID'] = $user->id;
             $this->model->insert($data);
             return $this->sendSuccess('Success create data');
         } catch (Exception $ex) {
-            Log::error('FarmAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('PlantAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-
-
     }
-
     /**
      * Display the specified resource.
      *
@@ -86,30 +66,15 @@ class FarmAPIController extends AppBaseController
     public function show(Request $request, $id)
     {
         try {
-            $user = $request->user();
             $data = $this->model->where([
-                'FarmID' => $id,
-                'UserID' => $user->id
+                'id' => $id,
             ])->first();
-            return $this->sendResponse($data, 'Get farm detail success');
+            return $this->sendResponse($data, 'Get plant detail success');
         } catch (\Exception $ex) {
-            Log::error('FarmAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('PlantAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -117,7 +82,7 @@ class FarmAPIController extends AppBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateFarmAPIRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $user = $request->user();
         $data = $request->all();
@@ -125,25 +90,12 @@ class FarmAPIController extends AppBaseController
         try {
             $data['updated_user'] = $user->email;
             $this->model->where([
-                'FarmID' => $id,
-                'UserID' => $user->id
+                'id' => $id
             ])->update($data);
             return $this->sendSuccess('Success update data');
         } catch (Exception $ex) {
-            Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('PlantAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
