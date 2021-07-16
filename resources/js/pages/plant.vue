@@ -23,7 +23,8 @@
               @click="myRowClickHandler(data['item'])">
               {{ $t('detail') }}
             </b-button>
-            <b-button variant="warning">
+            <b-button variant="warning"
+              @click="plantSateHandler(data['item'])">
               {{ $t('plant_state') }}
             </b-button>
           </template>
@@ -242,6 +243,14 @@
         </vs-row>
       </vs-popup>
 
+      <vs-popup name="form-state"
+                :active.sync="modalState"
+                title="Form State"
+                icon-close="x"
+                @close="closeStatePopup()">
+
+      </vs-popup>
+
     </div>
 
   </div>
@@ -252,6 +261,8 @@ export default {
   data() {
     return {
       modal: false,
+      modalState: false,
+
       name: '',
       cultivars: '',
       plant_type_id: '',
@@ -353,6 +364,9 @@ export default {
     showModal() {
       this.modal = true
     },
+    showModalState() {
+      this.modalState = true
+    },
     async save() {
       let params = {
         name: this.name,
@@ -420,6 +434,9 @@ export default {
       this.resetForm();
       this.modal = false
     },
+    closeStatePopup() {
+      this.modalState = false
+    },
     async myRowClickHandler(record, index) {
       this.showModal()
       let params = {
@@ -445,6 +462,9 @@ export default {
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
+    },
+    async plantSateHandler() {
+      this.showModalState()
     }
   }
 }
