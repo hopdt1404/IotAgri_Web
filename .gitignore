@@ -16,3 +16,6 @@ phpunit.dusk.xml
 /public/build
 /public/mix-manifest.json
 .idea
+composer.lock
+/public/fonts/
+package-lock.json
