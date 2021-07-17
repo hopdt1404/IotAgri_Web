@@ -65,5 +65,10 @@
   "info": "Info",
   "plant_info": "Plant info",
   "plant_state": "Plant state",
-  "detail": "Detail"
+  "detail": "Detail",
+  "growth_period_state": "Growth period state",
+  "temperature": "Temperature",
+  "moisture": "Moisture",
+  "light": "Light",
+  "note": "Note"
 }

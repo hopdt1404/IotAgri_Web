@@ -16,6 +16,7 @@ use App\Http\Controllers\API\DeviceTypeAPIController;
 use App\Http\Controllers\API\SoilTypeAPIController;
 use App\Http\Controllers\API\PlantTypeAPIController;
 use App\Http\Controllers\API\PlantAPIController;
+use App\Http\Controllers\API\PlantStateInfoAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('farm', FarmAPIController::class);
     Route::resource('device', DeviceAPIController::class);
     Route::resource('plant', PlantAPIController::class);
+    Route::resource('plant-state-info', PlantStateInfoAPIController::class);
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
     Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
     Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
