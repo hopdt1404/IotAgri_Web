@@ -47,4 +47,11 @@ export const actions = {
       return e
     }
   },
+  async getPlantState({ commit }, payload) {
+    try {
+      return await axios.get('/api/plant-state')
+    } catch (e) {
+      return e
+    }
+  },
 }

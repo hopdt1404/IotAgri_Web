@@ -249,589 +249,109 @@
                 title="Form State"
                 icon-close="x"
                 @close="closeStatePopup()">
-        <div>
-          <b-card class="mt-3" header="Seed state" v-show="false">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state"
-                         v-model="growth_period_state"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature"
-                         v-model="temperature"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
+        <div class="dialog-content">
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="growth_period_state">{{ $t('plant_state')}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-select id="plant_state_id" @change="getPlantStateInfo()" v-model="plant_state_id" :options="listPlantState"></b-form-select>
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="growth_period_state">{{ $t('growth_period_state') + ' day(s)'}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="growth_period_state"
+                       v-model="growth_period_state"
+                       clearable
+                       type="number"
+                       maxlength="7"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="temperature">{{ $t('temperature') + ' (oC)'}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="temperature"
+                       v-model="temperature"
+                       clearable
+                       type="number"
+                       maxlength="15"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
 
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture"
-                         v-model="moisture"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="moisture">{{ $t('moisture') + ' (%)'}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="moisture"
+                       v-model="moisture"
+                       clearable
+                       type="number"
+                       maxlength="15"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
 
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light"
-                         v-model="light"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="light">{{ $t('light') + ''}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="light"
+                       v-model="light"
+                       clearable
+                       type="text"
+                       maxlength="255"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
 
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note"
-                    v-model="note"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="Seed state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state0">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state0"
-                         v-model="arrayGrowthPeriodState[0]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature0">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature0"
-                         v-model="arrayTemperature[0]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture0">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture0"
-                         v-model="arrayMoisture[0]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light0">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light0"
-                         v-model="arrayLight[0]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note0">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note0"
-                    v-model="arrayNote[0]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="Seedling state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state1">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state1"
-                         v-model="arrayGrowthPeriodState[1]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature1">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature1"
-                         v-model="arrayTemperature[1]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture1">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture1"
-                         v-model="arrayMoisture[1]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light1">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light1"
-                         v-model="arrayLight[1]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note1">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note1"
-                    v-model="arrayNote[1]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="Before flower state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state2">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state2"
-                         v-model="arrayGrowthPeriodState[2]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature2">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature2"
-                         v-model="arrayTemperature[2]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture2">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture2"
-                         v-model="arrayMoisture[2]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light2">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light2"
-                         v-model="arrayLight[2]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note2">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note2"
-                    v-model="arrayNote[2]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="Flower state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state3">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state3"
-                         v-model="arrayGrowthPeriodState[3]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature3">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature3"
-                         v-model="arrayTemperature[3]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture3">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture3"
-                         v-model="arrayMoisture[3]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light3">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light3"
-                         v-model="arrayLight[3]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note3">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note3"
-                    v-model="arrayNote[3]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="After flower state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state4">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state4"
-                         v-model="arrayGrowthPeriodState[4]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature4">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature4"
-                         v-model="arrayTemperature[4]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture4">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture4"
-                         v-model="arrayMoisture[4]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light4">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light4"
-                         v-model="arrayLight[4]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note4">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note4"
-                    v-model="arrayNote[4]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-          </b-card>
-          <b-card class="mt-3" header="Harvest state">
-            <div class="dialog-content">
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="growth_period_state5">{{ $t('growth_period_state') + ' day(s)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="growth_period_state5"
-                         v-model="arrayGrowthPeriodState[5]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="temperature5">{{ $t('temperature') + ' (oC)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="temperature5"
-                         v-model="arrayTemperature[5]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="moisture5">{{ $t('moisture') + ' (%)'}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="moisture5"
-                         v-model="arrayMoisture[5]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="light5">{{ $t('light') + ''}}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <Input id="light5"
-                         v-model="arrayLight[5]"
-                         clearable
-                         type="number"
-                         maxlength="7"
-                         show-word-limit
-                         placeholder="Enter something..."
-                  />
-                </vs-col>
-
-              </vs-row>
-              <vs-row>
-                <vs-col cols="12">
-                  <label class="input-title" for="note5">{{ $t('note') }}</label>
-                </vs-col>
-                <vs-col cols="12">
-                  <b-form-textarea
-                    id="note0"
-                    v-model="arrayNote[5]"
-                    placeholder="Enter something..."
-                    rows="3"
-                    max-rows="6"
-                  ></b-form-textarea>
-                </vs-col>
-
-              </vs-row>
-            </div>
-
-          </b-card>
-          <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-            <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
-            <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="cancelState">{{ $t('cancel') }}</vs-button>
-          </vs-row>
-
-
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="note">{{ $t('note') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-textarea
+                  id="note"
+                  v-model="note"
+                  placeholder="Enter something..."
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+              </vs-col>
+            </vs-row>
+          </div>
         </div>
+        <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
+        </vs-row>
       </vs-popup>
 
     </div>
@@ -845,7 +365,7 @@ export default {
     return {
       modal: false,
       modalState: false,
-
+      id: '',
       name: '',
       cultivars: '',
       plant_type_id: '',
@@ -861,6 +381,8 @@ export default {
       listPlantType: [],
       listPlant: [],
       listSoilType: [],
+      listPlantState: [],
+      plant_state_id: '',
       currentPage: 1,
       perPage: 10,
       rows: 0,
@@ -906,63 +428,95 @@ export default {
         },
 
       ],
-
+      plant_state_info_id: '',
       growth_period_state: '',
-      arrayGrowthPeriodState: new Array(6),
-      growth_period_state1: '',
-      growth_period_state2: '',
-      growth_period_state3: '',
-      growth_period_state4: '',
-      growth_period_state5: '',
-      growth_period_state6: '',
-
       temperature: '',
-      arrayTemperature: new Array(6),
-
       moisture: '',
-      arrayMoisture: new Array(6),
-
       light: '',
-      arrayLight: new Array(6),
-
       note: '',
-      arrayNote: new Array(6),
     }
   },
   created() {
     this.getPlant()
     this.getPlantType()
     this.getSoilType()
+    this.getPlantState()
   },
   methods: {
+    async getPlantState() {
+      let response = await this.$store.dispatch('plant/getPlantState')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listPlantState = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listPlantState = []
+      }
+    },
     async saveState() {
-      let params = []
-      for (let i = 0; i < 6; i++) {
-        let data = {
-          plant_state_id: i + 1,
-          plant_id: this.id,
-          growth_period_state: this.arrayGrowthPeriodState[i],
-          temperature: this.arrayTemperature[i],
-          moisture: this.arrayMoisture[i],
-          light: this.arrayLight[i],
-          note: this.arrayNote[i],
-        }
-        params.push(data);
+      let params = {
+        plant_state_id: this.plant_state_id,
+        plant_id: this.id,
+        growth_period_state: this.growth_period_state,
+        temperature: this.temperature,
+        moisture: this.moisture,
+        light: this.light,
+        note: this.note,
       }
       let dispatch
-      dispatch = 'plantStateInfo/create'
-      let response = await this.$store.dispatch(dispatch,params);
+      if (this.plant_state_info_id) {
+        params.id = this.plant_state_info_id
+        dispatch = 'plantStateInfo/update'
+      } else {
+        dispatch = 'plantStateInfo/store'
+      }
+      let response = await this.$store.dispatch(dispatch, params);
       if (response.status === 200) {
-        // this.resetForm()
         this.$Notice.success({title: 'Success', desc: response.data.message})
-        // this.modal = !this.modal
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
-
-
     },
-    cancelState() {
+    async getPlantStateInfo() {
+      let params = {
+        plant_state_id: this.plant_state_id,
+        plant_id: this.id
+      }
+      let response = await this.$store.dispatch('plantStateInfo/getPlantStateInfo', params);
+      if (response.status === 200) {
+        if (response.data.data != null) {
+          let data = response.data.data
+          this.growth_period_state = data.growth_period_state
+          this.temperature = data.temperature
+          this.moisture = data.moisture
+          this.light = data.light
+          this.note = data.note
+          this.plant_state_info_id = data.id
+        }
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
+    },
+    closeFormState() {
+      this.modalState = false
+      this.resetFromState()
+    },
+    resetFromState() {
+      if (this.plant_state_info_id) {
+        this.plant_state_info_id = ''
+      }
+      this.id = ''
+      this.plant_state_id = ''
+      this.growth_period_state = ''
+      this.temperature = ''
+      this.moisture = ''
+      this.light = ''
+      this.note = ''
 
     },
     async getPlantType() {

@@ -26,33 +26,62 @@ class PlantStateInfoAPIController extends AppBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $data = $request->all();
+        try {
+            $data = $this->model->where([
+                'plant_state_id' => $data['plant_state_id'],
+                'plant_id' => $data['plant_id']
+            ])->first();
+            return $this->sendResponse($data, 'Success get PlantStateInfo');
+        } catch (\Exception $ex) {
+            Log::error('PlantStateInfoAPIController@create:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     public function store(CreatePlantStateInfoAPIRequest $request)
     {
         $user = $request->user();
         $data = $request->all();
-        DB::beginTransaction();
         try {
-//            for ($i = 0; $i < count($data); $i++) {
-//                $data[$i]['created_at'] = Carbon::now()->format('Y-m-d h:i:s');
-//                $data[$i]['created_user'] = $user->email;
-//                $temp = PlantStateInfo::create($data[$i]);
-//                $temp->save();
-//
-////                $this->model->insert($data[$i]);
-//            }
-//            $this->model->insert($data);
-//                ->insert($data[$i]);
-//            foreach ($data as $item) {
-//                $item['created_at'] = Carbon::now();
-//                $item['created_user'] = $user->email;
-//                Log::info($item);
-//                $this->model->insert($item);
-//            }
-            DB::commit();
+            $data['created_at'] = Carbon::now();
+            $data['created_user'] = $user->email;
+            $this->model->insert($data);
             return $this->sendSuccess('Success create data');
         } catch (Exception $ex) {
-            Log::error('PlantAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
-            DB::rollBack();
+            Log::error('PlantStateInfoAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CreatePlantStateInfoAPIRequest $request, $id)
+    {
+        $user = $request->user();
+        $data = $request->all();
+        $data['updated_at'] = Carbon::now();
+        try {
+            $data['updated_user'] = $user->email;
+            $this->model->where([
+                'id' => $id,
+                'plant_state_id' => $data['plant_state_id'],
+                'plant_id' => $data['plant_id']
+            ])->update($data);
+            return $this->sendSuccess('Success update data');
+        } catch (Exception $ex) {
+            Log::error('PlantStateInfoAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

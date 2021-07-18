@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DeviceTypeSeeder::class,
             PlantTypeSeeder::class,
             SoilTypeSeeder::class,
+            PlantStateSeeder::class,
         ]);
     }
 }

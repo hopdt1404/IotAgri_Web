@@ -24,13 +24,13 @@ class CreatePlantStateInfoAPIRequest extends FormRequest
     public function rules()
     {
         return [
-            '*.plant_state_id' => 'required|numeric',
-            '*.plant_id' => 'required|numeric',
-            '*.growth_period_state' => 'nullable|numeric',
-            '*.temperature' => 'nullable|numeric',
-            '*.moisture' => 'nullable|numeric',
-            '*.light' => 'nullable|string',
-            '*.info' => 'nullable|string',
+            'plant_state_id' => 'required|numeric',
+            'plant_id' => 'required|numeric',
+            'growth_period_state' => 'nullable|numeric',
+            'temperature' => 'nullable|numeric',
+            'moisture' => 'nullable|numeric',
+            'light' => 'nullable|string',
+            'note' => 'nullable|string',
         ];
     }
 }
