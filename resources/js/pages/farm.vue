@@ -10,7 +10,6 @@
         <b-table id="table-data"
                 :fields="columnsShow"
                  :items="listFarm" outlined
-                 @row-clicked="myRowClickHandler"
                  :current-page="currentPage"
                  :per-page="perPage">
 
@@ -19,6 +18,17 @@
           </template>
           <template #cell(updated_at)="data">
             {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
+          </template>
+          <template #cell(actions)="data">
+            <b-button variant="primary"
+                      @click="myRowClickHandler(data['item'])">
+              {{ $t('detail') }}
+            </b-button>
+            <b-button variant="secondary"
+                      @click="settingFarm(data['item'])">
+              {{ $t('setting_farm') }}
+            </b-button>
+
           </template>
         </b-table>
       </div>
@@ -35,7 +45,6 @@
     </div>
 
     <div>
-
       <vs-popup name="form-info"
                 :active.sync="modal"
                 title="Form Info"
@@ -96,11 +105,40 @@
             <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
           </vs-row>
         </div>
-
-
       </vs-popup>
 
     </div>
+
+    <vs-popup name="form-state"
+              :active.sync="modalSetting"
+              title="Form Setting"
+              icon-close="x"
+              @close="closeSettingPopup()">
+      <div class="dialog-content">
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col cols="12">
+              <label class="input-title"
+                     for="deviceFarm">{{ $t('management_device') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+<!--              <i-select id="deviceFarm"-->
+<!--                      v-model="devicesSelected"-->
+<!--                      multiple name="deviceFarm"-->
+<!--                      placeholder="Select devices">-->
+<!--                <i-option v-for="item in listDeviceSetting" :value="item.value" :key="item.value">{{ item.label }}</i-option>-->
+<!--              </i-select>-->
+
+            </vs-col>
+          </vs-row>
+        </div>
+        <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveSetting" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormSetting">{{ $t('cancel') }}</vs-button>
+        </vs-row>
+      </div>
+
+    </vs-popup>
 
 
 
@@ -108,6 +146,7 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect'
 
 export default {
 
@@ -124,6 +163,9 @@ export default {
       currentPage: 1,
       perPage: 10,
       rows: 0,
+      modalSetting: false,
+      devicesSelected: [],
+      listDeviceSetting: [],
       columnsShow: [
         {
           label: 'Name',
@@ -159,13 +201,16 @@ export default {
           key: 'updated_at',
           sortable: true
         },
-
+        {
+          label: 'Actions',
+          key: 'actions'
+        },
       ]
     }
   },
 
   components: {
-    // ButtonComponent
+    Multiselect
   },
 
   created() {
@@ -174,7 +219,6 @@ export default {
   },
   methods: {
     async save() {
-
       let params = {
         LocateID: this.location,
         name: this.name,
@@ -259,7 +303,43 @@ export default {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
         this.listFarmType = []
       }
-    }
+    },
+    showModalSetting() {
+      this.modalSetting = true
+    },
+    async getListDeviceSetting() {
+      let response = await this.$store.dispatch('device/getDeviceSettingFarm')
+      if (response.status === 200) {
+          let data = response.data.data
+          this.listDeviceSetting = data.map((element) => {
+            let elementResult = {}
+            elementResult.value = element.DeviceID
+            elementResult.label = element.DeviceName
+            return elementResult
+          })
+      } else {
+        this.listDeviceSetting = []
+      }
+    },
+
+    async settingFarm(record) {
+      this.showModalSetting()
+      let params = {
+        FarmID : record.FarmID
+      }
+      await this.getListDeviceSetting()
+
+    },
+    closeSettingPopup() {
+      this.modalSetting = false
+    },
+    saveSetting() {
+
+    },
+    closeFormSetting() {
+
+    },
+
   }
 
 }

@@ -38,7 +38,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
     Route::resource('farm', FarmAPIController::class);
+
+
+    Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
     Route::resource('device', DeviceAPIController::class);
+
+
     Route::resource('plant', PlantAPIController::class);
     Route::resource('plant-state-info', PlantStateInfoAPIController::class);
     Route::resource('plant-state', PlantStateAPIController::class);

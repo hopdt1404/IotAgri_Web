@@ -40,4 +40,12 @@ export const actions = {
       return e
     }
   },
+  async getDeviceSettingFarm({ commit }, payload) {
+    try {
+      return await axios.get('/api/device/getDeviceSettingFarm')
+    } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
+      return e
+    }
+  }
 }

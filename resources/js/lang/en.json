@@ -70,5 +70,7 @@
   "temperature": "Temperature",
   "moisture": "Moisture",
   "light": "Light",
-  "note": "Note"
+  "note": "Note",
+  "setting_farm": "Setting farm",
+  "management_device": "Management devices"
 }

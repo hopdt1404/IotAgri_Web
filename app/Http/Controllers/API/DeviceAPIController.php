@@ -112,4 +112,21 @@ class DeviceAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function getDeviceSettingFarm (Request $request)
+    {
+//        $data = $request->all();
+        $user = $request->user();
+        try {
+
+             $data = $this->model->where([
+//                'FarmID' => $data['FarmId'],
+                'user_id' => $user->id,
+                'FarmId' => null
+            ])->select('DeviceID', 'DeviceName')->get();
+            return $this->sendResponse($data, 'Success get device setting farm');
+        } catch (Exception $ex) {
+            Log::error('DeviceAPIController@getDeviceSettingFarm:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
