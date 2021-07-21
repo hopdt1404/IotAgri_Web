@@ -158,13 +158,24 @@ class FarmAPIController extends AppBaseController
             $deviceIds = $data['deviceIds'];
             $plantIds = $data['plantIds'];
 
-            DB::table('Devices')
-                ->whereIn('DeviceID', $deviceIds)
-                ->update([
-                    'FarmID' => $farmId,
-                    'updated_at' => Carbon::now(),
-                    'updated_user' => $user->email
-                ]);
+            if (count($deviceIds) > 0 ) {
+                DB::table('Devices')
+                    ->whereIn('DeviceID', $deviceIds)
+                    ->update([
+                        'FarmID' => $farmId,
+                        'updated_at' => Carbon::now(),
+                        'updated_user' => $user->email
+                    ]);
+            }
+            $farmPlantInsertData = [];
+            foreach ($plantIds as $plantId) {
+                $record['FarmID'] = $farmId;
+                $record['plant_id'] = $plantId;
+                $record['created_at'] = Carbon::now();
+                $record['created_user'] = $user->email;
+                array_push($farmPlantInsertData, $record);
+            }
+            DB::table('farm_plants')->insert($farmPlantInsertData);
 
             DB::commit();
             return $this->sendSuccess('Success setting farm');
