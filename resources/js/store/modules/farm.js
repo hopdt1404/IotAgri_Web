@@ -6,6 +6,7 @@ export const actions = {
       const data = await axios.get('/api/farm')
       return data
     } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
   },
@@ -14,7 +15,8 @@ export const actions = {
     try {
      return await axios.post('/api/farm', payload)
     } catch (e) {
-      return JSON.stringify(e)
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
+      return e
     }
   },
   async getFarmDetail({ commit }, payload) {
@@ -23,6 +25,7 @@ export const actions = {
         return await axios.get('/api/farm/' + payload.id )
       }
     } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
   },
@@ -32,6 +35,7 @@ export const actions = {
         return await axios.put('/api/farm/' + payload.FarmID, payload)
       }
     } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
   },
@@ -39,7 +43,16 @@ export const actions = {
     try {
       return await axios.get('/api/farm_type')
     } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
   },
+  async setting({ commit }, payload) {
+    try {
+      return await axios.post('/api/farm/setting', payload)
+    } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
+      return e
+    }
+  }
 }

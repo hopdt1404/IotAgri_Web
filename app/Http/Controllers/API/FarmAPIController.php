@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Farm;
 use App\Http\Requests\API\CreateFarmAPIRequest;
+use App\Http\Requests\API\SettingFarmAPIRequest;
 
 class FarmAPIController extends AppBaseController
 {
@@ -145,5 +146,33 @@ class FarmAPIController extends AppBaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function setting (SettingFarmAPIRequest $request)
+    {
+        $data = $request->all();
+        $user = $request->user();
+        DB::beginTransaction();
+        try {
+            $farmId = $data['FarmID'];
+            $deviceIds = $data['deviceIds'];
+            $plantIds = $data['plantIds'];
+
+            DB::table('Devices')
+                ->whereIn('DeviceID', $deviceIds)
+                ->update([
+                    'FarmID' => $farmId,
+                    'updated_at' => Carbon::now(),
+                    'updated_user' => $user->email
+                ]);
+
+            DB::commit();
+            return $this->sendSuccess('Success setting farm');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error('FarmAPIController@setting:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

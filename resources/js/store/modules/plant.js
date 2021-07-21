@@ -61,5 +61,6 @@ export const actions = {
       this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
-  }
+  },
+
 }

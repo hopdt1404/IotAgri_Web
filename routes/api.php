@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::post('farm/setting', [FarmAPIController::class, 'setting']);
     Route::resource('farm', FarmAPIController::class);
 
 
@@ -45,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
     Route::resource('plant', PlantAPIController::class);
+
     Route::resource('plant-state-info', PlantStateInfoAPIController::class);
     Route::resource('plant-state', PlantStateAPIController::class);
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);

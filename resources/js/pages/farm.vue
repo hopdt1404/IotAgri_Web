@@ -143,13 +143,13 @@
           <vs-row>
             <vs-col cols="12">
               <label class="input-title"
-                     for="plantFarm">{{ $t('management_device') }}</label>
+                     for="plantFarm">{{ $t('management_plant') }}</label>
             </vs-col>
             <vs-col cols="12">
               <multiselect
                 id="plantFarm"
                 v-model="plantSelected"
-                :options="listFarmSetting"
+                :options="listPlantSetting"
                 :multiple="true"
                 :close-on-select="false"
                 :clear-on-select="false"
@@ -200,6 +200,7 @@ export default {
       devicesSelected: [],
       listDeviceSetting: [],
       plantSelected: [],
+      listPlantSetting: [],
       listFarmSetting: [],
       columnsShow: [
         {
@@ -355,16 +356,17 @@ export default {
     async getListPlantSetting() {
       let response = await this.$store.dispatch('plant/getPlantSettingFarm')
       if (response.status === 200) {
-        this.listFarmSetting = response.data.data
+        this.listPlantSetting = response.data.data
       } else {
-        this.listFarmSetting = []
+        this.listPlantSetting = []
       }
     },
 
     async settingFarm(record) {
       this.showModalSetting()
+      this.id = record.FarmID
       let params = {
-        FarmID : record.FarmID
+        FarmID : this.id
       }
       await this.getListDeviceSetting()
       await this.getListPlantSetting()
@@ -372,12 +374,40 @@ export default {
     closeSettingPopup() {
       this.modalSetting = false
     },
-    saveSetting() {
-
+    async saveSetting() {
+      let deviceSelectedIds = [];
+      if (this.devicesSelected.length > 0) {
+        deviceSelectedIds = this.devicesSelected.map((element) => element.id)
+      }
+      let plantSelectedIds = [];
+      if (this.plantSelected.length > 0) {
+        plantSelectedIds = this.plantSelected.map((item) => item.id)
+      }
+      let params = {
+        FarmID: this.id,
+        deviceIds: deviceSelectedIds,
+        plantIds: plantSelectedIds
+      }
+      let dispatch
+      dispatch = 'farm/setting'
+      let response = await this.$store.dispatch(dispatch, params)
+      if (response.status === 200) {
+        this.$Notice.success({title: 'Success', desc: response.data.message})
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     },
     closeFormSetting() {
-
+      this.closeSettingPopup()
+      this.resetFormSetting()
     },
+    resetFormSetting() {
+      this.id = ''
+      this.plantSelected = []
+      this.devicesSelected = []
+      this.listDeviceSetting = []
+      this.listPlantSetting = []
+    }
 
   }
 
