@@ -54,4 +54,12 @@ export const actions = {
       return e
     }
   },
+  async getPlantSettingFarm({ commit }, payload) {
+    try {
+      return await axios.get('/api/plant/getPlantSettingFarm')
+    } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
+      return e
+    }
+  }
 }

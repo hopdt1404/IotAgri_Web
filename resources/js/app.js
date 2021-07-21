@@ -36,6 +36,11 @@ Vue.use(Vuesax)
 import moment from 'moment'
 Vue.prototype.moment = moment
 
+import Multiselect from 'vue-multiselect'
+import "vue-multiselect/dist/vue-multiselect.min.css"
+Vue.component('multiselect', Multiselect)
+
+
 /* eslint-disable no-new */
 new Vue({
   i18n,

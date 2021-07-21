@@ -101,4 +101,15 @@ class PlantAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getPlantSettingFarm ()
+    {
+        try {
+            $data = $this->model->select('id', 'name')->get();
+            return $this->sendResponse($data, 'Success get plant setting farm');
+        } catch (Exception $ex) {
+            Log::error('PlantAPIController@getPlantSettingFarm:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

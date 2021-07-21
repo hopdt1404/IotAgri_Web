@@ -1,3 +1,4 @@
+<script src="../store/modules/device.js"></script>
 <template>
   <div class="content">
     <div class="container-fluid">
@@ -122,13 +123,42 @@
                      for="deviceFarm">{{ $t('management_device') }}</label>
             </vs-col>
             <vs-col cols="12">
-<!--              <i-select id="deviceFarm"-->
-<!--                      v-model="devicesSelected"-->
-<!--                      multiple name="deviceFarm"-->
-<!--                      placeholder="Select devices">-->
-<!--                <i-option v-for="item in listDeviceSetting" :value="item.value" :key="item.value">{{ item.label }}</i-option>-->
-<!--              </i-select>-->
-
+              <multiselect
+                id="deviceFarm"
+                v-model="devicesSelected"
+                :options="listDeviceSetting"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Pick some"
+                label="name"
+                track-by="id"
+                :preselect-first="true"
+              />
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col cols="12">
+              <label class="input-title"
+                     for="plantFarm">{{ $t('management_device') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+              <multiselect
+                id="plantFarm"
+                v-model="plantSelected"
+                :options="listFarmSetting"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Pick some"
+                label="name"
+                track-by="id"
+                :preselect-first="true"
+              />
             </vs-col>
           </vs-row>
         </div>
@@ -149,6 +179,9 @@
 
 
 export default {
+  components: {
+
+  },
 
   data() {
     return {
@@ -166,6 +199,8 @@ export default {
       modalSetting: false,
       devicesSelected: [],
       listDeviceSetting: [],
+      plantSelected: [],
+      listFarmSetting: [],
       columnsShow: [
         {
           label: 'Name',
@@ -207,10 +242,6 @@ export default {
         },
       ]
     }
-  },
-
-  components: {
-
   },
 
   created() {
@@ -313,12 +344,20 @@ export default {
           let data = response.data.data
           this.listDeviceSetting = data.map((element) => {
             let elementResult = {}
-            elementResult.value = element.DeviceID
-            elementResult.label = element.DeviceName
+            elementResult.id = element.DeviceID
+            elementResult.name = element.DeviceName
             return elementResult
           })
       } else {
         this.listDeviceSetting = []
+      }
+    },
+    async getListPlantSetting() {
+      let response = await this.$store.dispatch('plant/getPlantSettingFarm')
+      if (response.status === 200) {
+        this.listFarmSetting = response.data.data
+      } else {
+        this.listFarmSetting = []
       }
     },
 
@@ -328,7 +367,7 @@ export default {
         FarmID : record.FarmID
       }
       await this.getListDeviceSetting()
-
+      await this.getListPlantSetting()
     },
     closeSettingPopup() {
       this.modalSetting = false
