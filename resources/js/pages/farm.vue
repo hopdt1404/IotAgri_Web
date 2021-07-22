@@ -1,4 +1,3 @@
-<script src="../store/modules/device.js"></script>
 <template>
   <div class="content">
     <div class="container-fluid">
