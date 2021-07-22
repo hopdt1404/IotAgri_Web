@@ -22,27 +22,13 @@
               {{ $t('plant_nav')}}
             </router-link>
           </li>
-<!--          <li class="nav-item dropdown">-->
-<!--              <a class="nav-link text-dark"-->
-<!--                 href="#" role="button" data-toggle="dropdown"-->
-<!--                 aria-haspopup="true" aria-expanded="false"-->
-<!--              >-->
-<!--                <Icon type="ios-ribbon" />-->
-<!--                {{ $t('plant_nav')}}-->
-<!--              </a>-->
-<!--            <div class="dropdown-menu">-->
-<!--              <router-link :to="{name: 'plant'}" class="dropdown-item pl-3">-->
-<!--                <Icon type="md-snow" />-->
-<!--                {{ $t('plant_info') }}-->
-<!--              </router-link>-->
-<!--              <div class="dropdown-divider" />-->
-<!--              <router-link :to="{name: 'plant-state'}" class="dropdown-item pl-3">-->
-<!--                <Icon type="ios-stats" />-->
-<!--                {{ $t('plant_state') }}-->
-<!--              </router-link>-->
-<!--            </div>-->
+          <li class="nav-item">
+            <router-link class="nav-link" active-class="active" :to="{name: 'agriculture_setting'}">
+              <Icon type="md-aperture" />
+              {{ $t('agriculture_setting')}}
+            </router-link>
+          </li>
 
-<!--          </li>-->
         </ul>
       </div>
     </nav>

@@ -37,11 +37,11 @@ export default [
     name: 'plant',
     component: page('plant')
   },
-  // {
-  //   path: 'plant-state',
-  //   name: 'plant-state',
-  //   component: page('plantState')
-  // },
+  {
+    path: 'agriculture-setting',
+    name: 'agriculture_setting',
+    component: page('agricultureSetting')
+  },
 
   { path: '*', component: page('errors/404.vue') }
 ]

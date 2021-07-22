@@ -224,4 +224,22 @@ class FarmAPIController extends AppBaseController
         }
 
     }
+    public function getFarmAgricultureSetting(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $farm = DB::table('Farms')
+                ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
+                    '=', 'FarmTypes.FarmTypeID')
+                ->where(['UserID' => $user->id])
+                ->select('Farms.*','FarmTypes.FarmType')
+                ->get();
+            return $this->sendResponse($farm, 'Get farm agriculture setting success');
+        } catch (\Exception $ex) {
+            Log::error('FarmAPIController@getFarmAgricultureSetting:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    public function
 }

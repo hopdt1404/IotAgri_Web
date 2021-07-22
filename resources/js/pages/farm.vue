@@ -1,3 +1,4 @@
+<script src="../store/modules/farm.js"></script>
 <template>
   <div class="content">
     <div class="container-fluid">
