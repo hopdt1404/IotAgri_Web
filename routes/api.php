@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('device', DeviceAPIController::class);
 
     Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
+    Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
     Route::resource('plant', PlantAPIController::class);
 
     Route::resource('plant-state-info', PlantStateInfoAPIController::class);

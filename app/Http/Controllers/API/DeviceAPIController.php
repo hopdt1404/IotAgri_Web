@@ -129,6 +129,7 @@ class DeviceAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function getDeviceOfFarm (Request $request)
     {
         $data = $request->all();

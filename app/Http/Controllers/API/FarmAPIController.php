@@ -171,6 +171,7 @@ class FarmAPIController extends AppBaseController
             foreach ($plantIds as $plantId) {
                 $record['FarmID'] = $farmId;
                 $record['plant_id'] = $plantId;
+                $record['user_id'] = $user->id;
                 $record['created_at'] = Carbon::now();
                 $record['created_user'] = $user->email;
                 array_push($farmPlantInsertData, $record);

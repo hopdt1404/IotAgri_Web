@@ -1,5 +1,20 @@
 import axios from 'axios'
 
+// state
+export const state = {
+
+}
+
+// getters
+export const getters = {
+
+}
+
+// mutations
+export const mutations = {
+
+}
+
 export const actions = {
   async getPlant({ commit }, payload) {
     try {
@@ -63,4 +78,18 @@ export const actions = {
     }
   },
 
+   getPlantOfFarm({ commit }, payload) {
+    return axios.get('/api/plant/getPlantOfFarm', {params: payload}).then(
+      response => {
+        return Promise.resolve(response.data);
+      },
+      error => {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        return Promise.reject(false);
+      }
+    )
+  }
+
 }
+
+

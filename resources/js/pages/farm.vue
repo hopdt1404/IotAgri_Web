@@ -366,6 +366,7 @@ export default {
       this.showModalSetting()
       this.id = record.FarmID
       await this.getListDeviceOfFarm()
+      await this.getListPlantAssigned()
       await this.getListDeviceSetting()
       await this.getListPlantSetting()
 
@@ -384,7 +385,16 @@ export default {
       }
     },
     async getListPlantAssigned() {
-
+      let params = {
+        FarmID : this.id
+      }
+      let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
+      if (response.success) {
+        let data = response.data
+        if (data.length > 0) {
+          this.plantSelected = data
+        }
+      }
     },
     closeSettingPopup() {
       this.modalSetting = false

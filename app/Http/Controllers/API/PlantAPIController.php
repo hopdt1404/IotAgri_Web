@@ -112,4 +112,20 @@ class PlantAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function getPlantOfFarm(Request $request)
+    {
+        $data = $request->all();
+        $user = $request->user();
+        try {
+            $result = DB::table('farm_plants')->where([
+                'FarmID' => $data['FarmID'],
+                'user_id' => $user->id
+            ])->join('plants', 'plants.id', '=', 'farm_plants.plant_id')
+                ->select('farm_plants.plant_id as id', 'plants.name')->get();
+            return $this->sendResponse($result, 'Success get plant of farm');
+        } catch (Exception $ex) {
+            Log::error('PlantAPIController@getPlantOfFarm:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
