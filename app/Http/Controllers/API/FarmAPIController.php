@@ -158,6 +158,14 @@ class FarmAPIController extends AppBaseController
             $deviceIds = $data['deviceIds'];
             $plantIds = $data['plantIds'];
 
+            // unset all device of farmId
+            DB::table('Devices')->where([
+               'user_id' => $user->id,
+                'FarmID' => $farmId
+            ])->update([
+                'FarmID' => null
+            ]);
+
             if (count($deviceIds) > 0 ) {
                 DB::table('Devices')
                     ->whereIn('DeviceID', $deviceIds)
@@ -167,6 +175,13 @@ class FarmAPIController extends AppBaseController
                         'updated_user' => $user->email
                     ]);
             }
+
+            // Delete data from table farm_plant then insert new record
+            DB::table('farm_plants')->where([
+                'user_id' => $user->id,
+                'FarmID' => $farmId
+            ])->delete();
+
             $farmPlantInsertData = [];
             foreach ($plantIds as $plantId) {
                 $record['FarmID'] = $farmId;
