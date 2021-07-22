@@ -192,13 +192,6 @@ class FarmAPIController extends AppBaseController
                 'user_id' => $user->id,
                 'FarmID' => $farmId
             ])->whereIn('plant_id', $plantIds)->pluck('plant_id')->toArray();
-
-//            Log::info('$farmPlantUpdateIds');
-//            Log::info($farmPlantUpdateIds);
-
-            $farmPlantInsertIds = array_diff($plantIds, $farmPlantUpdateIds);
-//            Log::info('$farmPlantInsertIds');
-//            Log::info($farmPlantInsertIds);
             DB::table('farm_plants')
                 ->where([
                     'user_id' => $user->id,
@@ -209,6 +202,7 @@ class FarmAPIController extends AppBaseController
                     'updated_at' => Carbon::now()
                 ]);
 
+            $farmPlantInsertIds = array_diff($plantIds, $farmPlantUpdateIds);
 
             $farmPlantInsertData = [];
             foreach ($farmPlantInsertIds as $plantId) {
