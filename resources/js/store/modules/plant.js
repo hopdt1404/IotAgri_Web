@@ -84,7 +84,6 @@ export const actions = {
         return Promise.resolve(response.data);
       },
       error => {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
         return Promise.reject(false);
       }
     )

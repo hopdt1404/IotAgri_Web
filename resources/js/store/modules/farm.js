@@ -47,12 +47,14 @@ export const actions = {
       return e
     }
   },
-  async setting({ commit }, payload) {
-    try {
-      return await axios.post('/api/farm/setting', payload)
-    } catch (e) {
-      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
-      return e
-    }
+  setting({ commit }, payload) {
+    return axios.post('/api/farm/setting', payload).then(
+      response => {
+        return Promise.resolve(response.data);
+      },
+      error => {
+        return Promise.reject(false);
+      }
+    )
   }
 }

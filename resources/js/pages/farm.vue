@@ -394,6 +394,8 @@ export default {
         if (data.length > 0) {
           this.plantSelected = data
         }
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
     },
     closeSettingPopup() {
@@ -413,11 +415,10 @@ export default {
         deviceIds: deviceSelectedIds,
         plantIds: plantSelectedIds
       }
-      let dispatch
-      dispatch = 'farm/setting'
+      let dispatch = 'farm/setting'
       let response = await this.$store.dispatch(dispatch, params)
-      if (response.status === 200) {
-        this.$Notice.success({title: 'Success', desc: response.data.message})
+      if (response.success) {
+        this.$Notice.success({title: 'Success', desc: response.message})
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
