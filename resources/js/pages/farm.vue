@@ -365,11 +365,26 @@ export default {
     async settingFarm(record) {
       this.showModalSetting()
       this.id = record.FarmID
+      await this.getListDeviceOfFarm()
+      await this.getListDeviceSetting()
+      await this.getListPlantSetting()
+
+      // await t
+    },
+    async getListDeviceOfFarm() {
       let params = {
         FarmID : this.id
       }
-      await this.getListDeviceSetting()
-      await this.getListPlantSetting()
+      let response = await this.$store.dispatch('device/getDeviceOfFarm', params)
+      if (response.status === 200) {
+        let data = response.data.data
+        if (data.length > 0) {
+            this.devicesSelected = data
+        }
+      }
+    },
+    async getListPlantAssigned() {
+
     },
     closeSettingPopup() {
       this.modalSetting = false

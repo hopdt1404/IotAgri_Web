@@ -47,5 +47,13 @@ export const actions = {
       this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
       return e
     }
+  },
+  async getDeviceOfFarm({ commit }, payload) {
+    try {
+      return await axios.get('/api/device/getDeviceOfFarm', {params: payload})
+    } catch (e) {
+      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
+      return e
+    }
   }
 }
