@@ -162,8 +162,12 @@ class FarmAPIController extends AppBaseController
             DB::table('Devices')->where([
                'user_id' => $user->id,
                 'FarmID' => $farmId
-            ])->update([
-                'FarmID' => null
+            ])->whereNotIn(
+                'DeviceID', $deviceIds
+            ) ->update([
+                'FarmID' => null,
+                'updated_at' => Carbon::now(),
+                "updated_user" => $user->email
             ]);
 
             if (count($deviceIds) > 0 ) {
@@ -180,10 +184,34 @@ class FarmAPIController extends AppBaseController
             DB::table('farm_plants')->where([
                 'user_id' => $user->id,
                 'FarmID' => $farmId
-            ])->delete();
+            ])->whereNotIn('plant_id', $plantIds)
+            ->delete();
+
+            // update record exited
+            $farmPlantUpdateIds = DB::table('farm_plants')->where([
+                'user_id' => $user->id,
+                'FarmID' => $farmId
+            ])->whereIn('plant_id', $plantIds)->pluck('plant_id')->toArray();
+
+//            Log::info('$farmPlantUpdateIds');
+//            Log::info($farmPlantUpdateIds);
+
+            $farmPlantInsertIds = array_diff($plantIds, $farmPlantUpdateIds);
+//            Log::info('$farmPlantInsertIds');
+//            Log::info($farmPlantInsertIds);
+            DB::table('farm_plants')
+                ->where([
+                    'user_id' => $user->id,
+                    'FarmID' => $farmId
+                ])->whereIn('plant_id', $farmPlantUpdateIds)
+                ->update([
+                    'updated_user' => $user->email,
+                    'updated_at' => Carbon::now()
+                ]);
+
 
             $farmPlantInsertData = [];
-            foreach ($plantIds as $plantId) {
+            foreach ($farmPlantInsertIds as $plantId) {
                 $record['FarmID'] = $farmId;
                 $record['plant_id'] = $plantId;
                 $record['user_id'] = $user->id;
