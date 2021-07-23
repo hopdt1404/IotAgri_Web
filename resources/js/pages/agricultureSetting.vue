@@ -39,10 +39,10 @@ export default {
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
       if (response.success) {
-        // this.listFarm = response.data.data
-        // this.rows = this.listFarm.length
+        this.listFarmAgricultureSetting = response.data
+        this.rows = this.listFarmAgricultureSetting.length
       } else {
-        // this.listFarm = []
+        this.listFarm = []
         this.rows = 0
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
