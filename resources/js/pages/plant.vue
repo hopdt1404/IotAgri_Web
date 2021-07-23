@@ -349,7 +349,7 @@
           </div>
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
           <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
@@ -445,8 +445,8 @@ export default {
   methods: {
     async getPlantState() {
       let response = await this.$store.dispatch('plant/getPlantState')
-      if (response.status === 200) {
-        let data = response.data.data
+      if (response.success) {
+        let data = response.data
         this.listPlantState = data.map((element) => {
           let elementResult = {}
           elementResult.value = element.id
@@ -497,8 +497,11 @@ export default {
           this.light = data.light
           this.note = data.note
           this.plant_state_info_id = data.id
+        } else {
+          this.resetInfoPlantState()
         }
       } else {
+        this.resetInfoPlantState()
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
     },
@@ -512,11 +515,7 @@ export default {
       }
       this.id = ''
       this.plant_state_id = ''
-      this.growth_period_state = ''
-      this.temperature = ''
-      this.moisture = ''
-      this.light = ''
-      this.note = ''
+      this.resetInfoPlantState()
 
     },
     async getPlantType() {
@@ -623,7 +622,7 @@ export default {
       this.modal = false
     },
     closeStatePopup() {
-      this.modalState = false
+      this.closeFormState()
     },
     async myRowClickHandler(record, index) {
       this.showModal()
@@ -654,6 +653,13 @@ export default {
     async plantSateHandler(record, index) {
       this.showModalState()
       this.id = record.id
+    },
+    resetInfoPlantState() {
+      this.growth_period_state = ''
+      this.temperature = ''
+      this.moisture = ''
+      this.light = ''
+      this.note = ''
     }
   }
 }

@@ -63,11 +63,19 @@ export const actions = {
     }
   },
   async getPlantState({ commit }, payload) {
-    try {
-      return await axios.get('/api/plant-state')
-    } catch (e) {
-      return e
-    }
+    return await axios.get('/api/plant-state').then(
+      response => {
+        return Promise.resolve(response.data);
+      },
+      error => {
+        return Promise.reject(false);
+      }
+    )
+    // try {
+    //   return await axios.get('/api/plant-state')
+    // } catch (e) {
+    //   return e
+    // }
   },
   async getPlantSettingFarm({ commit }, payload) {
     try {

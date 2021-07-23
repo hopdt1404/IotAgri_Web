@@ -75,5 +75,6 @@
   "management_device": "Management devices",
   "management_plant": "Management plant",
   "agriculture_setting": "Agriculture setting",
-  "select_plant": "Select plant"
+  "select_plant": "Select plant",
+  "setting_default": "Setting default"
 }

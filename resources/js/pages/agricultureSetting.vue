@@ -136,8 +136,9 @@
           </div>
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-0" color="info" type="filled" @click="getPlantAgricultureDefault">{{ $t('setting_default') }}</vs-button>
+          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeForm">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
     </div>
@@ -164,6 +165,7 @@ export default {
       plant_state_id: '',
       growth_period: '',
       temperature: '',
+      moisture: '',
       light: '',
       note: '',
       listPlantState: [],
@@ -253,6 +255,30 @@ export default {
     },
     async getPlantStateInfo() {
 
+    },
+    async getPlantAgricultureDefault() {
+
+    },
+    closeForm() {
+
+    },
+    async save () {
+
+    },
+    async getPlantState() {
+      let response = await this.$store.dispatch('plant/getPlantState')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listPlantState = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.listPlantState = []
+      }
     }
   }
 
