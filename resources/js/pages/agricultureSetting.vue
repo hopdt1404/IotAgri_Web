@@ -37,8 +37,109 @@
               </vs-col>
             </vs-row>
           </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="growth_period_state">{{ $t('plant_state')}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-select id="plant_state_id" @change="getPlantStateInfo()" v-model="plant_state_id" :options="listPlantState"></b-form-select>
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="growth_period">{{ $t('growth_period_form') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="growth_period"
+                       v-model="growth_period"
+                       clearable
+                       type="number"
+                       maxlength="7"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="temperature">{{ $t('temperature') + ' (oC)'}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="temperature"
+                       v-model="temperature"
+                       clearable
+                       type="number"
+                       maxlength="15"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
+
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="moisture">{{ $t('moisture') + ' (%)'}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="moisture"
+                       v-model="moisture"
+                       clearable
+                       type="number"
+                       maxlength="15"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
+
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="light">{{ $t('light') + ''}}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <Input id="light"
+                       v-model="light"
+                       clearable
+                       type="text"
+                       maxlength="255"
+                       show-word-limit
+                       placeholder="Enter something..."
+                />
+              </vs-col>
+
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="note">{{ $t('note') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-textarea
+                  id="note"
+                  v-model="note"
+                  placeholder="Enter something..."
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+              </vs-col>
+            </vs-row>
+          </div>
         </div>
-      </vs-popup></div>
+        <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
+          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+        </vs-row>
+      </vs-popup>
     </div>
   </div>
 </template>
@@ -59,9 +160,15 @@ export default {
       titlePopup: '',
       modal: false,
       farm_id: '',
-      // modal: true,
       plant_id: '',
+      plant_state_id: '',
+      growth_period: '',
+      temperature: '',
+      light: '',
+      note: '',
+      listPlantState: [],
       listPlantOfFarm: [],
+
       columnsShow: [
         {
           label: 'Name',
@@ -143,6 +250,9 @@ export default {
     },
     initTitlePopup() {
       this.titlePopup = 'Form setting agriculture for '
+    },
+    async getPlantStateInfo() {
+
     }
   }
 
