@@ -58,6 +58,7 @@ export default {
       rows: 0,
       titlePopup: '',
       modal: false,
+      farm_id: '',
       // modal: true,
       plant_id: '',
       listPlantOfFarm: [],
@@ -113,22 +114,32 @@ export default {
     async myRowClickHandler(record, index) {
       this.titlePopup += record.name;
       this.showModal()
+      this.farm_id = record.FarmID
       let params = {
-        FarmID: record.FarmID
+        FarmID: this.farm_id
       }
-      let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
-      if (response.success) {
-        this.listPlantOfFarm = response.data
-      } else {
-        this.listPlantOfFarm = []
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
-      }
+      await this.getPlantOfFarm()
+
     },
     showModal() {
       this.modal = true
     },
     async getPlantOfFarm() {
-
+      let params = {
+        FarmID: this.farm_id
+      }
+      let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
+      if (response.success) {
+        this.listPlantOfFarm = response.data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.listPlantOfFarm = []
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     },
     initTitlePopup() {
       this.titlePopup = 'Form setting agriculture for '
