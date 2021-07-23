@@ -25,4 +25,5 @@ export const actions = {
         return Promise.reject(false);
       }
     )
+  }
 }
