@@ -234,13 +234,23 @@ class FarmAPIController extends AppBaseController
                     'user_id' => $user->id,
                     ['FarmID', '<>', 'null']
                 ])->groupBy('FarmID')
-                ->select('FarmID', DB::raw('COUNT(DeviceID) AS number_device'));
+                ->selectRaw('FarmID, COUNT(DeviceID) AS number_device');
+            $plant = DB::table('farm_plants')
+                ->where([
+                    'user_id' => $user->id,
+                ])->groupBy('FarmID')
+                ->selectRaw('FarmID, count(plant_id) as number_plant');
 
             $farm = DB::table('Farms')
                 ->where(['UserID' => $user->id])
-                ->select('Farms.*',)
+                ->leftJoinSub(
+                    $devices, 'Devices',
+                    'Farms.FarmID', '=', 'Devices.FarmID')
+                ->leftJoinSub($plant, 'plants',
+                'plants.FarmID', '=', 'Farms.FarmID' )
+                ->select('Farms.*','Devices.number_device', 'plants.number_plant')
                 ->get();
-            return $this->sendResponse($devices->get(), 'Get farm agriculture setting success');
+            return $this->sendResponse($farm, 'Get farm agriculture setting success');
         } catch (\Exception $ex) {
             Log::error('FarmAPIController@getFarmAgricultureSetting:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
