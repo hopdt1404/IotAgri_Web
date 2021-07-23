@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
     Route::post('farm/setting', [FarmAPIController::class, 'setting']);
-    Route::post('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
+    Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
     Route::resource('farm', FarmAPIController::class);
 
 

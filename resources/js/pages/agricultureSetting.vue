@@ -32,17 +32,17 @@ export default {
       rows: 0,
     }
   },
-  created() {
-    console.log('hello')
+   created() {
+    this.getListFarmAgricultureSetting()
   },
   methods: {
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
-      if (response.status === 200) {
-        this.listFarm = response.data.data
-        this.rows = this.listFarm.length
+      if (response.success) {
+        // this.listFarm = response.data.data
+        // this.rows = this.listFarm.length
       } else {
-        this.listFarm = []
+        // this.listFarm = []
         this.rows = 0
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
