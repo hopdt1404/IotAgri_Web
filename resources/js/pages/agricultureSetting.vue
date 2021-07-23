@@ -23,7 +23,7 @@
 
       <vs-popup name="setting-agriculture"
                 :active.sync="modal"
-                title="Form setting agriculture"
+                :title="titlePopup"
                 icon-close="x"
                 @close="closePopup()">
         <div class="dialog-content">
@@ -56,8 +56,9 @@ export default {
       currentPage: 1,
       perPage: 10,
       rows: 0,
-      // modal: false,
-      modal: true,
+      titlePopup: '',
+      modal: false,
+      // modal: true,
       plant_id: '',
       listPlantOfFarm: [],
       columnsShow: [
@@ -91,10 +92,12 @@ export default {
   },
    created() {
     this.getListFarmAgricultureSetting()
+    this.initTitlePopup()
   },
   methods: {
     closePopup() {
       this.modal = false;
+      this.initTitlePopup()
     },
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
@@ -108,13 +111,27 @@ export default {
       }
     },
     async myRowClickHandler(record, index) {
+      this.titlePopup += record.name;
       this.showModal()
+      let params = {
+        FarmID: record.FarmID
+      }
+      let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
+      if (response.success) {
+        this.listPlantOfFarm = response.data
+      } else {
+        this.listPlantOfFarm = []
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     },
     showModal() {
       this.modal = true
     },
     async getPlantOfFarm() {
 
+    },
+    initTitlePopup() {
+      this.titlePopup = 'Form setting agriculture for '
     }
   }
 
