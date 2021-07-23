@@ -3,10 +3,10 @@
     <navbar />
 
     <div class="mt-4 row">
-      <div class="col-1 custom-grid">
+      <div class="custom-grid width-13">
         <navbar-vertical />
       </div>
-      <div class="col-11 custom-grid">
+      <div class="col-10 custom-grid">
         <child />
       </div>
 
@@ -27,3 +27,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.width-13 {
+  width: 13%;
+}
+</style>

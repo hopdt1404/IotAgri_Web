@@ -1,9 +1,8 @@
-<script src="../router/routes.js"></script>
 <template>
   <div v-if="user">
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
       <div id="navbarToggler" class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto flex-column">
+        <ul class="navbar-nav flex-column margin-left-10">
           <li class="nav-item">
             <router-link class="nav-link" active-class="active" :to="{name: 'farm'}">
               <Icon type="md-grid" />
