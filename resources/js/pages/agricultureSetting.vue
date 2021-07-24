@@ -136,8 +136,8 @@
           </div>
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-          <vs-button class="square mr-0" color="info" type="filled" @click="getPlantAgricultureDefault">{{ $t('setting_default') }}</vs-button>
-          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeForm">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2" color="#e6ccff" type="filled" @click="getPlantAgricultureDefault">{{ $t('setting_default') }}</vs-button>
+          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeForm">{{ $t('cancel') }}</vs-button>
           <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
