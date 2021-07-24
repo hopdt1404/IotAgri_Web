@@ -40,6 +40,25 @@ class AgriculturePlantAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function update(CreateAgriculturePlantAPIRequest $request, $id)
+    {
+        $user = $request->user();
+        $data = $request->all();
+        $data['updated_at'] = Carbon::now();
+        try {
+            $data['updated_user'] = $user->email;
+            $this->model->where([
+                'id' => $id,
+                'user_id' => $user->id,
+                'FarmID' => $data['FarmID'],
+                'plant_state_id' => $data['plant_state_id']
+            ])->update($data);
+            return $this->sendSuccess('Success agriculture data');
+        } catch (Exception $ex) {
+            Log::error('AgriculturePlantAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public function show(GetAgriculturePlantDetailAPIRequest $request, $id)
     {
@@ -55,7 +74,7 @@ class AgriculturePlantAPIController extends AppBaseController
             ])->first();
             return $this->sendResponse($result, 'Get agriculture plant detail success');
         } catch (\Exception $ex) {
-            Log::error('DeviceAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
+            Log::error('AgriculturePlantAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
