@@ -52,7 +52,7 @@ class PlantStateInfoAPIController extends AppBaseController
         try {
             $data['created_at'] = Carbon::now();
             $data['created_user'] = $user->email;
-            $result['id']  = $this->model->insertGetId($data);
+            $result['id'] = $this->model->insertGetId($data);
             return $this->sendResponse( $result,'Success create data');
         } catch (Exception $ex) {
             Log::error('PlantStateInfoAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());

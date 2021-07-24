@@ -33,8 +33,8 @@ class AgriculturePlantAPIController extends AppBaseController
             $data['user_id'] = $user->id;
             $data['created_at'] = Carbon::now();
             $data['created_user'] = $user->email;
-            $this->model->insert($data);
-            return $this->sendSuccess('Success create data agriculture plant');
+            $result['id'] = $this->model->insertGetId($data);
+            return $this->sendResponse($result, 'Success create data agriculture plant');
         } catch (Exception $ex) {
             Log::error('AgriculturePlantAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);

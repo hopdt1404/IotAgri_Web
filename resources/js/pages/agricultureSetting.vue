@@ -296,16 +296,22 @@ export default {
         note: this.note
       }
       let dispatch
+      let action
       if (this.id) {
         params.id = this.id
         dispatch = 'agricultureSetting/update'
+        action = 'update'
       } else {
         dispatch = 'agricultureSetting/create'
+        action = 'store'
       }
       let response = await this.$store.dispatch(dispatch, params)
       if (response.success) {
+        let data = response.data
+        if (data && action === 'store') {
+          this.id = data.id
+        }
         this.$Notice.success({title: 'Success', desc: response.message})
-        this.closeForm()
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
