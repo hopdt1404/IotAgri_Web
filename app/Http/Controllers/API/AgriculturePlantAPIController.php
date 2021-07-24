@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use App\Models\AgriculturePlant;
 use App\Http\Requests\API\CreateAgriculturePlantAPIRequest;
+use App\Http\Requests\API\GetAgriculturePlantDetailAPIRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
@@ -17,6 +18,11 @@ class AgriculturePlantAPIController extends AppBaseController
     public function __construct(AgriculturePlant $agriculturePlant)
     {
         $this->model = $agriculturePlant;
+    }
+
+    public function index()
+    {
+
     }
 
     public function store(CreateAgriculturePlantAPIRequest $request)
@@ -33,5 +39,25 @@ class AgriculturePlantAPIController extends AppBaseController
             Log::error('AgriculturePlantAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function show(GetAgriculturePlantDetailAPIRequest $request, $id)
+    {
+        $user = $request->user();
+        $data = $request->all();
+        try {
+
+            $result = $this->model->where([
+                'FarmID' => $id,
+                'plant_id' => $data['plant_id'],
+                'plant_state_id' => $data['plant_state_id'],
+                'user_id' => $user->id,
+            ])->first();
+            return $this->sendResponse($result, 'Get agriculture plant detail success');
+        } catch (\Exception $ex) {
+            Log::error('DeviceAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

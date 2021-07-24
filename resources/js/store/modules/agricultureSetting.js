@@ -37,5 +37,15 @@ export const actions = {
         return Promise.reject(false);
       }
     )
+  },
+  getAgriculturePlantDetail({ commit }, payload) {
+    return axios.get('/api/agriculture-plant/' + payload.FarmID, {params: payload}).then(
+      response => {
+        return Promise.resolve(response.data);
+      },
+      error => {
+        return Promise.reject(false);
+      }
+    )
   }
 }

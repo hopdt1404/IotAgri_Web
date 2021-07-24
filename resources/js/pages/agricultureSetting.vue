@@ -33,17 +33,17 @@
                 <label class="input-title" for="select_plant_id">{{ $t('select_plant')}}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="select_plant_id" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
+                <b-form-select id="select_plant_id" v-model="plant_id" @change="changePlantSelect" :options="listPlantOfFarm"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="growth_period_state">{{ $t('plant_state')}}</label>
+                <label class="input-title" for="plant_state_id">{{ $t('plant_state')}}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="plant_state_id" v-model="plant_state_id" :options="listPlantState"></b-form-select>
+                <b-form-select id="plant_state_id" v-model="plant_state_id" @change="changePlantState" :options="listPlantState"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -310,14 +310,53 @@ export default {
       if (this.id) {
         this.id = ''
       }
+      this.farm_id = ''
       this.plant_id = ''
       this.plant_state_id = ''
+      this.resetSubFromData()
+    },
+    resetSubFromData() {
+      this.id = ''
       this.growth_period = ''
       this.temperature = ''
       this.moisture = ''
       this.light = ''
       this.note = ''
+    },
+    changePlantSelect() {
+      if (this.plant_state_id && this.plant_id) {
+        this.getAgriculturePlantDetail()
+      }
+    },
+    changePlantState() {
+      if (this.plant_state_id && this.plant_id) {
+        this.getAgriculturePlantDetail()
+      }
+    },
+    async getAgriculturePlantDetail() {
+      let params = {
+        FarmID: this.farm_id,
+        plant_id: this.plant_id,
+        plant_state_id: this.plant_state_id
+      }
+      let response = await this.$store.dispatch('agricultureSetting/getAgriculturePlantDetail', params)
+      if (response.success) {
+        let data = response.data
+        if (data) {
+          this.id = data.id
+          this.growth_period = data.growth_period
+          this.temperature = data.temperature
+          this.moisture = data.moisture
+          this.light = data.light
+          this.note = data.note
+        } else {
+          this.resetSubFromData()
+        }
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
     }
+
   }
 
 }
