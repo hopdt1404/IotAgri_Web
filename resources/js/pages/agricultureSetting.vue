@@ -257,7 +257,28 @@ export default {
       this.titlePopup = 'Form setting agriculture for '
     },
     async getPlantAgricultureDefault() {
+      if (this.plant_id && this.plant_state_id) {
+        let params = {
+          plant_id: this.plant_id,
+          plant_state_id: this.plant_state_id
+        }
+        let response = await this.$store.dispatch('plantStateInfo/getPlantStateInfo', params)
+        if (response.status === 200) {
+          let data = response.data.data
+          if (data) {
+            this.growth_period = data.growth_period_state
+            this.temperature = data.temperature
+            this.moisture = data.moisture
+            this.light = data.light
+            this.note = data.note
+          } else {
+            this.resetSubFromData()
+          }
+        } else {
+          this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        }
 
+      }
     },
     closeForm() {
       this.closePopup()

@@ -114,12 +114,9 @@ class DeviceAPIController extends AppBaseController
     }
     public function getDeviceSettingFarm (Request $request)
     {
-//        $data = $request->all();
         $user = $request->user();
         try {
-
              $data = $this->model->where([
-//                'FarmID' => $data['FarmId'],
                 'user_id' => $user->id,
                 'FarmId' => null
             ])->select('DeviceID', 'DeviceName')->get();
