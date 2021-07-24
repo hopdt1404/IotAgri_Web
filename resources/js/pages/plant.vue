@@ -470,14 +470,24 @@ export default {
         note: this.note,
       }
       let dispatch
+      let action
       if (this.plant_state_info_id) {
         params.id = this.plant_state_info_id
         dispatch = 'plantStateInfo/update'
+        action = 'update'
       } else {
         dispatch = 'plantStateInfo/store'
+        action = 'store'
       }
+      console.log('action')
+      console.log(action)
       let response = await this.$store.dispatch(dispatch, params);
       if (response.status === 200) {
+        let data = response.data.data
+        if (data && action === 'store') {
+          console.log('if')
+          this.plant_state_info_id = data.id
+        }
         this.$Notice.success({title: 'Success', desc: response.data.message})
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
@@ -656,6 +666,7 @@ export default {
       this.id = record.id
     },
     resetInfoPlantState() {
+      this.plant_state_info_id = ''
       this.growth_period_state = ''
       this.temperature = ''
       this.moisture = ''
