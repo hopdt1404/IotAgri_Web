@@ -155,6 +155,7 @@ export default {
   data() {
     return {
       listFarmAgricultureSetting: [],
+      id: '',
       currentPage: 1,
       perPage: 10,
       rows: 0,
@@ -209,6 +210,7 @@ export default {
     closePopup() {
       this.modal = false;
       this.initTitlePopup()
+      this.resetFormData()
     },
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
@@ -258,9 +260,35 @@ export default {
 
     },
     closeForm() {
+      this.closePopup()
 
     },
     async save () {
+      let params = {
+        plant_id: this.plant_id,
+        plant_state_id: this.plant_state_id,
+        FarmID: this.farm_id,
+        growth_period: this.growth_period,
+        temperature: this.temperature,
+        moisture: this.moisture,
+        light: this.light,
+        note: this.note
+      }
+      let dispatch
+      if (this.id) {
+        params.id = this.id
+        dispatch = 'agricultureSetting/update'
+      } else {
+        dispatch = 'agricultureSetting/create'
+      }
+      let response = await this.$store.dispatch(dispatch, params)
+      if (response.success) {
+        this.$Notice.success({title: 'Success', desc: response.message})
+        this.closeForm()
+      } else {
+        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+      }
+
 
     },
     async getPlantState() {
@@ -278,6 +306,18 @@ export default {
         this.listPlantState = []
       }
     },
+    resetFormData () {
+      if (this.id) {
+        this.id = ''
+      }
+      this.plant_id = ''
+      this.plant_state_id = ''
+      this.growth_period = ''
+      this.temperature = ''
+      this.moisture = ''
+      this.light = ''
+      this.note = ''
+    }
   }
 
 }

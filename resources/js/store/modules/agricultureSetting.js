@@ -25,5 +25,17 @@ export const actions = {
         return Promise.reject(false);
       }
     )
+  },
+
+  create({ commit }, payload)
+  {
+    return axios.post('/api/agriculture-plant', payload).then(
+      response => {
+        return Promise.resolve(response.data);
+      },
+      error => {
+        return Promise.reject(false);
+      }
+    )
   }
 }

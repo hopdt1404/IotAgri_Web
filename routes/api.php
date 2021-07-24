@@ -18,6 +18,7 @@ use App\Http\Controllers\API\PlantTypeAPIController;
 use App\Http\Controllers\API\PlantAPIController;
 use App\Http\Controllers\API\PlantStateAPIController;
 use App\Http\Controllers\API\PlantStateInfoAPIController;
+use App\Http\Controllers\API\AgriculturePlantAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
     Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
     Route::resource('plant', PlantAPIController::class);
+
+    Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
 
     Route::resource('plant-state-info', PlantStateInfoAPIController::class);
     Route::resource('plant-state', PlantStateAPIController::class);

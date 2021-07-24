@@ -1,3 +1,4 @@
+<script src="../store/modules/device.js"></script>
 <script src="../store/modules/plant.js"></script>
 <template>
   <div class="content">
