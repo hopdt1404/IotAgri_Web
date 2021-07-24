@@ -33,7 +33,7 @@
                 <label class="input-title" for="select_plant_id">{{ $t('select_plant')}}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="select_plant_id" @change="getPlantOfFarm()" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
+                <b-form-select id="select_plant_id" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -43,7 +43,7 @@
                 <label class="input-title" for="growth_period_state">{{ $t('plant_state')}}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="plant_state_id" @change="getPlantStateInfo()" v-model="plant_state_id" :options="listPlantState"></b-form-select>
+                <b-form-select id="plant_state_id" v-model="plant_state_id" :options="listPlantState"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -203,6 +203,7 @@ export default {
    created() {
     this.getListFarmAgricultureSetting()
     this.initTitlePopup()
+    this.getPlantState()
   },
   methods: {
     closePopup() {
@@ -253,9 +254,6 @@ export default {
     initTitlePopup() {
       this.titlePopup = 'Form setting agriculture for '
     },
-    async getPlantStateInfo() {
-
-    },
     async getPlantAgricultureDefault() {
 
     },
@@ -267,8 +265,8 @@ export default {
     },
     async getPlantState() {
       let response = await this.$store.dispatch('plant/getPlantState')
-      if (response.status === 200) {
-        let data = response.data.data
+      if (response.success) {
+        let data = response.data
         this.listPlantState = data.map((element) => {
           let elementResult = {}
           elementResult.value = element.id
@@ -279,7 +277,7 @@ export default {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
         this.listPlantState = []
       }
-    }
+    },
   }
 
 }
