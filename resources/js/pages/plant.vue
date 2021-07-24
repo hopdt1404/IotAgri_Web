@@ -485,7 +485,6 @@ export default {
       if (response.status === 200) {
         let data = response.data.data
         if (data && action === 'store') {
-          console.log('if')
           this.plant_state_info_id = data.id
         }
         this.$Notice.success({title: 'Success', desc: response.data.message})
