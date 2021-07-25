@@ -248,7 +248,9 @@ class FarmAPIController extends AppBaseController
                     'Farms.FarmID', '=', 'Devices.FarmID')
                 ->leftJoinSub($plant, 'plants',
                 'plants.FarmID', '=', 'Farms.FarmID' )
-                ->select('Farms.*','Devices.number_device', 'plants.number_plant')
+                ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
+                    '=', 'FarmTypes.FarmTypeID')
+                ->select('Farms.*','Devices.number_device', 'plants.number_plant', 'FarmTypes.FarmType')
                 ->get();
             return $this->sendResponse($farm, 'Get farm agriculture setting success');
         } catch (\Exception $ex) {
