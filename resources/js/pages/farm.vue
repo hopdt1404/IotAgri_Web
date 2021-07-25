@@ -163,7 +163,7 @@
           </vs-row>
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-          <vs-button class="square mr-0" color="#bdc3c7" type="filled" @click="closeFormSetting">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormSetting">{{ $t('cancel') }}</vs-button>
           <vs-button class="square mr-2 " color="primary" type="filled" @click="saveSetting" >{{ $t('save')}}</vs-button>
         </vs-row>
       </div>
