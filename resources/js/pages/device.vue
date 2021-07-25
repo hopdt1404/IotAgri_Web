@@ -14,6 +14,10 @@
                  @row-clicked="myRowClickHandler"
                  :current-page="currentPage"
                  :per-page="perPage">
+          <template #cell(Status)="data">
+            {{ data['item']['Status'] == -1 ? 'Trouble' :
+            data['item']['Status'] == 1 ? 'Activate' : 'Deactivate'}}
+          </template>
           <template #cell(created_at)="data" class="width-15">
             {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
           </template>
