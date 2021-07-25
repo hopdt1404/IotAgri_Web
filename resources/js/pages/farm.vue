@@ -101,6 +101,22 @@
               </vs-col>
             </vs-row>
           </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="info">{{ $t('info') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-textarea
+                  id="planting_time"
+                  v-model="info"
+                  placeholder="Enter something..."
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+              </vs-col>
+            </vs-row>
+          </div>
           <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
             <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
             <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
@@ -190,6 +206,7 @@ export default {
       area: '',
       location: '',
       farm_type: '',
+      info: '',
       modal: false,
       listFarm: [],
       listFarmType: [],
@@ -255,7 +272,8 @@ export default {
         LocateID: this.location,
         name: this.name,
         Area: this.area,
-        FarmTypeId: this.farm_type
+        FarmTypeId: this.farm_type,
+        info: this.info
       }
       let dispatch
       if (this.id) {
@@ -286,6 +304,7 @@ export default {
       this.name = ''
       this.area = ''
       this.farm_type = ''
+      this.info = ''
     },
     async getFarm () {
       let response = await this.$store.dispatch('farm/getFarm')
@@ -311,6 +330,7 @@ export default {
         this.farm_type = data.FarmTypeID
         this.location = data.LocateID
         this.area = data.Area
+        this.info = data.info
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
