@@ -574,7 +574,7 @@ export default {
         row_spacing: this.row_spacing,
         tree_spacing: this.tree_spacing,
         soil_type_id: this.soil_type_id,
-        info: this.growth_period,
+        info: this.info,
       }
       let dispatch
       if (this.id) {

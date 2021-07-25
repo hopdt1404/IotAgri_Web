@@ -114,7 +114,7 @@
               :active.sync="modalSetting"
               title="Form Setting"
               icon-close="x"
-              @close="closeSettingPopup()">
+              @close="closeFormSetting()">
       <div class="dialog-content">
         <div class="dialog-item">
           <vs-row>
@@ -222,11 +222,11 @@ export default {
           label: 'Location',
           key: 'LocateID'
         },
-        {
-          label: 'Status',
-          key: 'Status',
-          sortable: true
-        },
+        // {
+        //   label: 'Status',
+        //   key: 'Status',
+        //   sortable: true
+        // },
         {
           label: 'Created at',
           key: 'created_at',
