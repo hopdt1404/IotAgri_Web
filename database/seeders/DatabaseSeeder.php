@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
             PlantTypeSeeder::class,
             SoilTypeSeeder::class,
             PlantStateSeeder::class,
+            LocateSeeder::class,
+            PlotTypeSeeder::class,
+            PlotSeeder::class,
         ]);
     }
 }
