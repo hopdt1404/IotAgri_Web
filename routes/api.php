@@ -39,27 +39,38 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
-    Route::post('farm/setting', [FarmAPIController::class, 'setting']);
-    Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
-    Route::resource('farm', FarmAPIController::class);
+    Route::middleware(['admin'])->group(function () {
+        Route::resource('plant', PlantAPIController::class);
+        Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
+        Route::get('soil_type', [SoilTypeAPIController::class, 'index']);
+        Route::resource('plant-state-info', PlantStateInfoAPIController::class);
+        Route::resource('device', DeviceAPIController::class);
+        Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
+    });
 
+    Route::middleware('user')->group(function () {
+        Route::get('farm', [FarmAPIController::class, 'index']);
+        Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
+        Route::post('farm', [FarmAPIController::class, 'store']);
+        Route::put('farm/{farm}', [FarmAPIController::class, 'update']);
+        Route::post('farm/setting', [FarmAPIController::class, 'setting']);
+        Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
 
-    Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
-    Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
-    Route::resource('device', DeviceAPIController::class);
+        Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
+        Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
 
-    Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
-    Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
-    Route::resource('plant', PlantAPIController::class);
+        Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
+        Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
 
-    Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
+        Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
+    });
 
-    Route::resource('plant-state-info', PlantStateInfoAPIController::class);
-    Route::resource('plant-state', PlantStateAPIController::class);
+    // For all User
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
-    Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
-    Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
-    Route::get('soil_type', [SoilTypeAPIController::class, 'index']);
+    Route::resource('plant-state', PlantStateAPIController::class);
+
+// Todo:     Route::get('location')
+
 });
 
 Route::middleware('guest:sanctum')->group(function () {
