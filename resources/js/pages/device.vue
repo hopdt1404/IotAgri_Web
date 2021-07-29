@@ -165,6 +165,8 @@ export default {
         this.listDevice = response.data.data
         this.rows = this.listDevice.length
       } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listDevice = []
         this.rows = 0
       }

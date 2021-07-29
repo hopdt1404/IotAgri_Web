@@ -4,8 +4,12 @@ export const actions = {
   async getDevice({ commit }, payload) {
     try {
       return await axios.get('/api/device')
-    } catch (e) {
-      return e
+    } catch (error) {
+      let status = error.response.status;
+      if (status == 422 || status == 403) {
+
+      }
+      return error.response;
     }
   },
   async create({ commit }, payload) {
