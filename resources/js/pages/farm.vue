@@ -446,8 +446,8 @@ export default {
       }
       let dispatch = 'farm/setting'
       let response = await this.$store.dispatch(dispatch, params)
-      if (response.success) {
-        this.$Notice.success({title: 'Success', desc: response.message})
+      if (response.status === 200) {
+        this.$Notice.success({title: 'Success', desc: response.data.message})
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
           desc: response.statusText + '. ' + response.data.message})

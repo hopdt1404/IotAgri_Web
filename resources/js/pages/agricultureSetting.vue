@@ -214,13 +214,14 @@ export default {
     },
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
-      if (response.success) {
-        this.listFarmAgricultureSetting = response.data
+      if (response.status === 200) {
+        this.listFarmAgricultureSetting = response.data.data
         this.rows = this.listFarmAgricultureSetting.length
       } else {
         this.listFarm = []
         this.rows = 0
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     async myRowClickHandler(record, index) {
@@ -241,7 +242,7 @@ export default {
         FarmID: this.farm_id
       }
       let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
-      if (response.success) {
+      if (response.status === 200) {
         this.listPlantOfFarm = response.data.map((element) => {
           let elementResult = {}
           elementResult.value = element.id
@@ -250,7 +251,8 @@ export default {
         })
       } else {
         this.listPlantOfFarm = []
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        tthis.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     initTitlePopup() {
@@ -275,7 +277,8 @@ export default {
             this.resetSubFromData()
           }
         } else {
-          this.$Notice.error({title: 'Error', desc: 'Request failed'})
+          this.$Notice.error({title: 'Error ' + response.status,
+            desc: response.statusText + '. ' + response.data.message})
         }
 
       }
@@ -306,21 +309,22 @@ export default {
         action = 'store'
       }
       let response = await this.$store.dispatch(dispatch, params)
-      if (response.success) {
+      if (response.status === 200) {
         let data = response.data
         if (data && action === 'store') {
           this.id = data.id
         }
         this.$Notice.success({title: 'Success', desc: response.message})
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
 
 
     },
     async getPlantState() {
       let response = await this.$store.dispatch('plant/getPlantState')
-      if (response.success) {
+      if (response.status === 200) {
         let data = response.data
         this.listPlantState = data.map((element) => {
           let elementResult = {}
@@ -329,7 +333,8 @@ export default {
           return elementResult
         })
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listPlantState = []
       }
     },
@@ -367,8 +372,8 @@ export default {
         plant_state_id: this.plant_state_id
       }
       let response = await this.$store.dispatch('agricultureSetting/getAgriculturePlantDetail', params)
-      if (response.success) {
-        let data = response.data
+      if (response.status === 200) {
+        let data = response.data.data
         if (data) {
           this.id = data.id
           this.growth_period = data.growth_period
@@ -380,7 +385,8 @@ export default {
           this.resetSubFromData()
         }
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     }
 

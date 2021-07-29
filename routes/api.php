@@ -40,11 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
     Route::middleware(['admin'])->group(function () {
-        Route::resource('plant', PlantAPIController::class);
-        Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
-        Route::get('soil_type', [SoilTypeAPIController::class, 'index']);
-        Route::resource('plant-state-info', PlantStateInfoAPIController::class);
-        Route::resource('device', DeviceAPIController::class);
+        Route::post('plant', [PlantAPIController::class, 'store']);
+        Route::put('plant/{plant}', [PlantAPIController::class, 'update']);
+
+        Route::post('plant-state-info', [PlantStateInfoAPIController::class, 'store']);
+        Route::put('plant-state-info/{plant-state-info}', [PlantStateInfoAPIController::class, 'update']);
+//        Route::resource('device', DeviceAPIController::class);
         Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
     });
 
@@ -68,6 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // For all User
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
     Route::resource('plant-state', PlantStateAPIController::class);
+
+    Route::get('plant', [PlantAPIController::class, 'index']);
+    Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
+    Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
+    Route::get('soil_type', [SoilTypeAPIController::class, 'index']);
+    Route::get('plant-state-info/create', [PlantStateInfoAPIController::class, 'create']);
 
 // Todo:     Route::get('location')
 

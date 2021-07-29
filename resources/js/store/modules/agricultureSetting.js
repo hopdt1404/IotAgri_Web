@@ -16,16 +16,12 @@ export const mutations = {
 }
 
 export const actions = {
-  getFarmAgricultureSetting ({ commit }, payload) {
-    return axios.get('/api/farm/getFarmAgricultureSetting').then(
-      response => {
-        return Promise.resolve(response.data);
-      },
-      error => {
-        return Promise.reject(false);
-        // return error.response
-      }
-    )
+  async getFarmAgricultureSetting ({ commit }, payload) {
+    try {
+      return await axios.get('/api/farm/getFarmAgricultureSetting')
+    } catch (error) {
+      return error.response
+    }
   },
 
   create({ commit }, payload)
