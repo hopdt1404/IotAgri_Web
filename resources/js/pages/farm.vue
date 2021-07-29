@@ -353,7 +353,8 @@ export default {
         })
 
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listFarmType = []
       }
     },
@@ -371,6 +372,8 @@ export default {
             return elementResult
           })
       } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listDeviceSetting = []
       }
     },
@@ -379,6 +382,8 @@ export default {
       if (response.status === 200) {
         this.listPlantSetting = response.data.data
       } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listPlantSetting = []
       }
     },
@@ -403,6 +408,9 @@ export default {
         if (data.length > 0) {
             this.devicesSelected = data
         }
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     async getListPlantAssigned() {
@@ -410,8 +418,8 @@ export default {
         FarmID : this.id
       }
       let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
-      if (response.success) {
-        let data = response.data
+      if (response.status === 200) {
+        let data = response.data.data
         if (data.length > 0) {
           this.plantSelected = data
         }
@@ -441,7 +449,8 @@ export default {
       if (response.success) {
         this.$Notice.success({title: 'Success', desc: response.message})
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     closeFormSetting() {
