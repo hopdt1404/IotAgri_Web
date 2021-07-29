@@ -3,11 +3,9 @@ import axios from 'axios'
 export const actions = {
   async getFarm({ commit }, payload) {
     try {
-      const data = await axios.get('/api/farm')
-      return data
-    } catch (e) {
-      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
-      return e
+      return await axios.get('/api/farm')
+    } catch (error) {
+      return error.response
     }
   },
 

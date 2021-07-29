@@ -314,7 +314,8 @@ export default {
       } else {
         this.listFarm = []
         this.rows = 0
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     async myRowClickHandler(record, index) {
