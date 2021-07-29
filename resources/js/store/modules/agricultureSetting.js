@@ -23,6 +23,7 @@ export const actions = {
       },
       error => {
         return Promise.reject(false);
+        // return error.response
       }
     )
   },

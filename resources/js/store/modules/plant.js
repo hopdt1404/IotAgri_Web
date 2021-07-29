@@ -19,15 +19,15 @@ export const actions = {
   async getPlant({ commit }, payload) {
     try {
       return await axios.get('/api/plant')
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
   async create({ commit }, payload) {
     try {
       return await axios.post('/api/plant', payload)
-    } catch (e) {
-      return JSON.stringify(e)
+    } catch (error) {
+      return error.response
     }
   },
   async getPlantDetail({ commit }, payload) {
@@ -35,8 +35,8 @@ export const actions = {
       if (payload.id != 0) {
         return await axios.get('/api/plant/' + payload.id )
       }
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
   async update({ commit }, payload) {
@@ -44,15 +44,15 @@ export const actions = {
       if (payload.id != 0) {
         return await axios.put('/api/plant/' + payload.id, payload)
       }
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
   async getPlantType({ commit }, payload) {
     try {
       return await axios.get('/api/plant_type')
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
   async getSoilType({ commit }, payload) {
@@ -63,38 +63,26 @@ export const actions = {
     }
   },
   async getPlantState({ commit }, payload) {
-    return await axios.get('/api/plant-state').then(
-      response => {
-        return Promise.resolve(response.data);
-      },
-      error => {
-        return Promise.reject(false);
-      }
-    )
-    // try {
-    //   return await axios.get('/api/plant-state')
-    // } catch (e) {
-    //   return e
-    // }
+    try {
+      return await axios.get('/api/plant-state')
+    } catch (error) {
+      return error.response
+    }
   },
   async getPlantSettingFarm({ commit }, payload) {
     try {
       return await axios.get('/api/plant/getPlantSettingFarm')
-    } catch (e) {
-      this.$Notice.error({title: 'Error', desc: 'Request failed: ' + e.toString()})
-      return e
+    } catch (error) {
+      return error.response
     }
   },
 
-   getPlantOfFarm({ commit }, payload) {
-    return axios.get('/api/plant/getPlantOfFarm', {params: payload}).then(
-      response => {
-        return Promise.resolve(response.data);
-      },
-      error => {
-        return Promise.reject(false);
-      }
-    )
+  async getPlantOfFarm({ commit }, payload) {
+    try {
+      return await axios.get('/api/plant/getPlantOfFarm', {params: payload})
+    } catch (error) {
+      return error.response
+    }
   }
 
 }
