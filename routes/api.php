@@ -51,11 +51,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('user')->group(function () {
         Route::get('farm', [FarmAPIController::class, 'index']);
-        Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
         Route::post('farm', [FarmAPIController::class, 'store']);
         Route::put('farm/{farm}', [FarmAPIController::class, 'update']);
         Route::post('farm/setting', [FarmAPIController::class, 'setting']);
         Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
+        Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
 
         Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
         Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
@@ -64,6 +64,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
 
         Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
+        Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
+        Route::get('management-agriculture/detail/{id}', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
     });
 
     // For all User

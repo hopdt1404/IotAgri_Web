@@ -74,7 +74,11 @@
   "setting_farm": "Setting farm",
   "management_device": "Management devices",
   "management_plant": "Management plant",
-  "agriculture_setting": "Agriculture setting",
+  "setting_agriculture": "Setting agriculture",
   "select_plant": "Select plant",
-  "setting_default": "Setting default"
+  "setting_default": "Setting default",
+  "management_agriculture": "Management agriculture",
+  "plant": "Plant",
+  "farm": "Farm",
+  "start_time_season": "Start time season"
 }

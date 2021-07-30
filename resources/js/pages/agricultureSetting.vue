@@ -215,8 +215,14 @@ export default {
     async getListFarmAgricultureSetting () {
       let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
       if (response.status === 200) {
-        this.listFarmAgricultureSetting = response.data.data
-        this.rows = this.listFarmAgricultureSetting.length
+        if (response.data.data != null) {
+          this.listFarmAgricultureSetting = response.data.data
+          this.rows = this.listFarmAgricultureSetting.length
+        } else {
+          this.listFarm = []
+          this.rows = 0
+        }
+
       } else {
         this.listFarm = []
         this.rows = 0
@@ -325,13 +331,18 @@ export default {
     async getPlantState() {
       let response = await this.$store.dispatch('plant/getPlantState')
       if (response.status === 200) {
-        let data = response.data
-        this.listPlantState = data.map((element) => {
-          let elementResult = {}
-          elementResult.value = element.id
-          elementResult.text = element.name
-          return elementResult
-        })
+        if (response.data.data != null) {
+          let data = response.data.data
+          this.listPlantState = data.map((element) => {
+            let elementResult = {}
+            elementResult.value = element.id
+            elementResult.text = element.name
+            return elementResult
+          })
+        } else {
+          this.listPlantState = []
+        }
+
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
           desc: response.statusText + '. ' + response.data.message})

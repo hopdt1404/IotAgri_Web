@@ -333,7 +333,8 @@ export default {
         this.area = data.Area
         this.info = data.info
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
 
     },
@@ -424,7 +425,8 @@ export default {
           this.plantSelected = data
         }
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     closeSettingPopup() {

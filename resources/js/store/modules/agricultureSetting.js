@@ -55,5 +55,19 @@ export const actions = {
         return Promise.reject(false);
       }
     )
+  },
+  async getPlantAgricultureManagement({ commit }, payload) {
+    try {
+      return await axios.get('/api/management-agriculture/', {params: payload})
+    } catch (error) {
+      return error.reponse
+    }
+  },
+  async getPlantAgricultureDetail({ commit }, payload) {
+    try {
+      return await axios.get('/api/management-agriculture/detail/' + payload.id, {params: payload.query})
+    } catch (error) {
+      return error.reponse
+    }
   }
 }

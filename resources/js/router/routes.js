@@ -38,9 +38,14 @@ export default [
     component: page('plant')
   },
   {
-    path: 'agriculture-setting',
-    name: 'agriculture_setting',
+    path: 'setting-agriculture',
+    name: 'setting_agriculture',
     component: page('agricultureSetting')
+  },
+  {
+    path: 'management-agriculture',
+    name: 'management_agriculture',
+    component: page('managementAgriculture')
   },
 
   { path: '*', component: page('errors/404.vue') }
