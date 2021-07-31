@@ -7,6 +7,18 @@
                :current-page="currentPage"
                :per-page="perPage"
                @row-clicked="myRowClickHandler">
+        <template #cell(status)="data">
+          {{
+            data['item']['status'] == -1 ?
+              'Deactivate' :
+            data['item']['status'] == 0 ?
+              'Init' :
+            data['item']['status'] == 1 ?
+              'Activate' :
+            data['item']['status'] == 2 ?
+              'End season': ''
+          }}
+        </template>
 
       </b-table>
     </div>
@@ -57,15 +69,79 @@
         <div class="dialog-content">
           <vs-row>
             <vs-col cols="12">
-              <label class="input-title" for="start_time_season">{{ $t('start_time_season') }}</label>
+              <label class="input-title" for="start_time_season">{{ $t('start_time_season') }} <Icon type="md-calendar" /></label>
             </vs-col>
             <vs-col cols="12">
-
+              <datetime format="YYYY-MM-DD H:i:s" v-model="start_time_season">
+              </datetime>
             </vs-col>
-
           </vs-row>
         </div>
+        <div class="dialog-content">
+          <vs-row>
+            <vs-col cols="12">
+              <label class="input-title" for="end_time_season">{{ $t('end_time_season') }} <Icon type="md-calendar" /></label>
+            </vs-col>
+            <vs-col cols="12">
+              <datetime format="YYYY-MM-DD H:i:s"
+                        v-model="end_time_season">
+              </datetime>
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col class="" cols="12">
+              <label class="input-title" for="current_plant_state">{{ $t('current_plant_state') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+              <b-form-select id="current_plant_state" v-model="current_plant_state" :options="listPlantState"></b-form-select>
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col class="" cols="12">
+              <label class="input-title" for="current_growth_day">{{ $t('current_growth_day') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+              <Input id="current_growth_day"
+                     v-model="current_growth_day"
+                     type="number"
 
+              />
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col class="" cols="12">
+              <label class="input-title" for="total_growth_day">{{ $t('total_growth_day') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+              <Input id="total_growth_day"
+                     v-model="total_growth_day"
+                     type="number"
+                     disabled
+              />
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col class="" cols="12">
+              <label class="input-title" for="status">{{ $t('status') }}</label>
+            </vs-col>
+            <vs-col cols="12" v-if="listStatusFarmPlant.length > 0">
+              <b-form-radio-group v-model="status" :options="listStatusFarmPlant">
+              </b-form-radio-group>
+            </vs-col>
+          </vs-row>
+        </div>
+        <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
+          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+        </vs-row>
       </vs-popup>
 
     </div>
@@ -73,10 +149,10 @@
 </template>
 
 <script>
-
+import datetime from 'vuejs-datetimepicker';
 export default {
   components: {
-
+    datetime
   },
 
   data() {
@@ -87,6 +163,19 @@ export default {
       plant_id: '',
       farm_name: '',
       farm_id: '',
+      start_time_season: '',
+      end_time_season: '',
+      current_plant_state: '',
+      listPlantState: [],
+      current_growth_day: '',
+      total_growth_day: '',
+      status: '',
+      listStatusFarmPlant: [
+        { text: 'Deactivate', value: -1 },
+        { text: 'Init', value: 0 },
+        { text: 'Activate', value: 1 },
+        { text: 'End season', value: 2 },
+      ],
       rows: 0,
       listPlantManagement: [],
       perPage: 10,
@@ -146,6 +235,7 @@ export default {
 
    created() {
     this.getPlantAgricultureManagement()
+    this.getListPlantState()
 
   },
   mounted() {
@@ -170,22 +260,86 @@ export default {
     },
     closePopup() {
       this.closeModal()
-
+      this.resetForm()
     },
     async myRowClickHandler(record, index) {
       this.showModal()
-      console.log(record)
+      this.id = record.id
+      this.plant_id = record.plant_id
+      this.farm_id = record.FarmID
+      this.plant_name = record.plant_name
+      this.farm_name = record.farm_name
       let params = {
-        id: record.id,
+        id: this.id,
         query: {
-          FarmID: record.FarmID,
-          plant_id: record.plant_id
+          FarmID: this.farm_id,
+          plant_id: this.plant_id
         }
 
       }
       let response = await this.$store.dispatch('agricultureSetting/getPlantAgricultureDetail', params)
-
-
+      if (response.status === 200) {
+        let data = response.data.data;
+        if (data != null) {
+          this.start_time_season = data.start_time_season
+          this.end_time_season = data.end_time_season
+          this.current_plant_state = data.current_plant_state
+          this.current_growth_day = data.current_growth_day
+          this.total_growth_day = data.total_growth_day
+          this.status = data.status
+        }
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
+      }
+    },
+    async getListPlantState() {
+      let response = await this.$store.dispatch('plant/getPlantState')
+      if (response.status === 200) {
+        let data = response.data.data
+        this.listPlantState = data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.id
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
+        this.listPlantState = []
+      }
+    },
+    cancel() {
+      this.closePopup()
+    },
+    async save() {
+      let params = {
+        id: this.id,
+        body: {
+          FarmID: this.farm_id,
+          plant_id: this.plant_id,
+          start_time_season: this.start_time_season,
+          end_time_season: this.end_time_season,
+          current_growth_day: this.current_growth_day,
+          current_plant_state: this.current_plant_state,
+          total_growth_day: this.total_growth_day,
+          status: this.status
+        }
+      }
+      let response = await this.$store.dispatch('agricultureSetting/savePlantAgriculture', params)
+      if (response != null && response.hasOwnProperty('status') && response.status === 200) {
+        this.closePopup()
+        this.$Notice.success({title: 'Success', desc: response.data.message})
+        await this.getPlantAgricultureManagement()
+      } else {
+        if (response != null) {
+          this.$Notice.error({title: 'Error ' + response.status,
+            desc: response.statusText + '. ' + response.data.message})
+        } else {
+          this.$Notice.error({title: 'Error ',
+            desc: 'Request failed'})
+        }
+      }
 
 
     },
@@ -196,6 +350,18 @@ export default {
       this.modal = false;
     },
     resetForm() {
+      this.id = ''
+      this.farm_id = ''
+      this.farm_name = ''
+      this.plant_id = ''
+      this.plant_name = ''
+      this.start_time_season = ''
+      this.end_time_season = ''
+      this.current_plant_state = ''
+      this.current_growth_day = 0
+      this.total_growth_day = 0
+      this.status = ''
+
 
     },
 

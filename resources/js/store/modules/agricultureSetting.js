@@ -69,5 +69,13 @@ export const actions = {
     } catch (error) {
       return error.reponse
     }
-  }
+  },
+  async savePlantAgriculture({ commit }, payload) {
+    try {
+      return await axios.put('/api/management-agriculture/savePlantAgriculture/' + payload.id, payload.body)
+    } catch (error) {
+      return error.reponse
+    }
+  },
+
 }

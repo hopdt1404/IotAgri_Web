@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Models\AgriculturePlant;
 use App\Http\Requests\API\CreateAgriculturePlantAPIRequest;
 use App\Http\Requests\API\GetAgriculturePlantDetailAPIRequest;
+use App\Http\Requests\API\SavePlantAgricultureAPIRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -108,12 +109,49 @@ class AgriculturePlantAPIController extends AppBaseController
             Log::error('AgriculturePlantAPIController@getPlantAgricultureManagement:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     public function getPlantAgricultureDetail(Request $request, $id) {
         $data = $request->all();
-        Log::info('$data');
-        Log::info($data);
+        $user = $request->user();
+        try {
+            $data = DB::table('farm_plants')
+                ->where([
+                    'id' => $id,
+                    'plant_id' => $data['plant_id'],
+                    'FarmID' => $data['FarmID'],
+                    'user_id' => $user->id
+                ])->first();
+            return $this->sendResponse($data, 'Get plant agriculture detail success');
+        } catch (\Exception $ex) {
+            Log::error('AgriculturePlantAPIController@getPlantAgricultureDetail:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function savePlantAgriculture(SavePlantAgricultureAPIRequest $request, $id) {
+        $data = $request->all();
+        $user = $request->user();
+        try {
+            DB::table('farm_plants')->where([
+                'id' => $id,
+                'FarmID' => $data['FarmID'],
+                'plant_id' => $data['plant_id'],
+                'user_id' => $user->id
+            ])->update([
+                'start_time_season' => $data['start_time_season'],
+                'end_time_season' => $data['end_time_season'],
+                'current_growth_day' => $data['current_growth_day'],
+                'current_plant_state' => $data['current_plant_state'],
+                'total_growth_day' => $data['total_growth_day'],
+                'status' => $data['status'],
+                'updated_at' => Carbon::now(),
+                'updated_user' => $user->email
+            ]);
+            return $this->sendSuccess('Save plant agriculture success');
+        } catch (\Exception $ex) {
+            Log::error('AgriculturePlantAPIController@getPlantAgricultureDetail:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

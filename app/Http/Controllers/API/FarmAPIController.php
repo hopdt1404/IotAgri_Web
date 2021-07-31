@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Farm;
 use App\Http\Requests\API\CreateFarmAPIRequest;
 use App\Http\Requests\API\SettingFarmAPIRequest;
+use App\Http\Utils\AppUtils;
 
 class FarmAPIController extends AppBaseController
 {
@@ -185,7 +186,12 @@ class FarmAPIController extends AppBaseController
                 'user_id' => $user->id,
                 'FarmID' => $farmId
             ])->whereNotIn('plant_id', $plantIds)
-            ->delete();
+            ->update([
+                'updated_at' => Carbon::now(),
+//                'status' => AppUtil::FARM_PLANT_DEACTIVATE_STATUS,
+                'status' => AppUtils::FARM_PLANT_DEACTIVATE_STATUS,
+                'updated_user' => $user->email
+            ]);
 
             // update record exited
             $farmPlantUpdateIds = DB::table('farm_plants')->where([
@@ -199,7 +205,8 @@ class FarmAPIController extends AppBaseController
                 ])->whereIn('plant_id', $farmPlantUpdateIds)
                 ->update([
                     'updated_user' => $user->email,
-                    'updated_at' => Carbon::now()
+                    'updated_at' => Carbon::now(),
+                    'status' => AppUtils::FARM_PLANT_INIT_STATUS,
                 ]);
 
             $farmPlantInsertIds = array_diff($plantIds, $farmPlantUpdateIds);
@@ -211,6 +218,9 @@ class FarmAPIController extends AppBaseController
                 $record['user_id'] = $user->id;
                 $record['created_at'] = Carbon::now();
                 $record['created_user'] = $user->email;
+                $record['current_growth_day'] = 0;
+                $record['total_growth_day'] = 0;
+                $record['status'] = AppUtils::FARM_PLANT_INIT_STATUS;
                 array_push($farmPlantInsertData, $record);
             }
             DB::table('farm_plants')->insert($farmPlantInsertData);

@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
         Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
+        Route::put('management-agriculture/savePlantAgriculture/{id}', [AgriculturePlantAPIController::class, 'savePlantAgriculture']);
         Route::get('management-agriculture/detail/{id}', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
     });
 

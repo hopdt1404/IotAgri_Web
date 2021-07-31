@@ -80,5 +80,10 @@
   "management_agriculture": "Management agriculture",
   "plant": "Plant",
   "farm": "Farm",
-  "start_time_season": "Start time season"
+  "start_time_season": "Start time season",
+  "end_time_season": "End time season",
+  "current_plant_state": "Current plant state",
+  "current_growth_day": "Current growth day(s)",
+  "total_growth_day": "Total growth day"
+
 }
