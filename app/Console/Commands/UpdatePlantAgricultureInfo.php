@@ -60,6 +60,8 @@ class UpdatePlantAgricultureInfo extends Command
                         $totalGrowthDay = $now->diffInDays($start_time_season);
                         $setDataUpdate = [];
                         $setDataUpdate['total_growth_day'] = $totalGrowthDay;
+                        $setDataUpdate['updated_at'] = Carbon::now();
+                        $setDataUpdate['updated_user'] = 'System';
 
                         // calculate farm_plants.current_plant_state
                         if (isset($record->current_plant_state)) {
@@ -74,12 +76,31 @@ class UpdatePlantAgricultureInfo extends Command
                                 ])->orderBy('plant_state_id')
                                 // default orderBy acs
                                 ->distinct('plant_state_id')->get();
-                            Log::channel('cron-daily')->info('(array) $agriculturePlan');
-                            Log::channel('cron-daily')->info((array) $agriculturePlant);
-                            ;
+                            $totalAgriculturePlantSetting = 0;
+                            $agriculturePlant = $agriculturePlant->all();
+                            $lastAgricultureIndex = 0;
+                            // process in growthPeriod
+                            for ($i = 0; $i < count($agriculturePlant); $i++) {
+                                $plantSetting = $agriculturePlant[$i];
+                                $currentGrowthDay = $totalGrowthDay - $totalAgriculturePlantSetting;
+                                $totalAgriculturePlantSetting += $plantSetting->growth_period;
+                                $lastAgricultureIndex = $i;
+                                if ($totalGrowthDay <= $totalAgriculturePlantSetting) {
+                                    $setDataUpdate['current_plant_state'] = $plantSetting->plant_state_id;
+                                    $setDataUpdate['current_growth_day'] = $currentGrowthDay;
+                                    break;
+                                }
+                            }
+                            // process if out of growthPeriod => update value, status,
+                            if (!isset($setDataUpdate['current_plant_state'])) {
+                                $plantSetting = $agriculturePlant[$lastAgricultureIndex];
+                                $setDataUpdate['current_plant_state'] = $plantSetting->plant_state_id;
+                                $setDataUpdate['current_growth_day'] = $plantSetting->growth_period;
+                                $setDataUpdate['status'] = AppUtils::FARM_PLANT_END_SEASON_STATUS;
+                                $setDataUpdate['total_growth_day'] = $totalAgriculturePlantSetting;
+                            }
 
                         }
-
                         DB::table('farm_plants')
                             ->where('id', $record->id)
                             ->update($setDataUpdate);
