@@ -239,7 +239,7 @@
         </div>
         <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
 
@@ -349,7 +349,7 @@
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
 
@@ -359,6 +359,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -441,11 +443,14 @@ export default {
     this.getSoilType()
     this.getPlantState()
   },
+  computed: mapGetters({
+    user: 'auth/user'
+  }),
   methods: {
     async getPlantState() {
       let response = await this.$store.dispatch('plant/getPlantState')
-      if (response.success) {
-        let data = response.data
+      if (response.status === 200) {
+        let data = response.data.data
         this.listPlantState = data.map((element) => {
           let elementResult = {}
           elementResult.value = element.id
@@ -453,7 +458,8 @@ export default {
           return elementResult
         })
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listPlantState = []
       }
     },
@@ -477,8 +483,6 @@ export default {
         dispatch = 'plantStateInfo/store'
         action = 'store'
       }
-      console.log('action')
-      console.log(action)
       let response = await this.$store.dispatch(dispatch, params);
       if (response.status === 200) {
         let data = response.data.data
@@ -487,7 +491,8 @@ export default {
         }
         this.$Notice.success({title: 'Success', desc: response.data.message})
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     async getPlantStateInfo() {
@@ -510,7 +515,8 @@ export default {
         }
       } else {
         this.resetInfoPlantState()
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     closeFormState() {
@@ -537,7 +543,8 @@ export default {
           return elementResult
         })
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listPlantType = []
       }
     },
@@ -552,7 +559,8 @@ export default {
           return elementResult
         })
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
         this.listSoilType = []
       }
     },
@@ -590,7 +598,8 @@ export default {
         await this.getPlant()
         this.modal = !this.modal
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     resetForm () {
@@ -618,7 +627,8 @@ export default {
       } else {
         this.listPlant = []
         this.rows = 0
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     cancel() {
@@ -655,7 +665,8 @@ export default {
         this.info = data.info
 
       } else {
-        this.$Notice.error({title: 'Error', desc: 'Request failed'})
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     async plantSateHandler(record, index) {

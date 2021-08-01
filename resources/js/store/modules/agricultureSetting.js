@@ -16,15 +16,12 @@ export const mutations = {
 }
 
 export const actions = {
-  getFarmAgricultureSetting ({ commit }, payload) {
-    return axios.get('/api/farm/getFarmAgricultureSetting').then(
-      response => {
-        return Promise.resolve(response.data);
-      },
-      error => {
-        return Promise.reject(false);
-      }
-    )
+  async getFarmAgricultureSetting ({ commit }, payload) {
+    try {
+      return await axios.get('/api/farm/getFarmAgricultureSetting')
+    } catch (error) {
+      return error.response
+    }
   },
 
   create({ commit }, payload)
@@ -58,5 +55,27 @@ export const actions = {
         return Promise.reject(false);
       }
     )
-  }
+  },
+  async getPlantAgricultureManagement({ commit }, payload) {
+    try {
+      return await axios.get('/api/management-agriculture/', {params: payload})
+    } catch (error) {
+      return error.reponse
+    }
+  },
+  async getPlantAgricultureDetail({ commit }, payload) {
+    try {
+      return await axios.get('/api/management-agriculture/detail/' + payload.id, {params: payload.query})
+    } catch (error) {
+      return error.reponse
+    }
+  },
+  async savePlantAgriculture({ commit }, payload) {
+    try {
+      return await axios.put('/api/management-agriculture/savePlantAgriculture/' + payload.id, payload.body)
+    } catch (error) {
+      return error.reponse
+    }
+  },
+
 }

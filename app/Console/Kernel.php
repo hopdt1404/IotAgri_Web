@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+         $schedule->command('update:plantAgricultureInfo')
+             ->daily()->between('00:00', '23:59')->runInBackground();
     }
 
     /**

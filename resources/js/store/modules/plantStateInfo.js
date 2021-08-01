@@ -4,15 +4,15 @@ export const actions = {
   async store({ commit }, payload) {
     try {
       return await axios.post('/api/plant-state-info', payload)
-    } catch (e) {
-      return JSON.stringify(e)
+    } catch (error) {
+      return error.response
     }
   },
   async getPlantStateInfo({ commit }, payload) {
     try {
       return await axios.get('/api/plant-state-info/create', { params: payload })
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
   async update({ commit }, payload) {
@@ -20,8 +20,8 @@ export const actions = {
       if (payload.id != 0) {
         return await axios.put('/api/plant-state-info/' + payload.id, payload)
       }
-    } catch (e) {
-      return e
+    } catch (error) {
+      return error.response
     }
   },
 }
