@@ -50,6 +50,7 @@ class UpdatePlantAgricultureInfo extends Command
             if (count($ids)) {
                 $data = DB::table('farm_plants')
                     ->whereIn('id', $ids)
+                    ->where('start_time_season', '<=', Carbon::now())
                     ->get();
                 foreach ($data as $record) {
                     if (isset($record->start_time_season) &&
