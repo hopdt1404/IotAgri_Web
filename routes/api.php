@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\LocateAPIController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -70,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // For all User
+    Route::get('locate', [LocateAPIController::class, 'index']);
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
     Route::resource('plant-state', PlantStateAPIController::class);
 

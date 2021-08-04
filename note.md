@@ -26,9 +26,5 @@ php artisan serve
 
 ### Install project Agriculture
 
-+ Install Interniij
++ Research: Topic: MQTT
 
-+ Install Maven
-+ Document https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
-+ cd ../Gateway/
-+ Run maven file  pom.xml => install lib

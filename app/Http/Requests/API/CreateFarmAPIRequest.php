@@ -26,8 +26,8 @@ class CreateFarmAPIRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'Area' => 'nullable|numeric',
-            'LocationID' => 'nullable',
-            'FarmTypeId' => 'nullable',
+            'LocateID' => 'required',
+            'FarmTypeId' => 'required',
             'info' => 'nullable'
         ];
     }

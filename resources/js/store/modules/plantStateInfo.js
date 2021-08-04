@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const actions = {
-  async store({ commit }, payload) {
+  async store ({ commit }, payload) {
     try {
       return await axios.post('/api/plant-state-info', payload)
     } catch (error) {

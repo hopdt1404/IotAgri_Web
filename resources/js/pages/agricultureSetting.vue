@@ -5,45 +5,45 @@
         <b-table id="table-data"
                  :fields="columnsShow"
                  :items="listFarmAgricultureSetting" outlined
-                 @row-clicked="myRowClickHandler"
                  :current-page="currentPage"
-                 :per-page="perPage">
-
-        </b-table>
+                 :per-page="perPage"
+                 @row-clicked="myRowClickHandler"
+        />
       </div>
-      <div class="overflow-auto" v-if="rows > 0">
+      <div v-if="rows > 0" class="overflow-auto">
         <b-pagination
           v-model="currentPage"
           :total-rows="rows"
           :per-page="perPage"
           aria-controls="my-table"
           align="center"
-        ></b-pagination>
+        />
       </div>
 
       <vs-popup name="setting-agriculture"
                 :active.sync="modal"
                 :title="titlePopup"
                 icon-close="x"
-                @close="closePopup()">
+                @close="closePopup()"
+      >
         <div class="dialog-content">
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="select_plant_id">{{ $t('select_plant')}}</label>
+                <label class="input-title" for="select_plant_id">{{ $t('select_plant') }}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="select_plant_id" v-model="plant_id" @change="changePlantSelect" :options="listPlantOfFarm"></b-form-select>
+                <b-form-select id="select_plant_id" v-model="plant_id" :options="listPlantOfFarm" @change="changePlantSelect" />
               </vs-col>
             </vs-row>
           </div>
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="plant_state_id">{{ $t('plant_state')}}</label>
+                <label class="input-title" for="plant_state_id">{{ $t('plant_state') }}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="plant_state_id" v-model="plant_state_id" @change="changePlantState" :options="listPlantState"></b-form-select>
+                <b-form-select id="plant_state_id" v-model="plant_state_id" :options="listPlantState" @change="changePlantState" />
               </vs-col>
             </vs-row>
           </div>
@@ -67,7 +67,7 @@
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="temperature">{{ $t('temperature') + ' (oC)'}}</label>
+                <label class="input-title" for="temperature">{{ $t('temperature') + ' (oC)' }}</label>
               </vs-col>
               <vs-col cols="12">
                 <Input id="temperature"
@@ -79,13 +79,12 @@
                        placeholder="Enter something..."
                 />
               </vs-col>
-
             </vs-row>
           </div>
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="moisture">{{ $t('moisture') + ' (%)'}}</label>
+                <label class="input-title" for="moisture">{{ $t('moisture') + ' (%)' }}</label>
               </vs-col>
               <vs-col cols="12">
                 <Input id="moisture"
@@ -97,13 +96,12 @@
                        placeholder="Enter something..."
                 />
               </vs-col>
-
             </vs-row>
           </div>
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="light">{{ $t('light') + ''}}</label>
+                <label class="input-title" for="light">{{ $t('light') + '' }}</label>
               </vs-col>
               <vs-col cols="12">
                 <Input id="light"
@@ -115,7 +113,6 @@
                        placeholder="Enter something..."
                 />
               </vs-col>
-
             </vs-row>
           </div>
           <div class="dialog-item">
@@ -130,15 +127,21 @@
                   placeholder="Enter something..."
                   rows="3"
                   max-rows="6"
-                ></b-form-textarea>
+                />
               </vs-col>
             </vs-row>
           </div>
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
-          <vs-button class="square mr-2" color="#e6ccff" type="filled" @click="getPlantAgricultureDefault">{{ $t('setting_default') }}</vs-button>
-          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeForm">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-2" color="#e6ccff" type="filled" @click="getPlantAgricultureDefault">
+            {{ $t('setting_default') }}
+          </vs-button>
+          <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeForm">
+            {{ $t('cancel') }}
+          </vs-button>
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="save">
+            {{ $t('save') }}
+          </vs-button>
         </vs-row>
       </vs-popup>
     </div>
@@ -152,7 +155,7 @@ export default {
   components: {
 
   },
-  data() {
+  data () {
     return {
       listFarmAgricultureSetting: [],
       id: '',
@@ -197,23 +200,23 @@ export default {
           label: 'Number plant',
           key: 'number_plant',
           sortable: true
-        },
+        }
       ]
     }
   },
-   created() {
+  created () {
     this.getListFarmAgricultureSetting()
     this.initTitlePopup()
     this.getPlantState()
   },
   methods: {
-    closePopup() {
-      this.modal = false;
+    closePopup () {
+      this.modal = false
       this.initTitlePopup()
       this.resetFormData()
     },
     async getListFarmAgricultureSetting () {
-      let response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
+      const response = await this.$store.dispatch('agricultureSetting/getFarmAgricultureSetting')
       if (response.status === 200) {
         if (response.data.data != null) {
           this.listFarmAgricultureSetting = response.data.data
@@ -222,57 +225,59 @@ export default {
           this.listFarm = []
           this.rows = 0
         }
-
       } else {
         this.listFarm = []
         this.rows = 0
-        this.$Notice.error({title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message})
+        this.$Notice.error({
+          title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message
+        })
       }
     },
-    async myRowClickHandler(record, index) {
-      this.titlePopup += record.name;
+    async myRowClickHandler (record, index) {
+      this.titlePopup += record.name
       this.showModal()
       this.farm_id = record.FarmID
-      let params = {
+      const params = {
         FarmID: this.farm_id
       }
       await this.getPlantOfFarm()
-
     },
-    showModal() {
+    showModal () {
       this.modal = true
     },
-    async getPlantOfFarm() {
-      let params = {
+    async getPlantOfFarm () {
+      const params = {
         FarmID: this.farm_id
       }
-      let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
+      const response = await this.$store.dispatch('plant/getPlantOfFarm', params)
       if (response.status === 200) {
-        this.listPlantOfFarm = response.data.map((element) => {
-          let elementResult = {}
+        this.listPlantOfFarm = response.data.data.map((element) => {
+          const elementResult = {}
           elementResult.value = element.id
           elementResult.text = element.name
           return elementResult
         })
       } else {
         this.listPlantOfFarm = []
-        tthis.$Notice.error({title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message})
+        this.$Notice.error({
+          title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message
+        })
       }
     },
-    initTitlePopup() {
+    initTitlePopup () {
       this.titlePopup = 'Form setting agriculture for '
     },
-    async getPlantAgricultureDefault() {
+    async getPlantAgricultureDefault () {
       if (this.plant_id && this.plant_state_id) {
-        let params = {
+        const params = {
           plant_id: this.plant_id,
           plant_state_id: this.plant_state_id
         }
-        let response = await this.$store.dispatch('plantStateInfo/getPlantStateInfo', params)
+        const response = await this.$store.dispatch('plantStateInfo/getPlantStateInfo', params)
         if (response.status === 200) {
-          let data = response.data.data
+          const data = response.data.data
           if (data) {
             this.growth_period = data.growth_period_state
             this.temperature = data.temperature
@@ -283,18 +288,18 @@ export default {
             this.resetSubFromData()
           }
         } else {
-          this.$Notice.error({title: 'Error ' + response.status,
-            desc: response.statusText + '. ' + response.data.message})
+          this.$Notice.error({
+            title: 'Error ' + response.status,
+            desc: response.statusText + '. ' + response.data.message
+          })
         }
-
       }
     },
-    closeForm() {
+    closeForm () {
       this.closePopup()
-
     },
     async save () {
-      let params = {
+      const params = {
         plant_id: this.plant_id,
         plant_state_id: this.plant_state_id,
         FarmID: this.farm_id,
@@ -314,27 +319,27 @@ export default {
         dispatch = 'agricultureSetting/create'
         action = 'store'
       }
-      let response = await this.$store.dispatch(dispatch, params)
-      if (response.status === 200) {
-        let data = response.data
+      const response = await this.$store.dispatch(dispatch, params)
+      if (response.success === true) { // update
+        const data = response.data
         if (data && action === 'store') {
           this.id = data.id
         }
-        this.$Notice.success({title: 'Success', desc: response.message})
+        this.$Notice.success({ title: 'Success', desc: response.message })
       } else {
-        this.$Notice.error({title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message})
+        this.$Notice.error({
+          title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message
+        })
       }
-
-
     },
-    async getPlantState() {
-      let response = await this.$store.dispatch('plant/getPlantState')
+    async getPlantState () {
+      const response = await this.$store.dispatch('plant/getPlantState')
       if (response.status === 200) {
         if (response.data.data != null) {
-          let data = response.data.data
+          const data = response.data.data
           this.listPlantState = data.map((element) => {
-            let elementResult = {}
+            const elementResult = {}
             elementResult.value = element.id
             elementResult.text = element.name
             return elementResult
@@ -342,10 +347,11 @@ export default {
         } else {
           this.listPlantState = []
         }
-
       } else {
-        this.$Notice.error({title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message})
+        this.$Notice.error({
+          title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message
+        })
         this.listPlantState = []
       }
     },
@@ -358,7 +364,7 @@ export default {
       this.plant_state_id = ''
       this.resetSubFromData()
     },
-    resetSubFromData() {
+    resetSubFromData () {
       this.id = ''
       this.growth_period = ''
       this.temperature = ''
@@ -366,25 +372,25 @@ export default {
       this.light = ''
       this.note = ''
     },
-    changePlantSelect() {
+    changePlantSelect () {
       if (this.plant_state_id && this.plant_id) {
         this.getAgriculturePlantDetail()
       }
     },
-    changePlantState() {
+    changePlantState () {
       if (this.plant_state_id && this.plant_id) {
         this.getAgriculturePlantDetail()
       }
     },
-    async getAgriculturePlantDetail() {
-      let params = {
+    async getAgriculturePlantDetail () {
+      const params = {
         FarmID: this.farm_id,
         plant_id: this.plant_id,
         plant_state_id: this.plant_state_id
       }
-      let response = await this.$store.dispatch('agricultureSetting/getAgriculturePlantDetail', params)
-      if (response.status === 200) {
-        let data = response.data.data
+      const response = await this.$store.dispatch('agricultureSetting/getAgriculturePlantDetail', params)
+      if (response.success === true) {
+        const data = response.data
         if (data) {
           this.id = data.id
           this.growth_period = data.growth_period
@@ -396,8 +402,10 @@ export default {
           this.resetSubFromData()
         }
       } else {
-        this.$Notice.error({title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message})
+        this.$Notice.error({
+          title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message
+        })
       }
     }
 

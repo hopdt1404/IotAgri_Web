@@ -17,10 +17,9 @@ class LocateSeeder extends Seeder
     {
         DB::table('Locates')->updateOrInsert(
             [
-                'id' => 1,
+                'LocateID' => 353412,
             ],
             [
-                'LocateID' => 353412,
                 'LocateName' => 'Ha Noi',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
