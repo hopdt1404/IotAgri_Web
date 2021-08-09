@@ -33,8 +33,10 @@ class FarmAPIController extends AppBaseController
             $farm = DB::table('Farms')
                 ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
                     '=', 'FarmTypes.FarmTypeID')
+                ->leftJoin('Locates', 'Farms.LocateID',
+                    '=', 'Locates.LocateID')
                 ->where(['UserID' => $user->id])
-                ->select('Farms.*','FarmTypes.FarmType')
+                ->select('Farms.*','FarmTypes.FarmType', 'Locates.LocateName')
                 ->get();
             return $this->sendResponse($farm, 'FarmAPIController');
         } catch (\Exception $ex) {
@@ -269,5 +271,19 @@ class FarmAPIController extends AppBaseController
         }
     }
 
-//    public function
+    public function getListFarmOfUser(Request $request)
+    {
+        $user = $request->user();
+        try {
+            Log::info('$user');
+            Log::info($user);
+            $data = $this->model->where([
+                'UserID' => $user->id
+            ])->select('FarmID', 'name')->get();
+            return $this->sendResponse($data, 'Get list farm user success');
+        } catch (\Exception $ex) {
+            Log::error('FarmAPIController@getListFarmOfUser:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -18,6 +18,8 @@ class CreateWeatherForecastTable extends Migration
                 $table->unsignedBigInteger('WeatherForecastID')->autoIncrement();
                 $table->string('LocateID', 50);
                 $table->timestamp('CurrentTime')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+                $table->timestamp('created_at')->useCurrent()->nullable();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
             });
         }
 

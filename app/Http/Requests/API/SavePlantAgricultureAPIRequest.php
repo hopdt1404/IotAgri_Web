@@ -32,6 +32,8 @@ class SavePlantAgricultureAPIRequest extends FormRequest
             'current_plant_state' => 'required|numeric',
             'total_growth_day' => 'required|numeric',
             'status' => 'required|numeric',
+            'plant_device_ids' => 'nullable|array',
+            'plant_device_ids.*' => 'numeric'
         ];
     }
 }

@@ -47,5 +47,19 @@ export const actions = {
     } catch (error) {
       return error.response
     }
+  },
+  async getListFarmOfUser({ commit }, payload) {
+    return await axios.get('/api/farm/getListFarmOfUser').then(
+      response => {
+        if (response.status === 200 && response.data) {
+          return response.data
+        } else {
+          return response
+        }
+      },
+      error => {
+        return error.response.data
+      }
+    )
   }
 }

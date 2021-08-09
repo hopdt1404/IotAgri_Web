@@ -80,6 +80,35 @@ export const actions = {
   async getPlantOfFarm ({ commit }, payload) {
     try {
       return await axios.get('/api/plant/getPlantOfFarm', { params: payload })
+        .then(
+          response => {
+            if (response.status === 200 && response.data) {
+              return response.data
+            } else {
+              return response
+            }
+          },
+          error => {
+            return error.response.data
+          })
+    } catch (error) {
+      return error.response
+    }
+  },
+  async getPlantAssignOfDevice ({ commit }, payload) {
+    try {
+      return await axios.get('/api/plant/getPlantAssignOfDevice', { params: payload })
+        .then(
+          response => {
+            if (response.status === 200 && response.data) {
+              return response.data
+            } else {
+              return response
+            }
+          },
+          error => {
+            return error.response.data
+          })
     } catch (error) {
       return error.response
     }

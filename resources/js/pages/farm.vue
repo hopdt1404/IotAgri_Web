@@ -239,7 +239,7 @@ export default {
         },
         {
           label: 'Location',
-          key: 'LocateID'
+          key: 'LocateName'
         },
         // {
         //   label: 'Status',
@@ -418,8 +418,6 @@ export default {
       await this.getListPlantAssigned()
       await this.getListDeviceSetting()
       await this.getListPlantSetting()
-
-      // await t
     },
     async getListDeviceOfFarm() {
       let params = {
@@ -428,8 +426,10 @@ export default {
       let response = await this.$store.dispatch('device/getDeviceOfFarm', params)
       if (response.status === 200) {
         let data = response.data.data
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             this.devicesSelected = data
+        } else {
+          this.devicesSelected = []
         }
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
@@ -443,8 +443,10 @@ export default {
       let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
       if (response.status === 200) {
         let data = response.data.data
-        if (data.length > 0) {
+        if (data && data.length > 0) {
           this.plantSelected = data
+        } else {
+          this.plantSelected = []
         }
       } else {
         this.$Notice.error({title: 'Error ' + response.status,

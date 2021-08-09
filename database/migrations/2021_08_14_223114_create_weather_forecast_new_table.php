@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWeatherForecastAtATimesTable extends Migration
+class CreateWeatherForecastNewTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateWeatherForecastAtATimesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('WeatherForecastAtATimes')) {
-            Schema::create('WeatherForecastAtATimes', function (Blueprint $table) {
-                $table->unsignedBigInteger('WeatherForecastID')->autoIncrement();
-                $table->timestamp('ForecastTime')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+        if (!Schema::hasTable('weather_forecast')) {
+            Schema::create('weather_forecast', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('LocateID', 50)->nullable();
+                $table->timestamp('ForecastTime')->useCurrent()->nullable();
                 $table->bigInteger('EpochTime')->nullable();
                 $table->string('ForecastStatus', 50)->nullable();
                 $table->tinyInteger('IsDayLight')->nullable();
@@ -41,6 +42,6 @@ class CreateWeatherForecastAtATimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('WeatherForecastAtATimes');
+        Schema::dropIfExists('weather_forecast');
     }
 }

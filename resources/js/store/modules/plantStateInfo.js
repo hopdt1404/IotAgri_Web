@@ -8,20 +8,20 @@ export const actions = {
       return error.response
     }
   },
-  async getPlantStateInfo({ commit }, payload) {
+  async getPlantStateInfo ({ commit }, payload) {
     try {
       return await axios.get('/api/plant-state-info/create', { params: payload })
     } catch (error) {
       return error.response
     }
   },
-  async update({ commit }, payload) {
+  async update ({ commit }, payload) {
     try {
-      if (payload.id != 0) {
+      if (payload.id !== 0) {
         return await axios.put('/api/plant-state-info/' + payload.id, payload)
       }
     } catch (error) {
       return error.response
     }
-  },
+  }
 }

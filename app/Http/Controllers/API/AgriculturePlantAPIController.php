@@ -132,22 +132,47 @@ class AgriculturePlantAPIController extends AppBaseController
     public function savePlantAgriculture(SavePlantAgricultureAPIRequest $request, $id) {
         $data = $request->all();
         $user = $request->user();
+        Log::info('$data');
+        Log::info($data);
         try {
-            DB::table('farm_plants')->where([
-                'id' => $id,
-                'FarmID' => $data['FarmID'],
-                'plant_id' => $data['plant_id'],
-                'user_id' => $user->id
-            ])->update([
-                'start_time_season' => $data['start_time_season'],
-                'end_time_season' => $data['end_time_season'],
-                'current_growth_day' => $data['current_growth_day'],
-                'current_plant_state' => $data['current_plant_state'],
-                'total_growth_day' => $data['total_growth_day'],
-                'status' => $data['status'],
-                'updated_at' => Carbon::now(),
-                'updated_user' => $user->email
-            ]);
+            DB::transaction(function () use ($id, $data, $user) {
+                $plantDevice = $data['plant_device_ids'];
+                $plantId = $data['plant_id'];
+                $farmId = $data['FarmID'];
+                $userId = $user->id;
+                DB::table('farm_plants')->where([
+                    'id' => $id,
+                    'FarmID' => $farmId,
+                    'plant_id' => $plantId,
+                    'user_id' => $userId
+                ])->update([
+                    'start_time_season' => $data['start_time_season'],
+                    'end_time_season' => $data['end_time_season'],
+                    'current_growth_day' => $data['current_growth_day'],
+                    'current_plant_state' => $data['current_plant_state'],
+                    'total_growth_day' => $data['total_growth_day'],
+                    'status' => $data['status'],
+                    'updated_at' => Carbon::now(),
+                    'updated_user' => $user->email
+                ]);
+                if (count($plantDevice) > 0) {
+                    $listPlantDeviceSave = [];
+                    // save new
+                    foreach ($plantDevice as $deviceId) {
+                        $record['plant_id'] = $plantId;
+                        $record['DeviceID'] = $deviceId;
+                        $record['FarmID'] = $farmId;
+                        $record['status'] = 1;
+                        $record['created_at'] = Carbon::now();
+                        $record['created_user'] = $user->email;
+
+                        array_push($listPlantDeviceSave, $record);
+                    }
+                    Db::table('plant_devices')->insert($listPlantDeviceSave);
+                }
+
+            });
+
             return $this->sendSuccess('Save plant agriculture success');
         } catch (\Exception $ex) {
             Log::error('AgriculturePlantAPIController@getPlantAgricultureDetail:' . $ex->getMessage().$ex->getTraceAsString());

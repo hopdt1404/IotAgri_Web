@@ -40,49 +40,69 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
-    Route::middleware(['admin'])->group(function () {
-        Route::post('plant', [PlantAPIController::class, 'store']);
-        Route::put('plant/{plant}', [PlantAPIController::class, 'update']);
-
-        Route::post('plant-state-info', [PlantStateInfoAPIController::class, 'store']);
-        Route::put('plant-state-info/{plant-state-info}', [PlantStateInfoAPIController::class, 'update']);
-//        Route::resource('device', DeviceAPIController::class);
-        Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
-    });
-
-    Route::middleware('user')->group(function () {
-        Route::get('farm', [FarmAPIController::class, 'index']);
-        Route::post('farm', [FarmAPIController::class, 'store']);
-        Route::put('farm/{farm}', [FarmAPIController::class, 'update']);
-        Route::post('farm/setting', [FarmAPIController::class, 'setting']);
-        Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
-        Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
-
-        Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
-        Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
-
-        Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
-        Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
-
-        Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
-        Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
-        Route::put('management-agriculture/savePlantAgriculture/{id}', [AgriculturePlantAPIController::class, 'savePlantAgriculture']);
-        Route::get('management-agriculture/detail/{id}', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
-    });
 
     // For all User
     Route::get('locate', [LocateAPIController::class, 'index']);
     Route::get('farm_type', [FarmTypeAPIController::class, 'index']);
     Route::resource('plant-state', PlantStateAPIController::class);
 
-    Route::get('plant', [PlantAPIController::class, 'index']);
-    Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
+
+    Route::get('farm/getListFarmOfUser', [FarmAPIController::class, 'getListFarmOfUser']);
+
     Route::get('plant_type', [PlantTypeAPIController::class, 'index']);
     Route::get('soil_type', [SoilTypeAPIController::class, 'index']);
     Route::get('plant-state-info/create', [PlantStateInfoAPIController::class, 'create']);
 
-// Todo:     Route::get('location')
 
+    Route::get('device_type', [DeviceTypeAPIController::class, 'index']);
+
+    Route::post('device', [DeviceAPIController::class, 'store']);
+    Route::put('device/{deviceId}', [DeviceAPIController::class, 'update']);
+
+    Route::get('device/getListDeviceSelectOfFarmPlant', [DeviceAPIController::class, 'getListDeviceSelectOfFarmPlant']);
+    Route::get('device/getDeviceAssignForPlantFarm', [DeviceAPIController::class, 'getDeviceAssignForPlantFarm']);
+
+
+
+    Route::middleware(['admin'])->group(function () {
+
+
+    });
+    Route::post('plant', [PlantAPIController::class, 'store']);
+    Route::put('plant/{plant}', [PlantAPIController::class, 'update']);
+
+    Route::post('plant-state-info', [PlantStateInfoAPIController::class, 'store']);
+    Route::put('plant-state-info/{plant-state-info}', [PlantStateInfoAPIController::class, 'update']);
+
+
+    Route::middleware('user')->group(function () {
+
+        Route::post('farm', [FarmAPIController::class, 'store']);
+        Route::put('farm/{farm}', [FarmAPIController::class, 'update']);
+        Route::post('farm/setting', [FarmAPIController::class, 'setting']);
+        Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
+
+
+        Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
+        Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);
+
+        Route::get('plant/getPlantOfFarm', [PlantAPIController::class, 'getPlantOfFarm']);
+        Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
+        Route::get('plant/getPlantAssignOfDevice', [PlantAPIController::class, 'getPlantAssignOfDevice']);
+
+        Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
+        Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
+        Route::put('management-agriculture/savePlantAgriculture/{id}', [AgriculturePlantAPIController::class, 'savePlantAgriculture']);
+        Route::get('management-agriculture/detail/{id}', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
+        Route::get('farm', [FarmAPIController::class, 'index']);
+        Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
+    });
+
+    Route::get('device', [DeviceAPIController::class, 'index']);
+    Route::get('device/{deviceId}', [DeviceAPIController::class, 'show']);
+    Route::get('device/getFarmAssignedDevice/{deviceId}', [DeviceAPIController::class, 'getFarmAssignedDevice']);
+    Route::get('plant', [PlantAPIController::class, 'index']);
+    Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
 });
 
 Route::middleware('guest:sanctum')->group(function () {
