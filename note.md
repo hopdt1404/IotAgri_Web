@@ -28,3 +28,4 @@ php artisan serve
 
 + Research: Topic: MQTT
 
++ I18n: https://viblo.asia/p/vuejs-da-ngon-ngu-trong-ung-dung-vue-6J3Zg2wLKmB

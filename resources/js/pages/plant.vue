@@ -44,14 +44,14 @@
 
       <vs-popup name="form-info"
                 :active.sync="modal"
-                title="Form Info"
+                :title="$t('detail_info')"
                 icon-close="x"
                 @close="closePopup()">
         <div class="dialog-content">
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="name">{{ $t('name') }}</label>
+                <label class="input-title" for="name">{{ $t('plant_name') }}</label>
               </vs-col>
               <vs-col cols="12">
                 <Input id="name"
@@ -239,13 +239,14 @@
         </div>
         <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
-          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+<!--          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>-->
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
 
       <vs-popup name="form-state"
                 :active.sync="modalState"
-                title="Form State"
+                :title="$t('plant_state')"
                 icon-close="x"
                 @close="closeStatePopup()">
         <div class="dialog-content">
@@ -349,7 +350,8 @@
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+<!--          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>-->
+          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
 
@@ -577,6 +579,7 @@ export default {
         plant_type_id: this.plant_type_id,
         growth_period: this.growth_period,
         planting_time: this.planting_time,
+        plant_density: this.plant_density,
         width_bed: this.width_bed,
         height_bed: this.height_bed,
         row_spacing: this.row_spacing,

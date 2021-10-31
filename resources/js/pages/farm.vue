@@ -49,7 +49,7 @@
     <div>
       <vs-popup name="form-info"
                 :active.sync="modal"
-                title="Form Info"
+                :title="$t('detail_info')"
                 icon-close="x">
         <div class="dialog-content">
           <div class="dialog-item">
