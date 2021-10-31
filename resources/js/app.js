@@ -8,12 +8,8 @@ import '~/plugins'
 import '~/components'
 
 // viewUI
-import ViewUI from 'view-design';
-import 'view-design/dist/styles/iview.css';
-
-Vue.config.productionTip = false
-
-Vue.use(ViewUI);
+import ViewUI from 'view-design'
+import 'view-design/dist/styles/iview.css'
 
 // Bootstap view
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -22,24 +18,27 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// Make BootstrapVue available throughout your project
-Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
-
 // vuesax
 import Vuesax from 'vuesax'
 
-import 'vuesax/dist/vuesax.css' //Vuesax styles
-Vue.use(Vuesax)
+import 'vuesax/dist/vuesax.css'
 
 import moment from 'moment'
-Vue.prototype.moment = moment
 
 import Multiselect from 'vue-multiselect'
-import "vue-multiselect/dist/vue-multiselect.min.css"
-Vue.component('multiselect', Multiselect)
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
+Vue.config.productionTip = false
+
+Vue.use(ViewUI)
+
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin) // Vuesax styles
+Vue.use(Vuesax)
+Vue.prototype.moment = moment
+Vue.component('Multiselect', Multiselect)
 
 /* eslint-disable no-new */
 new Vue({

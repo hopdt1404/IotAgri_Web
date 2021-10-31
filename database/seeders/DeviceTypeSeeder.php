@@ -15,6 +15,8 @@ class DeviceTypeSeeder extends Seeder
      */
     public function run()
     {
+        // NO_DEVICE, AGRICULTURE_SENSOR, PUMP
+        // Ref: EchonetLite_over_Lora/Gateway/src/utilites/Helper.java
         DB::table('DeviceTypes')->updateOrInsert(
             [
                 'DeviceTypeID' => 1,

@@ -1,3 +1,4 @@
+<script src="../store/modules/auth.js"></script>
 <script src="../store/modules/farm.js"></script>
 <template>
   <div class="content">
@@ -87,7 +88,7 @@
                 <label class="input-title" for="location">{{ $t('location') }}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="location" v-model="location" :options="null"></b-form-select>
+                <b-form-select id="location" v-model="location" :options="listLocation"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -193,7 +194,7 @@
 
 <script>
 
-
+import { mapActions } from 'vuex'
 export default {
   components: {
 
@@ -210,6 +211,7 @@ export default {
       modal: false,
       listFarm: [],
       listFarmType: [],
+      listLocation: [],
       currentPage: 1,
       perPage: 10,
       rows: 0,
@@ -237,7 +239,7 @@ export default {
         },
         {
           label: 'Location',
-          key: 'LocateID'
+          key: 'LocateName'
         },
         // {
         //   label: 'Status',
@@ -265,8 +267,12 @@ export default {
   created() {
     this.getFarm()
     this.getFarmType()
+    this.getLocationSelect()
   },
   methods: {
+    ...mapActions({
+      getListLocation: 'locate/getLocate'
+    }),
     async save() {
       let params = {
         LocateID: this.location,
@@ -305,6 +311,22 @@ export default {
       this.area = ''
       this.farm_type = ''
       this.info = ''
+    },
+    async getLocationSelect() {
+      let response = await this.getListLocation()
+      if (response.status === 200 && response.data ) {
+        let data = response.data.data
+        this.listLocation = data.map(element => {
+          let elementResult = {}
+          elementResult.value = element.LocateID
+          elementResult.text = element.LocateName
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
+        this.listLocation = []
+      }
     },
     async getFarm () {
       let response = await this.$store.dispatch('farm/getFarm')
@@ -396,8 +418,6 @@ export default {
       await this.getListPlantAssigned()
       await this.getListDeviceSetting()
       await this.getListPlantSetting()
-
-      // await t
     },
     async getListDeviceOfFarm() {
       let params = {
@@ -406,8 +426,10 @@ export default {
       let response = await this.$store.dispatch('device/getDeviceOfFarm', params)
       if (response.status === 200) {
         let data = response.data.data
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             this.devicesSelected = data
+        } else {
+          this.devicesSelected = []
         }
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
@@ -421,8 +443,10 @@ export default {
       let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
       if (response.status === 200) {
         let data = response.data.data
-        if (data.length > 0) {
+        if (data && data.length > 0) {
           this.plantSelected = data
+        } else {
+          this.plantSelected = []
         }
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
@@ -470,6 +494,5 @@ export default {
   }
 
 }
-
 
 </script>

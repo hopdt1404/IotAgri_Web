@@ -70,6 +70,28 @@
       <div class="dialog-item">
         <vs-row>
           <vs-col class="" cols="12">
+            <vs-col class="" cols="12">
+              <label class="input-title" for="farm_id">{{ $t('farm') }}</label>
+            </vs-col>
+            <vs-col cols="12">
+              <b-form-select id="farm_id" v-model="farm_id" :options="listFarmOfUser"></b-form-select>
+            </vs-col>
+          </vs-col>
+        </vs-row>
+      </div>
+      <div class="dialog-item">
+        <vs-row>
+          <vs-col class="" cols="12">
+            <label class="input-title" for="plant_id">{{ $t('plant') }}</label>
+          </vs-col>
+          <vs-col cols="12">
+            <b-form-select id="plant_id" name="plant_id" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
+          </vs-col>
+        </vs-row>
+      </div>
+      <div class="dialog-item">
+        <vs-row>
+          <vs-col class="" cols="12">
             <label class="input-title" for="plot_type">{{ $t('plot_type') }}</label>
           </vs-col>
           <vs-col cols="12">
@@ -101,13 +123,19 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
-  data() {
+  data () {
     return {
       id: '',
       name: '',
       device_type: '',
       plot_type: '',
+      listFarmOfUser: [],
+      farm_id: '',
+      plant_id: '',
+      listPlantOfFarm: [],
       status: 1,
       listDevice: [],
       currentPage: 1,
@@ -158,9 +186,16 @@ export default {
     this.getDeviceType()
   },
   methods: {
+    ...mapActions({
+      getListDevice: 'device/getDevice',
+      getListFarmOfUser: 'farm/getListFarmOfUser',
+      getFarmAssignedDevice: 'device/getFarmAssignedDevice',
+      getPlantOfFarm: 'plant/getPlantOfFarm',
+      getPlantAssignedOfDevice: 'plant/getPlantAssignOfDevice'
+    }),
 
     async getDevice () {
-      let response = await this.$store.dispatch('device/getDevice')
+      let response = await this.getListDevice()
       if (response.status === 200) {
         this.listDevice = response.data.data
         this.rows = this.listDevice.length
@@ -188,6 +223,69 @@ export default {
       this.resetForm();
       this.modal = !this.modal
     },
+    async getListFarmOfCurrentUser () {
+      const response = await this.getListFarmOfUser()
+      console.log('response')
+      console.log(response)
+      if (response.success && response.data) {
+        this.listFarmOfUser = response.data.map((element) => {
+          let elementResult = {}
+          elementResult.value = element.FarmID
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.listFarmOfUser = []
+      }
+    },
+    async getFarmAssignDevice (params) {
+      let response = await this.getFarmAssignedDevice(params)
+      if (response.success && response.data) {
+        this.farm_id = response.data.FarmID
+      } else {
+        this.farm_id = []
+      }
+    },
+    async getListPlantOfFarm (farmId) {
+      let params = {
+        FarmID: farmId
+      }
+      console.log('getListPlantOfFarm')
+      console.log('farmId')
+      console.log(farmId)
+      let response = await this.getPlantOfFarm(params)
+      if (response && response.success && response.data) {
+        if (response.data.length > 0) {
+          this.listPlantOfFarm = response.data.map(element => {
+            let result = {}
+            result.text = element.name
+            result.value = element.id
+            return result
+          })
+        } else {
+          this.listPlantOfFarm = []
+        }
+      } else {
+        this.listPlantOfFarm = []
+      }
+    },
+    async getPlantAssignOfDevice() {
+      // console.log('this.id')
+      // console.log(this.id)
+      let params = {
+        DeviceID: this.id,
+        FarmID: this.farm_id
+      }
+      let response = await this.getPlantAssignedOfDevice(params)
+      // console.log('response')
+      // console.log(response)
+      if (response.success && response.data) {
+        this.plant_id = response.data.id
+      } else {
+        this.plant_id = ''
+      }
+
+    },
     async myRowClickHandler(record, index) {
       this.showModal()
       let params = {
@@ -204,13 +302,17 @@ export default {
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
+      await this.getListFarmOfCurrentUser()
+      await this.getFarmAssignDevice(params)
     },
     async save() {
       let params = {
         DeviceName: this.name,
         DeviceTypeID: this.device_type,
         Status: this.status,
-        PlotId: this.plot_type
+        PlotID: this.plot_type,
+        FarmID: this.farm_id,
+        plant_id: this.plant_id
       }
       let dispatch
       if (this.id) {
@@ -219,6 +321,8 @@ export default {
       } else {
         dispatch = 'device/create'
       }
+      console.log('params')
+      console.log(params)
       let response = await this.$store.dispatch(dispatch, params)
       if (response.status === 200) {
         this.$Notice.success({title: 'Success', desc: response.data.message})
@@ -244,6 +348,21 @@ export default {
         this.listDeviceType = []
       }
 
+    }
+
+  },
+  watch: {
+    farm_id (newVal, oldVal) {
+      if (newVal) {
+        this.getListPlantOfFarm(newVal)
+        this.getPlantAssignOfDevice()
+        console.log('hello')
+      } else {
+        this.plant_id = ''
+        this.listPlantOfFarm = []
+        //  list is null
+        // assign is null
+      }
     }
   }
 }

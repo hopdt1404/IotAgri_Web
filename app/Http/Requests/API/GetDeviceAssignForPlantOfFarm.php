@@ -4,7 +4,7 @@ namespace App\Http\Requests\API;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateFarmAPIRequest extends FormRequest
+class GetDeviceAssignForPlantOfFarm extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,8 @@ class CreateFarmAPIRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:50',
-            'Area' => 'nullable|numeric',
-            'LocateID' => 'required',
-            'FarmTypeId' => 'required',
-            'info' => 'nullable'
+            'plant_id' => 'required|numeric',
+            'FarmID' => 'required|numeric'
         ];
     }
 }

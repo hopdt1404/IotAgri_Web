@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             LocateSeeder::class,
             PlotTypeSeeder::class,
             PlotSeeder::class,
+            SensingSeeder::class
         ]);
     }
 }

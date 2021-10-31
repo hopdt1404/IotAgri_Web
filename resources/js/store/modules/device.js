@@ -57,5 +57,56 @@ export const actions = {
     } catch (error) {
       return error.response
     }
-  }
+  },
+  async getListDeviceSelectOfFarmPlant({ commit }, payload) {
+    try {
+      return await axios.get('/api/device/getListDeviceSelectOfFarmPlant', {params: payload})
+        .then(response => {
+          if (response.data && response.data.success) {
+            return response.data
+          } else {
+            return response
+          }
+        },
+        error => {
+          return error.response.data
+        })
+    } catch (error) {
+      return error.response
+    }
+  },
+  async getDeviceAssignForPlantFarm({ commit }, payload) {
+    try {
+      return await axios.get('/api/device/getDeviceAssignForPlantFarm', {params: payload})
+        .then(response => {
+          if (response.data && response.data.success) {
+            return response.data
+          } else {
+            return response
+          }
+        },
+        error => {
+          return error.response.data
+        })
+    } catch (error) {
+      return error.response
+    }
+  },
+  async getFarmAssignedDevice ({ commit }, payload) {
+    try {
+      return await axios.get('/api/device/getFarmAssignedDevice/' + payload.id)
+        .then(response => {
+          if (response.data && response.data.success) {
+            return response.data
+          } else {
+            return response
+          }
+        },
+        error => {
+          return error.response.data
+        })
+    } catch (error) {
+      return error.response
+    }
+  },
 }

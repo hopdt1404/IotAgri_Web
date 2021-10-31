@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\API\GetDeviceAssignForPlantOfFarm;
+use App\Http\Requests\API\GetListDeviceSelectOfFarmPlantAPIRequest;
 use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\Request;
@@ -55,10 +57,50 @@ class DeviceAPIController extends AppBaseController
         $user = $request->user();
         $data = $request->all();
         try {
-            $data['created_user'] = $user->email;
-            $data['created_at'] = Carbon::now();
-            $data['user_id'] = $user->id;
-            $this->model->insert($data);
+            $device['DeviceName'] = $data['DeviceName'];
+            $device['DeviceTypeID'] = $data['DeviceTypeID'];
+            $device['Status'] = $data['Status'];
+            $device['PlotID'] = isset($data['PlotID']) ? $data['PlotID'] : 1;
+            $device['FarmID'] = isset($data['FarmID']) ? $data['FarmID'] : null;
+
+            $device['created_user'] = $user->email;
+            $device['created_at'] = Carbon::now();
+            $device['user_id'] = $user->id;
+            DB::transaction(function () use ($device, $data, $user) {
+//                $this->model->insert($device);
+                $id = $this->model->insertGetId($device);
+                $plantDevice = DB::table('plant_devices')
+                    ->where(['DeviceID' => $id])
+                    ->first();
+                $status = 0;
+                if (isset($data['plant_id']) && isset($data['FarmID'])) {
+                    $status = 1;
+                }
+                if(isset($plantDevice)) {
+                    DB::table('plant_devices')
+                        ->where(['DeviceID' => $id])
+                        ->update([
+                            'plant_id' => $data['plant_id'],
+                            'FarmID' => $data['FarmID'],
+                            'status' => $status,
+                            'updated_user' => $user->email,
+                            'updated_at' => Carbon::now()
+                        ]);
+                } else {
+                    // insert
+                    DB::table('plant_devices')
+                        ->insert([
+                            'DeviceID' => $id,
+                            'plant_id' => $data['plant_id'],
+                            'FarmID' => $data['FarmID'],
+                            'status' => $status,
+                            'created_user' => $user->email,
+                            'created_at' => Carbon::now()
+                        ]);
+                }
+
+            });
+
             return $this->sendSuccess('Success create data');
         } catch (Exception $ex) {
             Log::error('DeviceAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
@@ -99,13 +141,62 @@ class DeviceAPIController extends AppBaseController
     {
         $user = $request->user();
         $data = $request->all();
-        $data['updated_at'] = Carbon::now();
+
         try {
-            $data['updated_user'] = $user->email;
-            $this->model->where([
-                'DeviceID' => $id,
-                'user_id' => $user->id
-            ])->update($data);
+            $updated_at = Carbon::now();
+            $device['DeviceName'] = $data['DeviceName'];
+            $device['DeviceTypeID'] = $data['DeviceTypeID'];
+            $device['Status'] = $data['Status'];
+            $device['PlotID'] = isset($data['PlotID']) ? $data['PlotID'] : 1;
+            $device['FarmID'] = isset($data['FarmID']) ? $data['FarmID'] : null;
+
+            $updated_user = $user->email;
+            $device['updated_at'] = $updated_at;
+            $device['updated_user'] = $updated_user;
+
+            Log::info('$device');
+            Log::info($device);
+            Log::info('$data');
+            Log::info($data);
+            DB::transaction(function () use ($id, $user, $device, $data){
+                $this->model->where([
+                    'DeviceID' => $id,
+                    'user_id' => $user->id
+                ])->update($device);
+
+
+                $plantDevice = DB::table('plant_devices')
+                    ->where(['DeviceID' => $id])
+                    ->first();
+                $status = 0;
+                if (isset($data['plant_id']) && isset($data['FarmID'])) {
+                    $status = 1;
+                }
+                if(isset($plantDevice)) {
+                    DB::table('plant_devices')
+                        ->where(['DeviceID' => $id])
+                        ->update([
+                            'plant_id' => $data['plant_id'],
+                            'FarmID' => $data['FarmID'],
+                            'status' => $status,
+                            'updated_user' => $user->email,
+                            'updated_at' => Carbon::now()
+                        ]);
+                } else {
+                    // insert
+                    DB::table('plant_devices')
+                        ->insert([
+                            'DeviceID' => $id,
+                            'plant_id' => $data['plant_id'],
+                            'FarmID' => $data['FarmID'],
+                            'status' => $status,
+                            'created_user' => $user->email,
+                            'created_at' => Carbon::now()
+                        ]);
+                }
+
+            });
+
             return $this->sendSuccess('Success update data');
         } catch (Exception $ex) {
             Log::error('DeviceAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
@@ -141,5 +232,77 @@ class DeviceAPIController extends AppBaseController
             Log::error('DeviceAPIController@getDeviceOfFarm:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /*
+     * plant_devices.plant_id = plant_id,
+     * plant_devices.FarmID = FarmID,
+     * plant_devices.user_id = user_id,
+     * Inner join plant_devices - Devices where id = id
+     */
+    public function getListDeviceSelectOfFarmPlant(GetListDeviceSelectOfFarmPlantAPIRequest $request)
+    {
+        $data = $request->all();
+        try {
+            $farmId = $data['FarmID'];
+            $plantId = $data['plant_id'];
+
+            $device = DB::table('Devices')
+                ->where('Devices.FarmID', $farmId)
+                ->join('farm_plants',
+                    'farm_plants.FarmID', '=',
+                    'Devices.FarmID')
+                ->where('farm_plants.plant_id', $plantId)
+                // get device assign for plant_id of not (Left Join)
+//                ->join('plant_devices',
+//                    'plant_devices.plant_id', '=',
+//                    'farm_plants.plant_id')
+                ->select('Devices.DeviceID', 'Devices.DeviceName')
+                ->get();
+            return $this->sendResponse($device, 'Get getListDeviceSelectOfFarmPlant success');
+        } catch (Exception $ex) {
+            Log::error('DeviceAPIController@getListDeviceSelectOfFarmPlant:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getDeviceAssignForPlantFarm(GetDeviceAssignForPlantOfFarm $request)
+    {
+        $data = $request->all();
+        Log::info('getDeviceAssignForPlantFarm');
+        Log::info('$data');
+        Log::info($data);
+        try {
+            $farmId = $data['FarmID'];
+            $plantId = $data['plant_id'];
+            $device = DB::table('Devices')
+                ->where('Devices.FarmID', $farmId)
+                ->join('plant_devices', function ($join) {
+                   $join->on('plant_devices.DeviceID', '=', 'Devices.DeviceID');
+                   $join->on('plant_devices.FarmID', '=', 'Devices.FarmID');
+                })->where('plant_devices.plant_id', $plantId)->get();
+            return $this->sendResponse($device, 'Get getDeviceAssignForPlantFarm success');
+        } catch (Exception $ex) {
+            Log::error('DeviceAPIController@getDeviceAssignForPlantFarm:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    public function getFarmAssignedDevice(Request $request, $deviceId)
+    {
+        try {
+            $farm = DB::table('Devices')
+                ->where('Devices.DeviceID', $deviceId)
+                ->join('Farms', 'Farms.FarmID',
+                '=', 'Devices.FarmID')
+                ->select('Farms.FarmID', 'Farms.name')->first();
+
+            return $this->sendResponse($farm, 'Get getFarmAssignedDevice success');
+        } catch (Exception $ex) {
+            Log::error('DeviceAPIController@getFarmAssignedDevice:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

@@ -128,4 +128,21 @@ class PlantAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getPlantAssignOfDevice(Request $request) {
+        $data = $request->all();
+        $user = $request->user();
+        try {
+            $result = DB::table('plant_devices')->where([
+                'plant_devices.DeviceID' => $data['DeviceID'],
+                'plant_devices.FarmID' => $data['FarmID']
+            ])->join('plants','plant_devices.plant_id',
+                '=', 'plants.id')
+            ->select('plants.id', 'plants.name')->first();
+            return $this->sendResponse($result, 'Success getPlantAssignOfDevice');
+        } catch (Exception $ex) {
+            Log::error('PlantAPIController@getPlantAssignOfDevice:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

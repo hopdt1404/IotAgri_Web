@@ -38,7 +38,7 @@
                 icon-close="x"
                 @close="closePopup()">
 
-        <div class="dialog-content">
+        <div class="dialog-item">
           <vs-row>
             <vs-col cols="12">
               <label class="input-title" for="plant">{{ $t('plant') }}</label>
@@ -52,7 +52,7 @@
             </vs-col>
           </vs-row>
         </div>
-        <div class="dialog-content">
+        <div class="dialog-item">
           <vs-row>
             <vs-col cols="12">
               <label class="input-title" for="farm">{{ $t('farm') }}</label>
@@ -66,7 +66,7 @@
             </vs-col>
           </vs-row>
         </div>
-        <div class="dialog-content">
+        <div class="dialog-item">
           <vs-row>
             <vs-col cols="12">
               <label class="input-title" for="start_time_season">{{ $t('start_time_season') }} <Icon type="md-calendar" /></label>
@@ -77,7 +77,7 @@
             </vs-col>
           </vs-row>
         </div>
-        <div class="dialog-content">
+        <div class="dialog-item">
           <vs-row>
             <vs-col cols="12">
               <label class="input-title" for="end_time_season">{{ $t('end_time_season') }} <Icon type="md-calendar" /></label>
@@ -86,6 +86,34 @@
               <datetime format="YYYY-MM-DD H:i:s"
                         v-model="end_time_season">
               </datetime>
+            </vs-col>
+          </vs-row>
+        </div>
+        <div class="dialog-item">
+          <vs-row>
+            <vs-col cols="12">
+              <label class="input-title"
+                      for="deviceFarmPlant">
+                {{ $t('device')}}
+
+              </label>
+            </vs-col>
+            <vs-col cols="12">
+              <multiselect
+                id="deviceFarmPlant"
+                v-model="deviceFarmPlantSelected"
+                :options="listDeviceFarmPlant"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="true"
+                :preserve-search="false"
+                placeholder="Select device for plant ..."
+                label="DeviceName"
+                track-by="DeviceID"
+                :preselect-first="true"
+              >
+
+              </multiselect>
             </vs-col>
           </vs-row>
         </div>
@@ -149,7 +177,9 @@
 </template>
 
 <script>
-import datetime from 'vuejs-datetimepicker';
+import datetime from 'vuejs-datetimepicker'
+import { mapActions } from 'vuex'
+
 export default {
   components: {
     datetime
@@ -176,6 +206,8 @@ export default {
         { text: 'Activate', value: 1 },
         { text: 'End season', value: 2 },
       ],
+      deviceFarmPlantSelected: [],
+      listDeviceFarmPlant: [],
       rows: 0,
       listPlantManagement: [],
       perPage: 10,
@@ -242,6 +274,10 @@ export default {
 
   },
   methods: {
+    ...mapActions({
+      getListDeviceSelectOfFarmPlant: 'device/getListDeviceSelectOfFarmPlant',
+      getDeviceAssignForPlantFarm: 'device/getDeviceAssignForPlantFarm'
+    }),
     async getPlantAgricultureManagement() {
       let params = {
 
@@ -277,7 +313,9 @@ export default {
         }
 
       }
+      await this.getListDeviceOfFarmPlant(record)
       let response = await this.$store.dispatch('agricultureSetting/getPlantAgricultureDetail', params)
+      await this.getDeviceAssignedForPlantFarm(record)
       if (response.status === 200) {
         let data = response.data.data;
         if (data != null) {
@@ -313,6 +351,12 @@ export default {
       this.closePopup()
     },
     async save() {
+      let listDeviceIdSelected = []
+      if (this.deviceFarmPlantSelected.length > 0) {
+        listDeviceIdSelected = this.deviceFarmPlantSelected.map(element => element.DeviceID)
+      }
+      // console.log('listDeviceIdSelected')
+      // console.log(listDeviceIdSelected)
       let params = {
         id: this.id,
         body: {
@@ -323,7 +367,8 @@ export default {
           current_growth_day: this.current_growth_day,
           current_plant_state: this.current_plant_state,
           total_growth_day: this.total_growth_day,
-          status: this.status
+          status: this.status,
+          plant_device_ids: listDeviceIdSelected
         }
       }
       let response = await this.$store.dispatch('agricultureSetting/savePlantAgriculture', params)
@@ -347,7 +392,8 @@ export default {
       this.modal = true
     },
     closeModal() {
-      this.modal = false;
+      this.modal = false
+      this.resetForm()
     },
     resetForm() {
       this.id = ''
@@ -361,9 +407,41 @@ export default {
       this.current_growth_day = 0
       this.total_growth_day = 0
       this.status = ''
-
-
+      this.deviceFarmPlantSelected = []
+      this.listDeviceFarmPlant = []
     },
+    async getListDeviceOfFarmPlant(data) {
+      const params = {
+        plant_id: data.plant_id,
+        FarmID: data.FarmID
+      }
+      console.log('data getListDeviceOfFarmPlant')
+      console.log(data)
+      let response = await this.getListDeviceSelectOfFarmPlant(params)
+      if (response.success && response.data) {
+        let data = response.data
+        this.listDeviceFarmPlant = data
+      } else {
+        this.$Notice.error({title: 'Error', desc: response.message})
+      }
+    },
+    async getDeviceAssignedForPlantFarm(data) {
+      const params = {
+        plant_id: data.plant_id,
+        FarmID: data.FarmID
+      }
+      console.log('data getDeviceAssignedForPlantFarm')
+      console.log(data)
+      let response = await this.getDeviceAssignForPlantFarm(params)
+      if (response.success && response.data) {
+        let data = response.data
+        if (data) {
+          this.deviceFarmPlantSelected = data
+        } else {
+          this.deviceFarmPlantSelected = []
+        }
+      }
+    }
 
 
   }

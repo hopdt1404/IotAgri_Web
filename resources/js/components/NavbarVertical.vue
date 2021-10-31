@@ -9,7 +9,8 @@
                 {{ $t('farm_nav')}}
             </router-link>
           </li>
-          <li class="nav-item" v-if="user.group_user_id === 1">
+<!--          <li class="nav-item" v-if="user.group_user_id === 1">-->
+          <li class="nav-item">
             <router-link class="nav-link" active-class="active" :to="{name: 'device'}">
               <Icon type="logo-steam" />
                 {{ $t('device_nav')}}
