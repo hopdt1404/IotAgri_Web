@@ -129,7 +129,7 @@
 
     <vs-popup name="form-state"
               :active.sync="modalSetting"
-              title="Form Setting"
+              :title="$t('form_setting_farm')"
               icon-close="x"
               @close="closeFormSetting()">
       <div class="dialog-content">

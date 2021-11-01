@@ -246,7 +246,7 @@
 
       <vs-popup name="form-state"
                 :active.sync="modalState"
-                :title="$t('plant_state')"
+                :title="$t('plant_state') + ' ' + name"
                 icon-close="x"
                 @close="closeStatePopup()">
         <div class="dialog-content">
@@ -673,8 +673,10 @@ export default {
       }
     },
     async plantSateHandler(record, index) {
+
       this.showModalState()
       this.id = record.id
+      this.name = record.name
     },
     resetInfoPlantState() {
       this.plant_state_info_id = ''
@@ -683,6 +685,7 @@ export default {
       this.moisture = ''
       this.light = ''
       this.note = ''
+      this.name = ''
     }
   }
 }

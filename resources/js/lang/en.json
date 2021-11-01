@@ -88,6 +88,11 @@
   "total_growth_day": "Total growth day",
   "detail_info": "Detail info",
   "plant_name": "Plant name",
-  "plant_state_info": "Plant state info"
-
+  "plant_state_info": "Plant state info",
+  "form_setting_farm": "Form setting farm",
+  "farm_own": "Farm own",
+  "plant_tracking": "Plant tracking",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "trouble": "Trouble"
 }

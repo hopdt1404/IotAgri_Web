@@ -38,7 +38,7 @@
     </div>
     <vs-popup name="form-info"
               :active.sync="modal"
-              title="Form Info"
+              :title="$t('detail_info')"
               icon-close="x">
       <div class="dialog-content">
         <vs-row>
@@ -71,7 +71,7 @@
         <vs-row>
           <vs-col class="" cols="12">
             <vs-col class="" cols="12">
-              <label class="input-title" for="farm_id">{{ $t('farm') }}</label>
+              <label class="input-title" for="farm_id">{{ $t('farm_own') }}</label>
             </vs-col>
             <vs-col cols="12">
               <b-form-select id="farm_id" v-model="farm_id" :options="listFarmOfUser"></b-form-select>
@@ -82,7 +82,7 @@
       <div class="dialog-item">
         <vs-row>
           <vs-col class="" cols="12">
-            <label class="input-title" for="plant_id">{{ $t('plant') }}</label>
+            <label class="input-title" for="plant_id">{{ $t('plant_tracking') }}</label>
           </vs-col>
           <vs-col cols="12">
             <b-form-select id="plant_id" name="plant_id" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
@@ -106,9 +106,9 @@
           </vs-col>
           <vs-col cols="12">
               <b-form-radio-group v-model="status">
-                <b-form-radio value="1">Activate</b-form-radio>
-                <b-form-radio value="2">Deactivate</b-form-radio>
-                <b-form-radio value="-1">Trouble</b-form-radio>
+                <b-form-radio value="1">{{ $t('activate')}}</b-form-radio>
+                <b-form-radio value="2">{{ $t('deactivate')}}</b-form-radio>
+                <b-form-radio value="-1">{{ $t('trouble')}}</b-form-radio>
               </b-form-radio-group>
           </vs-col>
         </vs-row>
