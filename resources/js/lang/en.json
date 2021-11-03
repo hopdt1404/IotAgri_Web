@@ -94,5 +94,7 @@
   "plant_tracking": "Plant tracking",
   "activate": "Activate",
   "deactivate": "Deactivate",
-  "trouble": "Trouble"
+  "trouble": "Trouble",
+  "setting_agriculture_for": "Setting agriculture for",
+  "management_agriculture_form": "Form management agriculture"
 }

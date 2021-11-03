@@ -10,13 +10,13 @@
         <template #cell(status)="data">
           {{
             data['item']['status'] == -1 ?
-              'Deactivate' :
+              $t('deactivate') :
             data['item']['status'] == 0 ?
-              'Init' :
+                $t('init') :
             data['item']['status'] == 1 ?
-              'Activate' :
+              $t('activate') :
             data['item']['status'] == 2 ?
-              'End season': ''
+              $t('end_season'): ''
           }}
         </template>
 
@@ -34,7 +34,7 @@
     <div>
       <vs-popup name="form-info"
                 :active.sync="modal"
-                :title="titleForm"
+                :title="$t('management_agriculture_form')"
                 icon-close="x"
                 @close="closePopup()">
 
