@@ -98,6 +98,7 @@
   "deactivate": "Dừng hoạt động",
   "trouble": "Gặp lỗi",
   "init": "Khởi tạo",
+  "device_owner": "Người quản lý",
   "end_season": "Kêt thúc mùa vụ"
 
 }

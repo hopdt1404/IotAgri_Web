@@ -99,10 +99,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     });
+    Route::get('device/getListDeviceAdmin', [DeviceAPIController::class, 'getListDeviceAdmin']);
+    Route::get('device/getListUserCanOwnerDevice', [DeviceAPIController::class, 'getListUserCanOwnerDevice']);
 
     Route::get('device', [DeviceAPIController::class, 'index']);
     Route::get('device/{deviceId}', [DeviceAPIController::class, 'show']);
     Route::get('device/getFarmAssignedDevice/{deviceId}', [DeviceAPIController::class, 'getFarmAssignedDevice']);
+
     Route::get('plant', [PlantAPIController::class, 'index']);
     Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
 });

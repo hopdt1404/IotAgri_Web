@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\API\GetDeviceAssignForPlantOfFarm;
 use App\Http\Requests\API\GetListDeviceSelectOfFarmPlantAPIRequest;
+use App\Http\Utils\AppUtils;
 use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\Request;
@@ -46,6 +47,39 @@ class DeviceAPIController extends AppBaseController
         }
 
     }
+    public function getListDeviceAdmin(Request $request) {
+        try {
+            $user = $request->user();
+            $device = [];
+            if ($user->group_user_id === 1) {
+                $device = DB::table('Devices')
+                    ->leftJoin('DeviceTypes', 'Devices.DeviceTypeID',
+                        '=', 'DeviceTypes.DeviceTypeID')
+                    ->select('Devices.*', 'DeviceTypes.DeviceType')->get();
+            }
+            return $this->sendResponse($device, 'Get device success');
+        } catch (\Exception $ex) {
+            Log::error('DeviceAPIController@getListDeviceAdmin:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    public function getListUserCanOwnerDevice (Request $request) {
+        try {
+            $user = $request->user();
+            $listUser = [];
+            if ($user->group_user_id === 1) {
+                $listUser = DB::table('users')
+                    ->where([
+                        'users.group_user_id' => AppUtils::GROUP_USER
+                    ])
+                    ->select('users.id', 'users.name')->get();
+            }
+            return $this->sendResponse($listUser, '');
+        } catch (\Exception $ex) {
+            Log::error('DeviceAPIController@getListUserCanOwnerDevice:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -65,7 +99,7 @@ class DeviceAPIController extends AppBaseController
 
             $device['created_user'] = $user->email;
             $device['created_at'] = Carbon::now();
-            $device['user_id'] = $user->id;
+            $device['user_id'] = isset($data['user_id']) ? $data['user_id'] : $user->id;
             DB::transaction(function () use ($device, $data, $user) {
 //                $this->model->insert($device);
                 $id = $this->model->insertGetId($device);
@@ -76,27 +110,29 @@ class DeviceAPIController extends AppBaseController
                 if (isset($data['plant_id']) && isset($data['FarmID'])) {
                     $status = 1;
                 }
-                if(isset($plantDevice)) {
-                    DB::table('plant_devices')
-                        ->where(['DeviceID' => $id])
-                        ->update([
-                            'plant_id' => $data['plant_id'],
-                            'FarmID' => $data['FarmID'],
-                            'status' => $status,
-                            'updated_user' => $user->email,
-                            'updated_at' => Carbon::now()
-                        ]);
-                } else {
-                    // insert
-                    DB::table('plant_devices')
-                        ->insert([
-                            'DeviceID' => $id,
-                            'plant_id' => $data['plant_id'],
-                            'FarmID' => $data['FarmID'],
-                            'status' => $status,
-                            'created_user' => $user->email,
-                            'created_at' => Carbon::now()
-                        ]);
+                if(isset($data['plant_id'])) {
+                    if (isset($plantDevice)) {
+                        DB::table('plant_devices')
+                            ->where(['DeviceID' => $id])
+                            ->update([
+                                'plant_id' => $data['plant_id'],
+                                'FarmID' => $data['FarmID'],
+                                'status' => $status,
+                                'updated_user' => $user->email,
+                                'updated_at' => Carbon::now()
+                            ]);
+                    } else {
+                        DB::table('plant_devices')
+                            ->insert([
+                                'DeviceID' => $id,
+                                'plant_id' => $data['plant_id'],
+                                'FarmID' => $data['FarmID'],
+                                'status' => $status,
+                                'created_user' => $user->email,
+                                'created_at' => Carbon::now()
+                            ]);
+                    }
+
                 }
 
             });
@@ -120,8 +156,13 @@ class DeviceAPIController extends AppBaseController
             $user = $request->user();
             $data = $this->model->where([
                 'DeviceID' => $id,
-                'user_id' => $user->id
-            ])->first();
+            ]);
+            if ($user->group_user_id === AppUtils::GROUP_USER) {
+               $data->where([
+                   'user_id' => $user->id
+               ]);
+            }
+            $data = $data->first();
             return $this->sendResponse($data, 'Get device detail success');
         } catch (\Exception $ex) {
             Log::error('DeviceAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
@@ -154,14 +195,11 @@ class DeviceAPIController extends AppBaseController
             $device['updated_at'] = $updated_at;
             $device['updated_user'] = $updated_user;
 
-            Log::info('$device');
-            Log::info($device);
-            Log::info('$data');
-            Log::info($data);
-            DB::transaction(function () use ($id, $user, $device, $data){
+            $userId = isset($data['user_id']) ? $data['user_id'] : $user->id;
+            DB::transaction(function () use ($id, $user, $device, $data, $userId){
                 $this->model->where([
                     'DeviceID' => $id,
-                    'user_id' => $user->id
+                    'user_id' => $userId
                 ])->update($device);
 
 
@@ -172,27 +210,30 @@ class DeviceAPIController extends AppBaseController
                 if (isset($data['plant_id']) && isset($data['FarmID'])) {
                     $status = 1;
                 }
-                if(isset($plantDevice)) {
-                    DB::table('plant_devices')
-                        ->where(['DeviceID' => $id])
-                        ->update([
-                            'plant_id' => $data['plant_id'],
-                            'FarmID' => $data['FarmID'],
-                            'status' => $status,
-                            'updated_user' => $user->email,
-                            'updated_at' => Carbon::now()
-                        ]);
-                } else {
-                    // insert
-                    DB::table('plant_devices')
-                        ->insert([
-                            'DeviceID' => $id,
-                            'plant_id' => $data['plant_id'],
-                            'FarmID' => $data['FarmID'],
-                            'status' => $status,
-                            'created_user' => $user->email,
-                            'created_at' => Carbon::now()
-                        ]);
+                if (isset($data['plant_id'])) {
+                    if(isset($plantDevice)) {
+                        DB::table('plant_devices')
+                            ->where(['DeviceID' => $id])
+                            ->update([
+                                'plant_id' => $data['plant_id'],
+                                'FarmID' => $data['FarmID'],
+                                'status' => $status,
+                                'updated_user' => $user->email,
+                                'updated_at' => Carbon::now()
+                            ]);
+                    } else {
+                        // insert
+                        DB::table('plant_devices')
+                            ->insert([
+                                'DeviceID' => $id,
+                                'plant_id' => $data['plant_id'],
+                                'FarmID' => $data['FarmID'],
+                                'status' => $status,
+                                'created_user' => $user->email,
+                                'created_at' => Carbon::now()
+                            ]);
+                    }
+
                 }
 
             });
