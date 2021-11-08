@@ -239,8 +239,8 @@
         </div>
         <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
-<!--          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>-->
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+<!--          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>-->
         </vs-row>
       </vs-popup>
 
@@ -350,8 +350,8 @@
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
-<!--          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>-->
-          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
+<!--          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>-->
         </vs-row>
       </vs-popup>
 
