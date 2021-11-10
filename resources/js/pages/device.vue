@@ -3,7 +3,8 @@
     <div class="container-fluid">
       <div class="row justify-content-end">
         <div class="col-2">
-          <Button type="info" @click="showModal">{{ $t('add-button')}}</Button>
+          <Button type="info" v-if="user.group_user_id === 1"
+                  @click="showModal">{{ $t('add-button')}}</Button>
         </div>
       </div>
 

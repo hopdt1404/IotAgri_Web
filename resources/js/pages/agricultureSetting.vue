@@ -242,6 +242,11 @@ export default {
         FarmID: this.farm_id
       }
       await this.getPlantOfFarm()
+      if (this.listPlantOfFarm.length && this.listPlantState.length) {
+        this.plant_id = this.listPlantOfFarm[0].value
+        this.plant_state_id = this.listPlantState[0].value
+        this.changePlantState()
+      }
     },
     showModal () {
       this.modal = true

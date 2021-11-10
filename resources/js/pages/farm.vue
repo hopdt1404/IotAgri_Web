@@ -441,8 +441,8 @@ export default {
         FarmID : this.id
       }
       let response = await this.$store.dispatch('plant/getPlantOfFarm', params)
-      if (response.status === 200) {
-        let data = response.data.data
+      if (response.success) {
+        let data = response.data
         if (data && data.length > 0) {
           this.plantSelected = data
         } else {

@@ -189,6 +189,7 @@ class FarmAPIController extends AppBaseController
                 'FarmID' => $farmId
             ])->whereNotIn('plant_id', $plantIds)
             ->update([
+                'FarmID' => null,
                 'updated_at' => Carbon::now(),
 //                'status' => AppUtil::FARM_PLANT_DEACTIVATE_STATUS,
                 'status' => AppUtils::FARM_PLANT_DEACTIVATE_STATUS,
