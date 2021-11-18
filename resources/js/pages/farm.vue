@@ -26,8 +26,12 @@
                       @click="myRowClickHandler(data['item'])">
               {{ $t('detail') }}
             </b-button>
+<!--            <b-button variant="secondary"-->
+<!--                      @click="settingFarm(data['item'])">-->
+<!--              {{ $t('setting_farm') }}-->
+<!--            </b-button>-->
             <b-button variant="secondary"
-                      @click="settingFarm(data['item'])">
+                      @click="managementPlot(data['item'])">
               {{ $t('setting_farm') }}
             </b-button>
 

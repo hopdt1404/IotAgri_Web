@@ -28,6 +28,11 @@ export default [
     component: page('farm')
   },
   {
+    path: 'farm/{temp}',
+    name: 'farm',
+    component: page('farm')
+  },
+  {
     path: 'device',
     name: 'device',
     component: page('device')
