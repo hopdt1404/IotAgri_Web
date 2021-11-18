@@ -11,6 +11,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\FarmAPIController;
+use App\Http\Controllers\API\PlotAPIController;
 use App\Http\Controllers\API\DeviceAPIController;
 use App\Http\Controllers\API\FarmTypeAPIController;
 use App\Http\Controllers\API\DeviceTypeAPIController;
@@ -78,8 +79,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('farm', [FarmAPIController::class, 'store']);
     Route::put('farm/{farm}', [FarmAPIController::class, 'update']);
     Route::post('farm/setting', [FarmAPIController::class, 'setting']);
+    Route::get('farm/getListFarmSelect', [FarmAPIController::class, 'getListFarmSelect']);
     Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
-
+    Route::get('plot/getPlotOfFarm', [PlotAPIController::class, 'getPlotOfFarm']);
+    Route::get('plot/{plotId}', [PlotAPIController::class, 'show']);
 
     Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
     Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);

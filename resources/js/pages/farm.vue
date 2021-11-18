@@ -31,7 +31,7 @@
 <!--              {{ $t('setting_farm') }}-->
 <!--            </b-button>-->
             <b-button variant="secondary"
-                      @click="managementPlot(data['item'])">
+                      @click="managementAreaInFarm(data['item'])">
               {{ $t('setting_farm') }}
             </b-button>
 
@@ -305,6 +305,9 @@ export default {
     },
     showModal() {
       this.modal = true
+    },
+    managementAreaInFarm(farmInfo) {
+      this.$router.push({path:`/management-area-in-farm/${farmInfo.FarmID}`});
     },
     resetForm () {
       if (this.id) {

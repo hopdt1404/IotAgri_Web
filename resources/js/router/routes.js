@@ -28,9 +28,9 @@ export default [
     component: page('farm')
   },
   {
-    path: 'farm/{temp}',
-    name: 'farm',
-    component: page('farm')
+    path: '/management-area-in-farm/:farm_id',
+    name: 'management-area-in-farm',
+    component: page('managementAreaInFarm')
   },
   {
     path: 'device',

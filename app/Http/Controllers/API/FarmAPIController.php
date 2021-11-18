@@ -287,4 +287,19 @@ class FarmAPIController extends AppBaseController
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getListFarmSelect (Request $request) {
+        $user = $request->user();
+        try {
+            $farms = DB::table('Farms')
+                ->where([
+                   'UserID' => $user->id
+                ])->select('FarmID', 'name')->get();
+            return $this->sendResponse($farms, 'Get list farm select success');
+        }catch (\Exception $ex) {
+            Log::error('FarmAPIController@listFarmSelect:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError('Get list farm select error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
 }
