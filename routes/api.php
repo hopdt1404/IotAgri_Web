@@ -82,7 +82,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('farm/getListFarmSelect', [FarmAPIController::class, 'getListFarmSelect']);
     Route::get('farm/getFarmAgricultureSetting', [FarmAPIController::class, 'getFarmAgricultureSetting']);
     Route::get('plot/getPlotOfFarm', [PlotAPIController::class, 'getPlotOfFarm']);
-    Route::get('plot/{plotId}', [PlotAPIController::class, 'show']);
+    Route::resource('plot', PlotAPIController::class);
 
     Route::get('device/getDeviceOfFarm', [DeviceAPIController::class, 'getDeviceOfFarm']);
     Route::get('device/getDeviceSettingFarm', [DeviceAPIController::class, 'getDeviceSettingFarm']);

@@ -2,12 +2,19 @@
   <div class="content">
     <div id="current-farm">
       <div class="dialog-item">
-        <vs-row>
+        <vs-row class="">
           <vs-col class="" vs-offset="8" cols="4">
             {{ $t('current_farm_management') }}
           </vs-col>
           <vs-col vs-offset="8" cols="4">
             <b-form-select id="farm_id" v-model="farm_id" :options="listFarmSelect"></b-form-select>
+          </vs-col>
+        </vs-row>
+      </div>
+      <div class="dialog-item mt-4">
+        <vs-row>
+          <vs-col class="" cols="2" vs-type="flex" vs-justify="flex-end">
+            <Button type="info" @click="showModal">{{ $t('add-button')}}</Button>
           </vs-col>
         </vs-row>
       </div>
@@ -20,6 +27,16 @@
                :current-page="currentPage"
                :per-page="perPage"
                @row-clicked="myRowClickHandler">
+        <template #cell(status)="data">
+          {{
+            data['item']['status'] == -1 ?
+              $t('deactivate') :
+            data['item']['status'] == 0 ?
+              $t('init') :
+            data['item']['status'] == 1 ?
+              $t('activate') : ''
+          }}
+        </template>
       </b-table>
       <b-pagination
         v-model="currentPage"
@@ -169,7 +186,9 @@ export default {
     ...mapActions({
       getListPlotInFarm: 'plot/getListPlotOfFarm',
       getListFarmSelect: 'farm/getListFarmSelect',
-      getPlotDetail: 'plot/getPlotDetail'
+      getPlotDetail: 'plot/getPlotDetail',
+      updatePlotInfo: 'plot/updatePlot',
+      createPlot: 'plot/createPlot'
     }),
     async getListPlot () {
       const params = {
@@ -214,7 +233,7 @@ export default {
       }
     },
     async save() {
-      let params = {
+      const params = {
         Area: this.area,
         status: this.status,
         name: this.name,
@@ -222,11 +241,20 @@ export default {
         PlotTypeID: 1
       }
       // Todo: call api
+      let result
       if (this.plot_id) {
         params.PlotID = this.plot_id
-        // update
+        result = await this.updatePlotInfo(params)
       } else {
-        // create
+        result = await this.createPlot(params)
+      }
+      if (result) {
+        this.$Notice.success({title: 'Success', desc: result.message})
+        this.cancel()
+        this.getListPlot()
+      } else {
+        this.$Notice.error({title: 'Error ' + result.status,
+          desc: result.statusText + '. ' + result.data.message})
       }
 
     }

@@ -41,5 +41,29 @@ export const actions = {
         return Promise.reject(error)
       })
   },
+  async createPlot({ commit }, payload) {
+    return await axios.post(`${config.API_BASE_ULR}/plot/`, payload)
+      .then(response => {
+        if (response.data) {
+          return Promise.resolve(response.data)
+        } else {
+          return Promise.reject(response.data)
+        }
+      }).catch(error =>{
+        return Promise.reject(error)
+      })
+  },
+  async updatePlot({ commit }, payload) {
+    return await axios.put(`${config.API_BASE_ULR}/plot/${payload.PlotID}`, payload)
+      .then(response => {
+        if (response.data) {
+          return Promise.resolve(response.data)
+        } else {
+          return Promise.reject(response.data)
+        }
+      }).catch(error =>{
+        return Promise.reject(error)
+      })
+  },
 
 }

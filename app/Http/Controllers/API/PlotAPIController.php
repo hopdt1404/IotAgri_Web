@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\API\CreatePlotAPIRequest;
 use App\Http\Requests\API\GetPlotOfFarmAPIRequest;
-use Database\Seeders\SensingSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -62,5 +62,32 @@ class PlotAPIController extends AppBaseController
             return $this->sendError('Get plot detail error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public function update(CreatePlotAPIRequest $request, $plotId)
+    {
+        $data = $request->all();
+        try {
+            DB::table('Plots')
+                ->where([
+                   'PlotID' => $plotId,
+                   'FarmID' => $data['FarmID']
+                ])->update($data);
+            return $this->sendSuccess('Update plot info success');
+        } catch (\Exception $ex) {
+            Log::error('PlotAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError('Update plot info error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    public function store(CreatePlotAPIRequest $request)
+    {
+        $data = $request->all();
+        try {
+            DB::table('Plots')->insert($data);
+            return $this->sendSuccess('Create plot success');
+        } catch (\Exception $ex) {
+            Log::error('PlotAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError('Create plot error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
