@@ -32,7 +32,7 @@
 <!--            </b-button>-->
             <b-button variant="secondary"
                       @click="managementAreaInFarm(data['item'])">
-              {{ $t('setting_farm') }}
+              {{ $t('management_area_in_farm') }}
             </b-button>
 
           </template>

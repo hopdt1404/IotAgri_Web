@@ -23,7 +23,7 @@ export default [
     ]
   },
   {
-    path: 'farm',
+    path: '/farm',
     name: 'farm',
     component: page('farm')
   },
@@ -33,22 +33,22 @@ export default [
     component: page('managementAreaInFarm')
   },
   {
-    path: 'device',
+    path: '/device',
     name: 'device',
     component: page('device')
   },
   {
-    path: 'plant',
+    path: '/plant',
     name: 'plant',
     component: page('plant')
   },
   {
-    path: 'setting-agriculture',
+    path: '/setting-agriculture',
     name: 'setting_agriculture',
     component: page('agricultureSetting')
   },
   {
-    path: 'management-agriculture',
+    path: '/management-agriculture',
     name: 'management_agriculture',
     component: page('managementAgriculture')
   },

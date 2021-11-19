@@ -4,32 +4,31 @@
       <div id="navbarToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav flex-column margin-left-10">
           <li class="nav-item" v-if="user.group_user_id === 0">
-            <router-link class="nav-link" active-class="active" :to="{name: 'farm'}">
+            <router-link class="nav-link" active-class="active" to="farm">
               <Icon type="md-grid" />
                 {{ $t('farm_nav')}}
             </router-link>
           </li>
-<!--          <li class="nav-item" v-if="user.group_user_id === 1">-->
           <li class="nav-item">
-            <router-link class="nav-link" active-class="active" :to="{name: 'device'}">
+            <router-link class="nav-link" active-class="active" to="device">
               <Icon type="logo-steam" />
                 {{ $t('device_nav')}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" active-class="active" :to="{name: 'plant'}">
+            <router-link class="nav-link" active-class="active" to="plant">
               <Icon type="ios-ribbon" />
               {{ $t('plant_nav')}}
             </router-link>
           </li>
           <li class="nav-item" v-if="user.group_user_id === 0">
-            <router-link class="nav-link" active-class="active" :to="{name: 'setting_agriculture'}">
+            <router-link class="nav-link" active-class="active" to="setting-agriculture">
               <Icon type="md-aperture" />
               {{ $t('setting_agriculture')}}
             </router-link>
           </li>
           <li class="nav-item" v-if="user.group_user_id === 0">
-            <router-link class="nav-link" active-class="active" :to="{name: 'management_agriculture'}">
+            <router-link class="nav-link" active-class="active" to="management-agriculture">
               <Icon type="ios-barcode" />
               {{ $t('management_agriculture')}}
             </router-link>
@@ -46,12 +45,18 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  data() {
+    return {
+    }
+  },
 
   computed: mapGetters({
     user: 'auth/user'
   }),
 
   created() {
+  },
+  methods: {
   }
 }
 </script>
