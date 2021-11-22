@@ -134,7 +134,7 @@ export default {
       isGetPlotInCreated: false,
       columnsShow: [
         {
-          label: 'Tên vùng',
+          label: 'Tên khu vực',
           key: 'name',
           sortable: true
         },

@@ -328,6 +328,7 @@ export default {
     },
     showModal() {
       this.modal = true
+      this.resetForm()
     },
     managementAreaInFarm(farmInfo) {
       this.$router.push({path:`/management-area-in-farm/${farmInfo.FarmID}`});

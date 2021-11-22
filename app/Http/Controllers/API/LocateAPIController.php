@@ -19,7 +19,11 @@ class LocateAPIController extends AppBaseController
     public function index()
     {
         try {
-            $data = $this->model->get();
+            $data = $this->model
+                ->select('LocateID',
+                'LocateName')
+                ->orderBy('LocateName', 'asc')
+                ->get();
             return $this->sendResponse($data, 'Get Locate success');
         } catch (\Exception $ex) {
             Log::error('LocateAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());

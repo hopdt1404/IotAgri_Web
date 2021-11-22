@@ -34,6 +34,11 @@ class PlotAPIController extends AppBaseController
                 )->leftJoinSub($devices, 'Devices',
                 'Plots.PlotID', '=', 'Devices.PlotID')
                 ->get();
+            foreach ($plots as $plot) {
+                if (!($plot->number_device)) {
+                    $plot->number_device = 0;
+                }
+            }
             return $this->sendResponse($plots, 'Get plots of farm success');
         } catch (\Exception $ex) {
             Log::error('PlotAPIController@getPlotOfFarm:' . $ex->getMessage().$ex->getTraceAsString());

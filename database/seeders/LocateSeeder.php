@@ -17,7 +17,7 @@ class LocateSeeder extends Seeder
     public function run()
     {
         // Get all location City in VN
-        $string = file_get_contents("/home/hopdt/Documents/uet/do_an/project/agriculture/IoTAgriculture/Irrigation/city.list.json");
+        $string = file_get_contents("/home/hopdt/Documents/uet/Web/example_project_laravel_vuejs/laravel-vue-spa/database/init/server/city.list.json");
         $json_a = json_decode($string,true);
         foreach ($json_a as $key => $value) {
             if ($value['country'] == 'VN') {
