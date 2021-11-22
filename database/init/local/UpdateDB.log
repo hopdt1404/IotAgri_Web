@@ -1,0 +1,13 @@
+Group cloumns (create_user, create_at, update_at, update_user)
+Table:
+1: Farms
+Farms.name => nvarchar 128
+Farms.info => Text
+Farms.create_user => nvarchar 128
+Farms.create_at => datetime
+Farms.update_user => nvarchar 128
+Farms.update_at => datetime
+
+
+
+

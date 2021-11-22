@@ -24,10 +24,11 @@ class CreateFarmAPIRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:128',
             'Area' => 'nullable|numeric',
-            'LocateID' => 'required',
-            'FarmTypeId' => 'required',
+            'Status' => 'required|numeric',
+            'LocateID' => 'required|',
+            'FarmTypeId' => 'required|numeric',
             'info' => 'nullable'
         ];
     }

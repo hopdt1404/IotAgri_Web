@@ -36,12 +36,17 @@ class FarmAPIController extends AppBaseController
                 ->leftJoin('Locates', 'Farms.LocateID',
                     '=', 'Locates.LocateID')
                 ->where(['UserID' => $user->id])
-                ->select('Farms.*','FarmTypes.FarmType', 'Locates.LocateName')
+                ->select('Farms.FarmID',
+                    'Farms.Area',
+                    'Farms.name',
+                    'Farms.Status',
+                    'FarmTypes.FarmType',
+                    'Locates.LocateName')
                 ->get();
-            return $this->sendResponse($farm, 'FarmAPIController');
+            return $this->sendResponse($farm, 'Get list farm success');
         } catch (\Exception $ex) {
             Log::error('FarmAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError("Get list farm error", Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -71,10 +76,10 @@ class FarmAPIController extends AppBaseController
             $data['created_at'] = Carbon::now();
             $data['UserID'] = $user->id;
             $this->model->insert($data);
-            return $this->sendSuccess('Success create data');
+            return $this->sendSuccess('Success create farm');
         } catch (Exception $ex) {
             Log::error('FarmAPIController@store:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError("Error create farm", Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
 
@@ -94,11 +99,19 @@ class FarmAPIController extends AppBaseController
             $data = $this->model->where([
                 'FarmID' => $id,
                 'UserID' => $user->id
-            ])->first();
+            ])->select(
+                'FarmID',
+                'name',
+                'Area',
+                'LocateID',
+                'FarmTypeID',
+                'Status',
+                'info',
+            )->first();
             return $this->sendResponse($data, 'Get farm detail success');
         } catch (\Exception $ex) {
             Log::error('FarmAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Get farm detail error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -132,10 +145,10 @@ class FarmAPIController extends AppBaseController
                 'FarmID' => $id,
                 'UserID' => $user->id
             ])->update($data);
-            return $this->sendSuccess('Success update data');
+            return $this->sendSuccess('Success update farm info');
         } catch (Exception $ex) {
             Log::error('FarmAPIController@update:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Error update farm info', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }

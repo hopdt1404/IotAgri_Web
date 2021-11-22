@@ -14,13 +14,15 @@
                  :items="listFarm" outlined
                  :current-page="currentPage"
                  :per-page="perPage">
-
-          <template #cell(created_at)="data" class="width-15">
-              {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
+          <template #cell(Status)="data" class="width-15">
+            {{ data['item']['Status'] == 1 ? $t('activate') : $t('deactivate') }}
           </template>
-          <template #cell(updated_at)="data">
-            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
-          </template>
+<!--          <template #cell(created_at)="data" class="width-15">-->
+<!--              {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}-->
+<!--          </template>-->
+<!--          <template #cell(updated_at)="data">-->
+<!--            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}-->
+<!--          </template>-->
           <template #cell(actions)="data">
             <b-button variant="primary"
                       @click="myRowClickHandler(data['item'])">
@@ -66,9 +68,9 @@
                        v-model="name"
                        clearable
                        type="text"
-                       maxlength="50"
+                       maxlength="128"
                        show-word-limit
-                       placeholder="Enter something..."
+                       placeholder="..."
                        />
               </vs-col>
             </vs-row>
@@ -82,7 +84,7 @@
                 <Input id="area"
                        v-model="area"
                        type="number"
-                       placeholder="Enter something..."/>
+                       placeholder="..."/>
               </vs-col>
             </vs-row>
           </div>
@@ -109,13 +111,26 @@
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
+                <label class="input-title" for="status">{{ $t('status') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-radio-group v-model="status">
+                  <b-form-radio value="0">{{ $t('deactivate')}}</b-form-radio>
+                  <b-form-radio value="1">{{ $t('activate')}}</b-form-radio>
+                </b-form-radio-group>
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
                 <label class="input-title" for="info">{{ $t('info') }}</label>
               </vs-col>
               <vs-col cols="12">
                 <b-form-textarea
                   id="planting_time"
                   v-model="info"
-                  placeholder="Enter something..."
+                  placeholder="..."
                   rows="3"
                   max-rows="6"
                 ></b-form-textarea>
@@ -212,6 +227,7 @@ export default {
       location: '',
       farm_type: '',
       info: '',
+      status: '',
       modal: false,
       listFarm: [],
       listFarmType: [],
@@ -227,39 +243,45 @@ export default {
       listFarmSetting: [],
       columnsShow: [
         {
-          label: 'Name',
+          // label: 'Name',
+          label: 'Tên trang trại',
           key: 'name',
           sortable: true
         },
         {
-          label: 'Area',
+          // label: 'Area',
+          label: 'Diện tích',
           key: 'Area',
           sortable: true
         },
         {
-          label: 'Farm type',
+          // label: 'Farm type',
+          label: 'Loại trang trại',
           key: 'FarmType',
           sortable: true
         },
         {
-          label: 'Location',
-          key: 'LocateName'
+          // label: 'Location',
+          label: 'Vị trí',
+          key: 'LocateName',
+          sortable: true
+        },
+        {
+          // label: 'Status',
+          label: 'Trạng thái',
+          key: 'Status',
+          sortable: true
         },
         // {
-        //   label: 'Status',
-        //   key: 'Status',
+        //   label: 'Created at',
+        //   key: 'created_at',
         //   sortable: true
         // },
-        {
-          label: 'Created at',
-          key: 'created_at',
-          sortable: true
-        },
-        {
-          label: 'Updated at',
-          key: 'updated_at',
-          sortable: true
-        },
+        // {
+        //   label: 'Updated at',
+        //   key: 'updated_at',
+        //   sortable: true
+        // },
         {
           label: 'Actions',
           key: 'actions'
@@ -283,7 +305,8 @@ export default {
         name: this.name,
         Area: this.area,
         FarmTypeId: this.farm_type,
-        info: this.info
+        info: this.info,
+        Status: this.status
       }
       let dispatch
       if (this.id) {
@@ -313,6 +336,7 @@ export default {
       if (this.id) {
         this.id = null
       }
+      this.status = ''
       this.location = ''
       this.name = ''
       this.area = ''
@@ -361,6 +385,7 @@ export default {
         this.location = data.LocateID
         this.area = data.Area
         this.info = data.info
+        this.status = data.Status
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
           desc: response.statusText + '. ' + response.data.message})
