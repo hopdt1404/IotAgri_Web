@@ -83,6 +83,16 @@
             </vs-row>
           </div>
           <div class="dialog-item">
+            <vs-row class="">
+              <vs-col class="" cols="12">
+                {{ $t('plant_on_area') }}
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-select id="plant_id" v-model="plant_id" :options="listPlantSelect"></b-form-select>
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
                 <label class="input-title" for="status">{{ $t('status') }}</label>
@@ -123,13 +133,15 @@ export default {
       farm_id: '',
       listPlotOfFarm: [],
       listFarmSelect: [],
+      listPlantSelect: [],
       plot_id: '',
+      plant_id: '',
       currentPage: 1,
       perPage: 10,
       rows: 0,
       name: '',
       modal: false,
-      status: 0,
+      status: '',
       area: '',
       isGetPlotInCreated: false,
       columnsShow: [
@@ -146,6 +158,11 @@ export default {
         {
           label: 'Trạng thái',
           key: 'status',
+          sortable: true
+        },
+        {
+          label: 'Cây trồng',
+          key: 'plant_name',
           sortable: true
         },
         {
@@ -181,6 +198,7 @@ export default {
         return elementResult
       })
     }
+    await this.getListPlant()
   },
   methods: {
     ...mapActions({
@@ -188,7 +206,8 @@ export default {
       getListFarmSelect: 'farm/getListFarmSelect',
       getPlotDetail: 'plot/getPlotDetail',
       updatePlotInfo: 'plot/updatePlot',
-      createPlot: 'plot/createPlot'
+      createPlot: 'plot/createPlot',
+      getListPlantSelect: 'plant/getPlantSettingFarm'
     }),
     async getListPlot () {
       const params = {
@@ -202,6 +221,21 @@ export default {
           desc: result.statusText + '. ' + result.data.message})
       }
     },
+    async getListPlant() {
+      const result = await this.getListPlantSelect()
+      if (result) {
+        this.listPlantSelect = result.map(item => {
+          let elementResult = {}
+          elementResult.value = item.id
+          elementResult.text = item.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error ' + result.status,
+          desc: result.statusText + '. ' + result.data.message})
+      }
+    },
+
     showModal() {
       this.modal = true
     },
@@ -213,7 +247,8 @@ export default {
       this.name = ''
       this.plot_id = ''
       this.area = ''
-      this.status = 0
+      this.status = ''
+      this.plant_id = ''
     },
     async myRowClickHandler(record) {
       this.showModal()
@@ -230,6 +265,7 @@ export default {
         this.area = result.Area
         this.status = result.status
         this.name = result.name
+        this.plant_id = result.plant_id
       }
     },
     async save() {
@@ -238,6 +274,7 @@ export default {
         status: this.status,
         name: this.name,
         FarmID: this.farm_id,
+        plant_id: this.plant_id,
         PlotTypeID: 1
       }
       // Todo: call api

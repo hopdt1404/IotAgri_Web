@@ -30,9 +30,11 @@ class PlotAPIController extends AppBaseController
                    'FarmID' => $FarmID
                 ])->select(
                     'Plots.PlotID', 'Plots.name', 'Plots.Area',
-                    'Plots.status', 'Devices.number_device'
+                    'Plots.status', 'Devices.number_device', 'plants.name as plant_name'
                 )->leftJoinSub($devices, 'Devices',
                 'Plots.PlotID', '=', 'Devices.PlotID')
+                ->leftJoin('plants', 'Plots.plant_id',
+                '=', 'plants.id')
                 ->get();
             foreach ($plots as $plot) {
                 if (!($plot->number_device)) {
@@ -55,7 +57,8 @@ class PlotAPIController extends AppBaseController
                 'PlotID',
                 'name',
                 'Area',
-                'status'
+                'status',
+                'plant_id'
             )->first();
             if (isset($plot)) {
                 return $this->sendResponse($plot, 'Get plot detail success');

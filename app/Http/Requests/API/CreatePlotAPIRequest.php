@@ -26,8 +26,9 @@ class CreatePlotAPIRequest extends FormRequest
         return [
             'name' => 'required|string',
             'Area' => 'required|numeric|min:0',
-            'FarmID' => 'required|numeric',
+            'FarmID' => 'required|numeric|min:0',
             'status' => 'required|numeric',
+            'plant_id' => 'nullable|numeric|min:0'
         ];
     }
 }

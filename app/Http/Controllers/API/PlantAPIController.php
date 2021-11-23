@@ -109,7 +109,7 @@ class PlantAPIController extends AppBaseController
             return $this->sendResponse($data, 'Success get plant setting farm');
         } catch (Exception $ex) {
             Log::error('PlantAPIController@getPlantSettingFarm:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Error get plant setting farm', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function getPlantOfFarm(Request $request)

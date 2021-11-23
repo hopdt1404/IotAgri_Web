@@ -70,11 +70,16 @@ export const actions = {
     }
   },
   async getPlantSettingFarm ({ commit }, payload) {
-    try {
-      return await axios.get('/api/plant/getPlantSettingFarm')
-    } catch (error) {
-      return error.response
-    }
+    return await axios.get('/api/plant/getPlantSettingFarm')
+      .then(response => {
+        if (response.data && response.data.data) {
+          return Promise.resolve(response.data.data)
+        } else {
+          return Promise.reject(response.data)
+        }
+      }).catch(error =>{
+        return Promise.reject(error)
+      })
   },
 
   async getPlantOfFarm ({ commit }, payload) {

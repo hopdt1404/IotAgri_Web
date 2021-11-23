@@ -99,5 +99,6 @@
   "device_owner": "User owner",
   "management_agriculture_form": "Form management agriculture",
   "current_farm_management": "Current farm management",
+  "plant_on_area": "Plant on area",
   "management_area_in_farm": "Management area in farm"
 }
