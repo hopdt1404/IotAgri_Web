@@ -13,4 +13,9 @@ class AppUtils
     const GROUP_USER = 0;
     const GROUP_ADMIN = 1;
 
+    const PLOT_STATUS_DEACTIVATE = -1;
+    const PLOT_STATUS_INIT = 0;
+    const PLOT_STATUS_ACTIVATE = 1;
+
+
 }

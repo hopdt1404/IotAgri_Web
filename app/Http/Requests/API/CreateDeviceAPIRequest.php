@@ -27,9 +27,8 @@ class CreateDeviceAPIRequest extends FormRequest
             'DeviceName' => 'required|string|max:50',
             'DeviceTypeID' => 'nullable|numeric',
             'Status' => 'required|numeric',
-            'PlotID' => 'nullable|numeric',
-            'FarmID' => 'nullable|numeric',
-            'plant_id' => 'nullable|numeric',
+            'PlotID' => 'nullable|numeric|min:0',
+            'FarmID' => 'nullable|numeric|min:0',
 
         ];
     }

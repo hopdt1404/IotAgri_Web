@@ -22,7 +22,19 @@ class DeviceTypeSeeder extends Seeder
                 'DeviceTypeID' => 1,
             ],
             [
-                'DeviceType' => 'Sensing',
+//                'DeviceType' => 'Sensing',
+                'DeviceType' => 'Cảm biến',
+                'created_at' => Carbon::now(),
+                'created_user' => 'Admin',
+            ]
+        );
+        DB::table('DeviceTypes')->updateOrInsert(
+            [
+                'DeviceTypeID' => 1,
+            ],
+            [
+//                'DeviceType' => 'Sensing',
+                'DeviceType' => 'Cảm biến',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -32,7 +44,8 @@ class DeviceTypeSeeder extends Seeder
                 'DeviceTypeID' => 2,
             ],
             [
-                'DeviceType' => 'Actuating',
+//                'DeviceType' => 'Sensing',
+                'DeviceType' => 'Cảm biến độ ẩm đất',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -42,7 +55,8 @@ class DeviceTypeSeeder extends Seeder
                 'DeviceTypeID' => 3,
             ],
             [
-                'DeviceType' => 'Gateway',
+//                'DeviceType' => 'Sensing',
+                'DeviceType' => 'Cảm biến nhiệt độ và độ ẩm không khí',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -52,7 +66,41 @@ class DeviceTypeSeeder extends Seeder
                 'DeviceTypeID' => 4,
             ],
             [
-                'DeviceType' => 'Controlling',
+//                'DeviceType' => 'Sensing',
+                'DeviceType' => 'Cảm biến ánh sáng',
+                'created_at' => Carbon::now(),
+                'created_user' => 'Admin',
+            ]
+        );
+        DB::table('DeviceTypes')->updateOrInsert(
+            [
+                'DeviceTypeID' => 5,
+            ],
+            [
+//                'DeviceType' => 'Actuating',
+                'DeviceType' => 'Máy bơm',
+                'created_at' => Carbon::now(),
+                'created_user' => 'Admin',
+            ]
+        );
+        DB::table('DeviceTypes')->updateOrInsert(
+            [
+                'DeviceTypeID' => 6,
+            ],
+            [
+//                'DeviceType' => 'Gateway',
+                'DeviceType' => 'Trạm trung gian',
+                'created_at' => Carbon::now(),
+                'created_user' => 'Admin',
+            ]
+        );
+        DB::table('DeviceTypes')->updateOrInsert(
+            [
+                'DeviceTypeID' => 7,
+            ],
+            [
+//                'DeviceType' => 'Controlling',
+                'DeviceType' => 'Bộ điều khiển',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]

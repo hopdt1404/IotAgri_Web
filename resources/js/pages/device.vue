@@ -16,15 +16,15 @@
                  :current-page="currentPage"
                  :per-page="perPage">
           <template #cell(Status)="data">
-            {{ data['item']['Status'] == -1 ? 'Trouble' :
-            data['item']['Status'] == 1 ? 'Activate' : 'Deactivate'}}
+            {{ data['item']['Status'] == -1 ? $t('trouble') :
+            data['item']['Status'] == 1 ? $t('activate') : $t('deactivate')}}
           </template>
-          <template #cell(created_at)="data" class="width-15">
-            {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
-          </template>
-          <template #cell(updated_at)="data">
-            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
-          </template>
+<!--          <template #cell(created_at)="data" class="width-15">-->
+<!--            {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}-->
+<!--          </template>-->
+<!--          <template #cell(updated_at)="data">-->
+<!--            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}-->
+<!--          </template>-->
         </b-table>
       </div>
       <div class="overflow-auto" v-if="rows > 0">
@@ -51,6 +51,7 @@
                    v-model="name"
                    clearable
                    type="text"
+                   :disabled="!isAdmin"
                    maxlength="50"
                    show-word-limit
                    placeholder="Enter something..."
@@ -64,33 +65,40 @@
             <label class="input-title" for="device_type">{{ $t('device_type') }}</label>
           </vs-col>
           <vs-col cols="12">
-            <b-form-select id="device_type" v-model="device_type" :options="listDeviceType"></b-form-select>
+            <b-form-select id="device_type"
+                           v-model="device_type"
+                           :options="listDeviceType"
+                           :disabled="!isAdmin"></b-form-select>
           </vs-col>
         </vs-row>
       </div>
-      <div v-if="user.group_user_id === 0" class="dialog-item" >
+      <div v-if="!isAdmin" class="dialog-item">
         <vs-row>
           <vs-col class="" cols="12">
             <vs-col class="" cols="12">
               <label class="input-title" for="farm_id">{{ $t('farm_own') }}</label>
             </vs-col>
             <vs-col cols="12">
-              <b-form-select id="farm_id" v-model="farm_id" :options="listFarmOfUser"></b-form-select>
+              <b-form-select id="farm_id"
+                             v-model="farm_id"
+                             :options="listFarmOfUser"
+                             @change="updateListPlotOfFarm"
+              ></b-form-select>
             </vs-col>
           </vs-col>
         </vs-row>
       </div>
-      <div v-if="user.group_user_id === 0" class="dialog-item">
+      <div v-if="!isAdmin" class="dialog-item">
         <vs-row>
           <vs-col class="" cols="12">
-            <label class="input-title" for="plant_id">{{ $t('plant_tracking') }}</label>
+            <label class="input-title" for="plot_id">{{ $t('plot_position') }}</label>
           </vs-col>
           <vs-col cols="12">
-            <b-form-select id="plant_id" name="plant_id" v-model="plant_id" :options="listPlantOfFarm"></b-form-select>
+            <b-form-select id="plot_id" name="plot_id" v-model="plot_id" :options="listPlotOfFarmSelect"></b-form-select>
           </vs-col>
         </vs-row>
       </div>
-      <div v-if="user.group_user_id === 1" class="dialog-item" >
+      <div v-if="isAdmin" class="dialog-item" >
         <vs-row>
           <vs-col class="" cols="12">
             <label class="input-title" for="device_owner">{{ $t('device_owner') }}</label>
@@ -100,23 +108,23 @@
           </vs-col>
         </vs-row>
       </div>
-      <div class="dialog-item">
-        <vs-row>
-          <vs-col class="" cols="12">
-            <label class="input-title" for="plot_type">{{ $t('plot_type') }}</label>
-          </vs-col>
-          <vs-col cols="12">
-            <b-form-select id="plot_type" v-model="plot_type" :options="null"></b-form-select>
-          </vs-col>
-        </vs-row>
-      </div>
+<!--      <div class="dialog-item">-->
+<!--        <vs-row>-->
+<!--          <vs-col class="" cols="12">-->
+<!--            <label class="input-title" for="plot_type">{{ $t('plot_type') }}</label>-->
+<!--          </vs-col>-->
+<!--          <vs-col cols="12">-->
+<!--            <b-form-select id="plot_type" v-model="plot_type" :options="null"></b-form-select>-->
+<!--          </vs-col>-->
+<!--        </vs-row>-->
+<!--      </div>-->
       <div class="dialog-item">
         <vs-row>
           <vs-col class="" cols="12">
             <label class="input-title" for="status">{{ $t('status') }}</label>
           </vs-col>
           <vs-col cols="12">
-              <b-form-radio-group v-model="status">
+              <b-form-radio-group disabled v-model="status">
                 <b-form-radio value="1">{{ $t('activate')}}</b-form-radio>
                 <b-form-radio value="2">{{ $t('deactivate')}}</b-form-radio>
                 <b-form-radio value="-1">{{ $t('trouble')}}</b-form-radio>
@@ -149,7 +157,9 @@ export default {
       listFarmOfUser: [],
       farm_id: '',
       plant_id: '',
+      plot_id: '',
       listPlantOfFarm: [],
+      listPlotOfFarmSelect: [],
       status: 1,
       user_id_owner: '',
       listUser: [],
@@ -158,37 +168,49 @@ export default {
       perPage: 10,
       rows: 0,
       modal: false,
+      isAdmin: false,
       columnsShow: [
         {
-          label: 'Name',
+          // label: 'Name',
+          label: 'Tên thiết bị',
           key: 'DeviceName',
           sortable: true
         },
         {
-          label: 'Device Type',
+          // label: 'Device Type',
+          label: 'Loại thiết bị',
           key: 'DeviceType',
           sortable: true
         },
         {
-          label: 'Plot type',
-          key: 'PlotID',
-          sortable: true
-        },
-        {
-          label: 'Status',
+          // label: 'Status',
+          label: 'Trạng thái',
           key: 'Status',
           sortable: true
         },
         {
-          label: 'Created at',
-          key: 'created_at',
+          // label: 'Farm',
+          label: 'Trang trại lắp đặt',
+          key: 'farm_name',
           sortable: true
         },
         {
-          label: 'Updated at',
-          key: 'updated_at',
+          // label: 'plot',
+          label: 'Khu vực lắp đặt',
+          key: 'plot_name',
           sortable: true
         },
+
+        // {
+        //   label: 'Created at',
+        //   key: 'created_at',
+        //   sortable: true
+        // },
+        // {
+        //   label: 'Updated at',
+        //   key: 'updated_at',
+        //   sortable: true
+        // },
 
       ],
       listDeviceType: [],
@@ -200,6 +222,9 @@ export default {
   created() {
     this.getDevice()
     this.getDeviceType()
+    if (this.user.group_user_id === 1) {
+      this.isAdmin = true
+    }
   },
   computed: mapGetters({
     user: 'auth/user'
@@ -210,6 +235,7 @@ export default {
       getListDeviceAdmin: 'device/getListDeviceAdmin',
       getListFarmOfUser: 'farm/getListFarmOfUser',
       getListUserCanOwner: 'device/getListUserCanOwnerDevice',
+      getListPlotOfFarmSelect: 'plot/getListPlotOfFarmSelect',
       getFarmAssignedDevice: 'device/getFarmAssignedDevice',
       getPlantOfFarm: 'plant/getPlantOfFarm',
       getPlantAssignedOfDevice: 'plant/getPlantAssignOfDevice'
@@ -234,7 +260,11 @@ export default {
     },
     showModal() {
       this.modal = true
-      this.getListUser()
+      if (this.isAdmin) {
+        this.getListUser()
+      }
+      this.resetForm()
+
     },
     resetForm () {
       if (this.id) {
@@ -244,6 +274,12 @@ export default {
       this.name = ''
       this.status = 1
       this.device_type = ''
+      this.farm_id = ''
+      this.plot_id = ''
+    },
+    updateListPlotOfFarm() {
+      this.getListPlotOfFarm(this.farm_id)
+      this.plot_id = ''
     },
     cancel() {
       this.resetForm();
@@ -309,21 +345,23 @@ export default {
         id : record.DeviceID
       }
       let response
-      if (this.user.group_user_id === 0) {
+      if (!this.isAdmin) {
         this.getListFarmOfCurrentUser()
-        this.getFarmAssignDevice(params)
+        // this.getFarmAssignDevice(params)
 
       }
       response = await this.$store.dispatch('device/getDeviceDetail', params)
       // console.log('response')
       // console.log(response)
       if (response.data && response) {
-        let data = response.data
+        const data = response.data
         this.id = data.DeviceID
         this.name = data.DeviceName
         this.device_type = data.DeviceTypeID
         this.status = data.Status
-        this.plot_type = data.PlotId
+        this.farm_id = data.FarmID
+        this.getListPlotOfFarm(this.farm_id)
+        this.plot_id = data.PlotID
         this.user_id_owner = data.user_id
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
@@ -348,7 +386,7 @@ export default {
         DeviceName: this.name,
         DeviceTypeID: this.device_type,
         Status: this.status,
-        PlotID: this.plot_type,
+        PlotID: this.plot_id,
       }
       if (this.user.group_user_id === 0) {
         params.FarmID = this.farm_id
@@ -390,22 +428,41 @@ export default {
         this.listDeviceType = []
       }
 
+    },
+    async getListPlotOfFarm(farmId) {
+      const params = {
+        FarmID: farmId
+      }
+      const response = await this.getListPlotOfFarmSelect(params)
+      if (response) {
+        this.listPlotOfFarmSelect = response.map(element => {
+          let elementResult = {}
+          elementResult.value = element.PlotID
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
+      }
+
     }
 
   },
   watch: {
-    farm_id (newVal, oldVal) {
-      if (newVal) {
-        this.getListPlantOfFarm(newVal)
-        this.getPlantAssignOfDevice()
-        console.log('hello')
-      } else {
-        this.plant_id = ''
-        this.listPlantOfFarm = []
-        //  list is null
-        // assign is null
-      }
-    }
+    // farm_id (newVal, oldVal) {
+    //   if (newVal) {
+    //     // this.getListPlantOfFarm(newVal)
+    //     this.getListPlotOfFarm(newVal)
+    //     // this.getPlantAssignOfDevice()
+    //   } else {
+    //     // this.plant_id = ''
+    //     // this.listPlantOfFarm = []
+    //     this.listPlotOfFarmSelect = []
+    //     //  list is null
+    //     // assign is null
+    //   }
+    // }
   }
 }
 </script>

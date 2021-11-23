@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\CreatePlotAPIRequest;
 use App\Http\Requests\API\GetPlotOfFarmAPIRequest;
+use App\Http\Utils\AppUtils;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,28 @@ class PlotAPIController extends AppBaseController
         } catch (\Exception $ex) {
             Log::error('PlotAPIController@getPlotOfFarm:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError('Get plots of farm error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getListPlotOfFarmSelect(GetPlotOfFarmAPIRequest $request)
+    {
+        $data = $request->all();
+        try {
+            $FarmID = $data['FarmID'];
+            $plots = DB::table('Plots')
+                ->where([
+                    'FarmID' => $FarmID
+                ])
+                ->whereIn('Plots.status',
+                    [AppUtils::PLOT_STATUS_INIT, AppUtils::PLOT_STATUS_ACTIVATE])
+                ->select(
+                    'Plots.PlotID', 'Plots.name')
+                ->orderBy('PlotID')
+                ->get();
+            return $this->sendResponse($plots, 'Get plots of farm select success');
+        } catch (\Exception $ex) {
+            Log::error('PlotAPIController@getListPlotOfFarmSelect:' . $ex->getMessage().$ex->getTraceAsString());
+            return $this->sendError('Get plots of farm select error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

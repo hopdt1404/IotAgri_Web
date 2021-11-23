@@ -29,6 +29,18 @@ export const actions = {
         return Promise.reject(error)
       })
   },
+  async getListPlotOfFarmSelect({ commit }, payload) {
+    return await axios.get(`${config.API_BASE_ULR}/plot/getListPlotOfFarmSelect`, {params: payload})
+      .then(response => {
+        if (response.data && response.data.data) {
+          return Promise.resolve(response.data.data)
+        } else {
+          return Promise.reject(response.data)
+        }
+      }).catch(error =>{
+        return Promise.reject(error)
+      })
+  },
   async getPlotDetail({ commit }, payload) {
     return await axios.get(`${config.API_BASE_ULR}/plot/${payload.PlotID}`)
       .then(response => {
