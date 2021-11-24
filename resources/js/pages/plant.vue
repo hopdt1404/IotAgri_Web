@@ -12,12 +12,12 @@
                  :items="listPlant" outlined
                  :current-page="currentPage"
                  :per-page="perPage">
-          <template #cell(created_at)="data" class="width-15">
-            {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}
-          </template>
-          <template #cell(updated_at)="data">
-            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}
-          </template>
+<!--          <template #cell(created_at)="data" class="width-15">-->
+<!--            {{ moment(data['item']['created_at']).format("YYYY-MM-DD HH:mm:ss") }}-->
+<!--          </template>-->
+<!--          <template #cell(updated_at)="data">-->
+<!--            {{ data['item']['updated_at'] ? moment(data['item']['updated_at']).format("YYYY-MM-DD HH:mm:ss") : ''}}-->
+<!--          </template>-->
           <template #cell(actions)="data">
             <b-button variant="primary"
               @click="myRowClickHandler(data['item'])">
@@ -58,26 +58,10 @@
                        v-model="name"
                        clearable
                        type="text"
+                       :disabled="!isAdmin"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
-                />
-              </vs-col>
-            </vs-row>
-          </div>
-          <div class="dialog-item">
-            <vs-row>
-              <vs-col cols="12">
-                <label class="input-title" for="cultivars">{{ $t('cultivars') }}</label>
-              </vs-col>
-              <vs-col cols="12">
-                <Input id="cultivars"
-                       v-model="cultivars"
-                       clearable
-                       type="text"
-                       maxlength="50"
-                       show-word-limit
-                       placeholder="Enter something..."
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -88,7 +72,10 @@
                 <label class="input-title" for="plant_type_id">{{ $t('plant_type') }}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="plant_type_id" v-model="plant_type_id" :options="listPlantType"></b-form-select>
+                <b-form-select id="plant_type_id"
+                               v-model="plant_type_id"
+                               :disabled="!isAdmin"
+                               :options="listPlantType"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -102,9 +89,10 @@
                        v-model="growth_period"
                        clearable
                        type="text"
+                       :disabled="!isAdmin"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -118,7 +106,8 @@
                 <b-form-textarea
                   id="planting_time"
                   v-model="planting_time"
-                  placeholder="Enter something..."
+                  :disabled="!isAdmin"
+                  placeholder="..."
                   rows="3"
                   max-rows="6"
                 ></b-form-textarea>
@@ -137,7 +126,8 @@
                        type="text"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -154,7 +144,8 @@
                        type="text"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -171,7 +162,8 @@
                        type="text"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -188,7 +180,8 @@
                        type="text"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -205,7 +198,8 @@
                        type="text"
                        maxlength="50"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -216,7 +210,10 @@
                 <label class="input-title" for="soil_type_id">{{ $t('soil_type') }}</label>
               </vs-col>
               <vs-col cols="12">
-                <b-form-select id="soil_type_id" v-model="soil_type_id" :options="listSoilType"></b-form-select>
+                <b-form-select id="soil_type_id"
+                               v-model="soil_type_id"
+                               :disabled="!isAdmin"
+                               :options="listSoilType"></b-form-select>
               </vs-col>
             </vs-row>
           </div>
@@ -229,7 +226,8 @@
                 <b-form-textarea
                   id="info"
                   v-model="info"
-                  placeholder="Enter something..."
+                  :disabled="!isAdmin"
+                  placeholder="..."
                   rows="3"
                   max-rows="6"
                 ></b-form-textarea>
@@ -239,7 +237,7 @@
         </div>
         <vs-row class="pt-6 pr-3" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="cancel">{{ $t('cancel') }}</vs-button>
-          <vs-button v-if="user.group_user_id === 1" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
+          <vs-button v-if="isAdmin" class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>
 <!--          <vs-button class="square mr-2 " color="primary" type="filled" @click="save" >{{ $t('save')}}</vs-button>-->
         </vs-row>
       </vs-popup>
@@ -272,7 +270,8 @@
                        type="number"
                        maxlength="7"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
             </vs-row>
@@ -289,7 +288,8 @@
                        type="number"
                        maxlength="15"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
 
@@ -307,7 +307,8 @@
                        type="number"
                        maxlength="15"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
 
@@ -325,7 +326,8 @@
                        type="text"
                        maxlength="255"
                        show-word-limit
-                       placeholder="Enter something..."
+                       :disabled="!isAdmin"
+                       placeholder="..."
                 />
               </vs-col>
 
@@ -340,7 +342,8 @@
                 <b-form-textarea
                   id="note"
                   v-model="note"
-                  placeholder="Enter something..."
+                  :disabled="!isAdmin"
+                  placeholder="..."
                   rows="3"
                   max-rows="6"
                 ></b-form-textarea>
@@ -350,8 +353,7 @@
         </div>
         <vs-row class="pt-6 pr-3 mt-4" vs-type="flex" vs-justify="flex-end" vs-align="center">
           <vs-button class="square mr-2" color="#bdc3c7" type="filled" @click="closeFormState">{{ $t('cancel') }}</vs-button>
-          <vs-button class="square mr-2 " v-if="user.group_user_id === 1" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
-<!--          <vs-button class="square mr-2 " color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>-->
+          <vs-button class="square mr-2 " v-if="isAdmin" color="primary" type="filled" @click="saveState" >{{ $t('save')}}</vs-button>
         </vs-row>
       </vs-popup>
 
@@ -370,7 +372,6 @@ export default {
       modalState: false,
       id: '',
       name: '',
-      cultivars: '',
       plant_type_id: '',
       growth_period: '',
       planting_time: '',
@@ -391,35 +392,34 @@ export default {
       rows: 0,
       columnsShow: [
         {
-          label: 'Name',
+          // label: 'Name',
+          label: 'Tên cây trồng',
           key: 'name',
           sortable: true
         },
         {
-          label: 'Cultivars',
-          key: 'cultivars',
-          sortable: true
-        },
-        {
-          label: 'Growth period',
+          // label: 'Growth period',
+          label: 'Thời gian sinh trưởng',
           key: 'growth_period',
           sortable: true
         },
         {
-          label: 'Plant type',
+          // label: 'Plant type',
+          label: 'Loại cây trồng',
           key: 'plant_type',
           sortable: true
         },
         {
-          label: 'Soil type',
+          // label: 'Soil type',
+          label: 'Loại đất trồng',
           key: 'soil_type',
           sortable: true
         },
-        {
-          label: 'Created at',
-          key: 'created_at',
-          sortable: true
-        },
+        // {
+        //   label: 'Created at',
+        //   key: 'created_at',
+        //   sortable: true
+        // },
         // {
         //   label: 'Updated at',
         //   key: 'updated_at',
@@ -446,7 +446,8 @@ export default {
     this.getPlantState()
   },
   computed: mapGetters({
-    user: 'auth/user'
+    user: 'auth/user',
+    isAdmin: 'auth/isAdmin'
   }),
   methods: {
     async getPlantState() {
@@ -575,7 +576,6 @@ export default {
     async save() {
       let params = {
         name: this.name,
-        cultivars: this.cultivars,
         plant_type_id: this.plant_type_id,
         growth_period: this.growth_period,
         planting_time: this.planting_time,
@@ -610,7 +610,6 @@ export default {
         this.id = ''
       }
       this.name = ''
-      this.cultivars = ''
       this.plant_type_id = ''
       this.growth_period = ''
       this.planting_time = ''
@@ -652,10 +651,9 @@ export default {
       }
       let response = await this.$store.dispatch('plant/getPlantDetail', params)
       if (response.status === 200) {
-        let data = response.data.data;
+        let data = response.data.data
         this.id = data.id
         this.name = data.name
-        this.cultivars = data.cultivars
         this.plant_type_id = data.plant_type_id
         this.growth_period = data.growth_period
         this.planting_time = data.planting_time

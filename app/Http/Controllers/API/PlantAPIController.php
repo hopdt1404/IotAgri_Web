@@ -31,12 +31,16 @@ class PlantAPIController extends AppBaseController
             $plant = DB::table('plants')
                 ->leftJoin('soil_types', 'plants.soil_type_id', '=', 'soil_types.id')
                 ->leftJoin('plant_types', 'plants.plant_type_id', '=', 'plant_types.id')
-                ->orderby('created_at', 'desc')
-                ->select('plants.*', 'soil_types.name AS soil_type', 'plant_types.name AS plant_type') ->get();
+                ->orderby('plants.created_at', 'desc')
+                ->select('plants.id',
+                    'plants.name',
+                    'plants.growth_period',
+                    'soil_types.name AS soil_type',
+                    'plant_types.name AS plant_type') ->get();
             return $this->sendResponse($plant, 'Get plant success');
         } catch (\Exception $ex) {
             Log::error('PlantAPIController@index:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Get plant error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

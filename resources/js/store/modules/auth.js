@@ -9,7 +9,13 @@ export const state = {
 // getters
 export const getters = {
   user: state => state.user,
-  check: state => state.user !== null
+  check: state => state.user !== null,
+  isAdmin: state => {
+    if (state.user.group_user_id === 1) {
+      return true
+    }
+    return false
+  }
 }
 
 // mutations

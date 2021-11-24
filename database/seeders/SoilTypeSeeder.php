@@ -20,7 +20,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 1,
             ],
             [
-                'name' => 'Sandy soil',
+//                'name' => 'Sandy soil',
+                'name' => 'Đất cát',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
@@ -31,7 +32,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 2,
             ],
             [
-                'name' => 'Clay Soil',
+//                'name' => 'Clay Soil',
+                'name' => 'Đất sét',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
@@ -42,7 +44,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 3,
             ],
             [
-                'name' => 'Silt Soil',
+//                'name' => 'Silt Soil',
+                'name' => 'Đất phù sa',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
@@ -53,7 +56,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 4,
             ],
             [
-                'name' => 'Peat Soil',
+//                'name' => 'Peat Soil',
+                'name' => 'Đất than bùn',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
@@ -64,7 +68,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 5,
             ],
             [
-                'name' => 'Chalk Soil',
+//                'name' => 'Chalk Soil',
+                'name' => 'Đất đá',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
@@ -75,7 +80,8 @@ class SoilTypeSeeder extends Seeder
                 'id' => 6,
             ],
             [
-                'name' => 'Loam Soil',
+//                'name' => 'Loam Soil',
+                'name' => 'Đất mùn',
                 'info' => 'https://www.boughton.co.uk/products/topsoils/soil-types/',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',

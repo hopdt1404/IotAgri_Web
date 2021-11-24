@@ -168,7 +168,6 @@ export default {
       perPage: 10,
       rows: 0,
       modal: false,
-      isAdmin: false,
       columnsShow: [
         {
           // label: 'Name',
@@ -222,12 +221,10 @@ export default {
   created() {
     this.getDevice()
     this.getDeviceType()
-    if (this.user.group_user_id === 1) {
-      this.isAdmin = true
-    }
   },
   computed: mapGetters({
-    user: 'auth/user'
+    user: 'auth/user',
+    isAdmin: 'auth/isAdmin'
   }),
   methods: {
     ...mapActions({

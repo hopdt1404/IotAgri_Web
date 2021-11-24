@@ -20,7 +20,8 @@ class PlantTypeSeeder extends Seeder
                 'id' => 1,
             ],
             [
-                'name' => 'Annuals',
+//                'name' => 'Annuals',
+                'name' => 'Cây lương thực',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -30,7 +31,8 @@ class PlantTypeSeeder extends Seeder
                 'id' => 2,
             ],
             [
-                'name' => 'Bulbs',
+//                'name' => 'Bulbs',
+                'name' => 'Cây ăn quả',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -40,7 +42,8 @@ class PlantTypeSeeder extends Seeder
                 'id' => 3,
             ],
             [
-                'name' => 'Cactus - Succulents',
+//                'name' => 'Cactus - Succulents',
+                'name' => 'Cây rau màu',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -50,7 +53,8 @@ class PlantTypeSeeder extends Seeder
                 'id' => 4,
             ],
             [
-                'name' => 'Climbers',
+//                'name' => 'Climbers',
+                'name' => 'Cây làm thuốc',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -60,7 +64,7 @@ class PlantTypeSeeder extends Seeder
                 'id' => 5,
             ],
             [
-                'name' => 'Conifers',
+                'name' => 'Cây gia vị',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -70,7 +74,7 @@ class PlantTypeSeeder extends Seeder
                 'id' => 6,
             ],
             [
-                'name' => 'Ferns',
+                'name' => 'Cây công nghiệp',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -80,112 +84,113 @@ class PlantTypeSeeder extends Seeder
                 'id' => 7,
             ],
             [
-                'name' => 'Fruit',
+//                'name' => 'Fruit',
+                'name' => 'Loại khác',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
         );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 8,
-            ],
-            [
-                'name' => 'Herbs',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 9,
-            ],
-            [
-                'name' => 'Ornamental Grasses',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 10,
-            ],
-            [
-                'name' => 'Perennials',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 11,
-            ],
-            [
-                'name' => 'Roses',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 12,
-            ],
-            [
-                'name' => 'Shrubs',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 13,
-            ],
-            [
-                'name' => 'Trees',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 14,
-            ],
-            [
-                'name' => 'Palms - Cycads',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 15,
-            ],
-            [
-                'name' => 'Bamboos',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 16,
-            ],
-            [
-                'name' => 'Aquatic Plants',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-
-        DB::table('plant_types')->updateOrInsert(
-            [
-                'id' => 17,
-            ],
-            [
-                'name' => 'Orchids',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 8,
+//            ],
+//            [
+//                'name' => 'Herbs',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 9,
+//            ],
+//            [
+//                'name' => 'Ornamental Grasses',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 10,
+//            ],
+//            [
+//                'name' => 'Perennials',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 11,
+//            ],
+//            [
+//                'name' => 'Roses',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 12,
+//            ],
+//            [
+//                'name' => 'Shrubs',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 13,
+//            ],
+//            [
+//                'name' => 'Trees',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 14,
+//            ],
+//            [
+//                'name' => 'Palms - Cycads',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 15,
+//            ],
+//            [
+//                'name' => 'Bamboos',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 16,
+//            ],
+//            [
+//                'name' => 'Aquatic Plants',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
+//
+//        DB::table('plant_types')->updateOrInsert(
+//            [
+//                'id' => 17,
+//            ],
+//            [
+//                'name' => 'Orchids',
+//                'created_at' => Carbon::now(),
+//                'created_user' => 'Admin',
+//            ]
+//        );
 
     }
 }

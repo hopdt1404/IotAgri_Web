@@ -17,7 +17,6 @@ class CreatePlantTable extends Migration
             Schema::create('plants', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name', 50)->nullable();
-                $table->string('cultivars', 50)->nullable()->comment('giong cay trong');
                 $table->unsignedTinyInteger('plant_type_id')->nullable();
                 $table->string('growth_period', 50)->nullable()->comment('Thoi gian sinh truong');
                 $table->text('planting_time')->nullable()->comment('thoi gian gieo trong');
