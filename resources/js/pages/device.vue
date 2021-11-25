@@ -1,3 +1,4 @@
+<script src="../store/modules/analyticData.js"></script>
 <template>
   <div class="content">
     <div class="container-fluid">

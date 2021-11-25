@@ -100,5 +100,11 @@
   "management_agriculture_form": "Form management agriculture",
   "current_farm_management": "Current farm management",
   "plant_on_area": "Plant on area",
+  "analytics-data": "Analytics data",
+  "analytics-data-for-area": "Analytics data for area",
+  "plot": "Area",
+  "date_analytics": "Date analytics",
+  "analytic_data": "Analytic data",
+  "avg_data_for_plot_by_day": "Avg data for area by day",
   "management_area_in_farm": "Management area in farm"
 }

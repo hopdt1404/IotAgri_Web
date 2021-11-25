@@ -102,5 +102,11 @@
   "end_season": "Kêt thúc mùa vụ",
   "current_farm_management": "Trang trại hiện tại",
   "plant_on_area": "Cây trồng trong khu vực",
+  "analytics-data": "Biểu đồ dữ liệu",
+  "analytics-data-for-area": "Phân tích dữ liệu theo khu vực",
+  "plot": "Khu vực",
+  "date_analytics": "Ngày phân tích dữ liệu",
+  "analytic_data": "Phân tích",
+  "avg_data_for_plot_by_day": "Dữ liệu trung bình theo ngày tại khu vực",
   "management_area_in_farm": "Quản lý khu vực"
 }

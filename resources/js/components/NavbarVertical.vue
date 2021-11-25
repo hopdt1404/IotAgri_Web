@@ -33,6 +33,12 @@
               {{ $t('management_agriculture')}}
             </router-link>
           </li>
+          <li class="nav-item" v-if="user.group_user_id === 0">
+            <router-link class="nav-link" active-class="active" to="analytics-data">
+              <Icon type="md-stats" />
+              {{ $t('analytics-data')}}
+            </router-link>
+          </li>
 
         </ul>
       </div>

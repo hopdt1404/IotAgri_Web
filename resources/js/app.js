@@ -4,6 +4,17 @@ import router from '~/router'
 import i18n from '~/plugins/i18n'
 import App from '~/components/App'
 
+import ECharts from 'vue-echarts'
+import { use } from 'echarts/core'
+// //
+// // import ECharts modules manually to reduce bundle size
+import { CanvasRenderer } from 'echarts/renderers'
+import { BarChart } from 'echarts/charts'
+import {
+  GridComponent,
+  TooltipComponent
+} from 'echarts/components'
+
 import '~/plugins'
 import '~/components'
 
@@ -40,6 +51,16 @@ Vue.use(Vuesax)
 Vue.prototype.moment = moment
 Vue.component('Multiselect', Multiselect)
 
+
+// register globally (or you can do it locally)
+use([
+  CanvasRenderer,
+  BarChart,
+  GridComponent,
+  TooltipComponent
+])
+
+Vue.component('v-chart', ECharts)
 /* eslint-disable no-new */
 new Vue({
   i18n,

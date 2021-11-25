@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AnalyticsDataAPIController;
 use App\Http\Controllers\API\LocateAPIController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -61,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('device/{deviceId}', [DeviceAPIController::class, 'update']);
 
     Route::get('device/getListDeviceSelectOfFarmPlant', [DeviceAPIController::class, 'getListDeviceSelectOfFarmPlant']);
+    Route::get('device/getListDeviceSelectOfFarmPlot', [DeviceAPIController::class, 'getListDeviceSelectOfFarmPlot']);
     Route::get('device/getDeviceAssignForPlantFarm', [DeviceAPIController::class, 'getDeviceAssignForPlantFarm']);
 
 
@@ -112,6 +114,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('plant', [PlantAPIController::class, 'index']);
     Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
+
+    Route::get('analytics/getDataAnalytics', [AnalyticsDataAPIController::class, 'getDataAnalytics']);
 });
 
 Route::middleware('guest:sanctum')->group(function () {

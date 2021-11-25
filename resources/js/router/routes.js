@@ -52,6 +52,11 @@ export default [
     name: 'management_agriculture',
     component: page('managementAgriculture')
   },
+  {
+    path: '/analytics-data',
+    name: 'analytics_data',
+    component: page('analyticsData')
+  },
 
   { path: '*', component: page('errors/404.vue') }
 ]

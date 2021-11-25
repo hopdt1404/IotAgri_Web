@@ -1,4 +1,5 @@
 import axios from 'axios'
+import deviceService from '../../services/device.service'
 
 export const actions = {
   async getDevice ({ commit }, payload) {
@@ -154,5 +155,20 @@ export const actions = {
     } catch (error) {
       return error.response
     }
+  },
+  getListDeviceSelectOfFarmPlot ({ commit }, data) {
+    return deviceService.getListDeviceSelectOfFarmPlot(data)
+      .then(response => {
+        return Promise.resolve(response.data)
+      },
+      () => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
+      })
+      .catch(() => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
+      })
   }
+
 }

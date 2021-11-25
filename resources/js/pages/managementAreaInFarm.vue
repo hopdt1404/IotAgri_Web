@@ -1,3 +1,4 @@
+<script src="../store/modules/locate.js"></script>
 <template>
   <div class="content">
     <div id="current-farm">

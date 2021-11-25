@@ -29,3 +29,8 @@ php artisan serve
 + Research: Topic: MQTT
 
 + I18n: https://viblo.asia/p/vuejs-da-ngon-ngu-trong-ung-dung-vue-6J3Zg2wLKmB
+
+
++ Chart: https://echarts.apache.org/v4/en/option.html#title
++ Chart examples: https://echarts.apache.org/v4/examples/en/index.html
++ Vue-chart: https://github.com/ecomfe/vue-echarts
