@@ -140,10 +140,15 @@ class AnalyticsDataAPIController extends AppBaseController
 
             $xAxis = [];
             $data = [];
-            for ($i = $daySubtract; $i > 0; $i-- ) {
-                $currentDay = Carbon::parse($today)->subDays($i);
-                $xAxis[] = ucfirst($currentDay->dayName);
-                $currentDayString = $currentDay->format('Y-m-d');
+            for ($i = $daySubtract; $i >= 0; $i-- ) {
+                if ($i == 0) {
+                    $xAxis[] = 'Hôm nay';
+                    $currentDayString = $today;
+                } else {
+                    $currentDay = Carbon::parse($today)->subDays($i);
+                    $xAxis[] = ucfirst($currentDay->dayName);
+                    $currentDayString = $currentDay->format('Y-m-d');
+                }
                 $resultCurrentDay = $result->firstWhere('dateMeasurement', $currentDayString);
                 if ($resultCurrentDay) {
                     $data[] = $resultCurrentDay->$columnPluck;
@@ -151,8 +156,9 @@ class AnalyticsDataAPIController extends AppBaseController
                     $data[] = 0;
                 }
 
+
             }
-            $xAxis[] = 'Hôm nay';
+
 
             $resultData['success'] = true;
             $resultData['data'] = [
