@@ -23,5 +23,19 @@ export const actions = {
         // eslint-disable-next-line prefer-promise-reject-errors
         return Promise.reject(false)
       })
+  },
+  getAnalyticDataSevenDayNearest ({ commit }, data) {
+    return analyticDataService.getAnalyticDataSevenDayNearest(data)
+      .then(response => {
+          return Promise.resolve(response.data)
+        },
+        () => {
+          // eslint-disable-next-line prefer-promise-reject-errors
+          return Promise.reject(false)
+        })
+      .catch(() => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
+      })
   }
 }

@@ -116,6 +116,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('plant/{plant}', [PlantAPIController::class, 'show']);
 
     Route::get('analytics/getDataAnalytics', [AnalyticsDataAPIController::class, 'getDataAnalytics']);
+    Route::get('analytics/analyticDataSevenDayNearest', [AnalyticsDataAPIController::class, 'analyticDataSevenDayNearest']);
 });
 
 Route::middleware('guest:sanctum')->group(function () {

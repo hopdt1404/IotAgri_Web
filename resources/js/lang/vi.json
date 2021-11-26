@@ -108,5 +108,7 @@
   "date_analytics": "Ngày phân tích dữ liệu",
   "analytic_data": "Phân tích",
   "avg_data_for_plot_by_day": "Dữ liệu trung bình theo ngày tại khu vực",
+  "avg_data_7_day_nearest": "Dữ liệu trung bình 7 ngày gần nhất",
+  "analytics_data_type": "Loaị dữ liệu",
   "management_area_in_farm": "Quản lý khu vực"
 }
