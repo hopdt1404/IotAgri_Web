@@ -343,14 +343,9 @@ export default {
         id : record.DeviceID
       }
       let response
-      if (!this.isAdmin) {
-        this.getListFarmOfCurrentUser()
-        // this.getFarmAssignDevice(params)
+      // get device info is for admin and user
 
-      }
       response = await this.$store.dispatch('device/getDeviceDetail', params)
-      // console.log('response')
-      // console.log(response)
       if (response.data && response) {
         const data = response.data
         this.id = data.DeviceID
@@ -358,12 +353,27 @@ export default {
         this.device_type = data.DeviceTypeID
         this.status = data.Status
         this.farm_id = data.FarmID
-        this.getListPlotOfFarm(this.farm_id)
         this.plot_id = data.PlotID
         this.user_id_owner = data.user_id
       } else {
         this.$Notice.error({title: 'Error', desc: 'Request failed'})
       }
+      if (this.isAdmin) {
+
+        // this.getFarmAssignDevice(params)
+
+      } else {
+        // for user
+        this.getListFarmOfCurrentUser()
+        // Todo  Admin, user
+        this.getListPlotOfFarm(this.farm_id)
+      }
+
+
+
+      // console.log('response')
+      // console.log(response)
+
 
     },
     async getListUser() {

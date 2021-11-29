@@ -165,18 +165,21 @@ class DeviceAPIController extends AppBaseController
             $data = $this->model->where([
                 'DeviceID' => $id,
             ]);
+            $data->select('DeviceID',
+                'DeviceName',
+                'DeviceTypeID',
+                'FarmID',
+                'PlotID',
+                'Status',
+            );
             if ($user->group_user_id === AppUtils::GROUP_USER) {
                $data->where([
                    'user_id' => $user->id
                ]);
+            } else {
+                $data->addSelect('user_id');
             }
-            $data = $data->select('DeviceID',
-                    'DeviceName',
-                    'DeviceTypeID',
-                    'FarmID',
-                    'PlotID',
-                    'Status',
-            )->first();
+            $data = $data->first();
             return $this->sendResponse($data, 'Get device detail success');
         } catch (\Exception $ex) {
             Log::error('DeviceAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());
@@ -199,7 +202,6 @@ class DeviceAPIController extends AppBaseController
 
         try {
             $updated_at = Carbon::now();
-//            $device['DeviceName'] = $data['DeviceName'];
 //            $device['DeviceTypeID'] = $data['DeviceTypeID'];
 //            $device['Status'] = $data['Status'];
             $device['PlotID'] = isset($data['PlotID']) ? $data['PlotID'] : null;
@@ -209,12 +211,22 @@ class DeviceAPIController extends AppBaseController
             $device['updated_at'] = $updated_at;
             $device['updated_user'] = $updated_user;
 
+
             $userId = isset($data['user_id']) ? $data['user_id'] : $user->id;
-            DB::transaction(function () use ($id, $user, $device, $data, $userId){
-                $this->model->where([
+
+            DB::transaction(function () use ($id, $user, $device, $userId, $data){
+                $temp = $this->model->where([
                     'DeviceID' => $id,
-                    'user_id' => $userId
-                ])->update($device);
+                ]);
+                if ($user->group_user_id == AppUtils::GROUP_ADMIN) {
+                    $device['DeviceName'] = $data['DeviceName'];
+                    $device['user_id'] = $userId;
+                } else {
+                    $temp->where([
+                        'user_id' => $userId
+                    ]);
+                }
+                $temp->update($device);
 
 
                 // Todo: not use table: plant_devices
