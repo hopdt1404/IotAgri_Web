@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\API\GetPlantAgricultureDetailAPIRequest;
+use App\Http\Utils\AppUtils;
 use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\Request;
@@ -84,21 +86,34 @@ class AgriculturePlantAPIController extends AppBaseController
     {
         $user = $request->user();
         try {
-            // Todo: order by
             $farm = DB::table('Farms')
                 ->where([
-                    'UserID' => $user->id
+                    'UserID' => $user->id,
+                    'Status' => AppUtils::FARM_PLANT_ACTIVATE_STATUS
                 ])->select('name', 'FarmID', 'LocateID');
-            $farmPlant = DB::table('farm_plants')
+            $farmPlant = DB::table('Plots')
+                ->joinSub($farm, 'Farms',
+                'Plots.FarmID', '=', 'Farms.FarmID')
                 ->where([
-                    'user_id' => $user->id,
-                ])->leftJoinSub($farm, 'Farms',
-                'Farms.FarmID', '=', 'farm_plants.FarmID')
-                ->leftJoin('plants', 'plants.id', '=', 'farm_plants.plant_id')
-
-//                ->leftJoin('plant_states', 'farm_plants.plant_state')
-                ->select('farm_plants.*', 'plants.name AS plant_name', 'Farms.name AS farm_name')
-                ->orderBy('farm_plants.created_at', 'desc')->get();
+                    'Plots.status' => AppUtils::PLOT_STATUS_ACTIVATE
+                ])->join('plants',
+                'plants.id', '=', 'Plots.plant_id')
+                ->leftJoin('farm_plants',function ($join) {
+                    $join->on('farm_plants.PlotID', '=', 'Plots.PlotID');
+                    $join->on('farm_plants.plant_id', '=', 'Plots.plant_id');
+                })->orderBy('Plots.FarmID')
+                ->select(
+                    'plants.name as plant_name',
+                    'plants.id as plant_id',
+                    'Farms.name as farm_name',
+                    'Farms.FarmID',
+                    'Plots.name as plot_name',
+                    'Plots.PlotID as plot_id',
+                    'farm_plants.status',
+                    'farm_plants.id',
+                    'farm_plants.start_time_season',
+                    'farm_plants.end_time_season',
+                )->get();
             return $this->sendResponse($farmPlant, 'Get plant agriculture management success');
         } catch (\Exception $ex) {
             Log::error('AgriculturePlantAPIController@getPlantAgricultureManagement:' . $ex->getMessage().$ex->getTraceAsString());
@@ -106,72 +121,25 @@ class AgriculturePlantAPIController extends AppBaseController
         }
     }
 
-    public function getPlantAgricultureDetail(Request $request, $id) {
+    public function getPlantAgricultureDetail(GetPlantAgricultureDetailAPIRequest $request) {
         $data = $request->all();
-        $user = $request->user();
         try {
-            $data = DB::table('farm_plants')
+            $result = DB::table('farm_plants')
                 ->where([
-                    'id' => $id,
                     'plant_id' => $data['plant_id'],
-                    'FarmID' => $data['FarmID'],
-                    'user_id' => $user->id
-                ])->first();
-            return $this->sendResponse($data, 'Get plant agriculture detail success');
-        } catch (\Exception $ex) {
-            Log::error('AgriculturePlantAPIController@getPlantAgricultureDetail:' . $ex->getMessage().$ex->getTraceAsString());
-            return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function savePlantAgriculture(SavePlantAgricultureAPIRequest $request, $id) {
-        $data = $request->all();
-        $user = $request->user();
-        Log::info('$data');
-        Log::info($data);
-        try {
-            DB::transaction(function () use ($id, $data, $user) {
-                $plantDevice = $data['plant_device_ids'];
-                $plantId = $data['plant_id'];
-                $farmId = $data['FarmID'];
-                $userId = $user->id;
-                DB::table('farm_plants')->where([
-                    'id' => $id,
-                    'FarmID' => $farmId,
-                    'plant_id' => $plantId,
-                    'user_id' => $userId
-                ])->update([
-                    'start_time_season' => $data['start_time_season'],
-                    'end_time_season' => $data['end_time_season'],
-                    'current_growth_day' => $data['current_growth_day'],
-                    'current_plant_state' => $data['current_plant_state'],
-                    'total_growth_day' => $data['total_growth_day'],
-                    'status' => $data['status'],
-                    'updated_at' => Carbon::now(),
-                    'updated_user' => $user->email
+                    'PlotID' => $data['PlotID'],
                 ]);
-                if (count($plantDevice) > 0) {
-                    $listPlantDeviceSave = [];
-                    // save new
-                    foreach ($plantDevice as $deviceId) {
-                        $record['plant_id'] = $plantId;
-                        $record['DeviceID'] = $deviceId;
-                        $record['FarmID'] = $farmId;
-                        $record['status'] = 1;
-                        $record['created_at'] = Carbon::now();
-                        $record['created_user'] = $user->email;
-
-                        array_push($listPlantDeviceSave, $record);
-                    }
-                    Db::table('plant_devices')->insert($listPlantDeviceSave);
-                }
-
-            });
-
-            return $this->sendSuccess('Save plant agriculture success');
+            if (isset($data['id'])) {
+                $result->where([
+                    'id' => $data['id']
+                ]);
+            }
+            $result = $result->first();
+            return $this->sendResponse($result, 'Get plant agriculture detail success');
         } catch (\Exception $ex) {
             Log::error('AgriculturePlantAPIController@getPlantAgricultureDetail:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

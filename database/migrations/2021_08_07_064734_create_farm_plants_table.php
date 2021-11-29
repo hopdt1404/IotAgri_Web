@@ -18,8 +18,8 @@ class CreateFarmPlantsTable extends Migration
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('PlotID')->nullable();
                 $table->unsignedBigInteger('plant_id')->nullable();
-                $table->timestamp('start_time_season')->nullable()->comment('thoi gian bat dau vu mua');
-                $table->timestamp('end_time_season')->nullable()->comment('Thoi gian ket thuc vu mua');
+                $table->date('start_time_season')->nullable()->comment('thoi gian bat dau vu mua');
+                $table->date('end_time_season')->nullable()->comment('Thoi gian ket thuc vu mua');
                 $table->unsignedTinyInteger('current_plant_state')->nullable()->comment('Trang thai sinh truong hien tai');
                 $table->unsignedSmallInteger('current_growth_day')->nullable()->comment('so ngay sinh truong o trang thai hien tai');
                 $table->unsignedMediumInteger('total_growth_day')->nullable()->comment('Tong so ngay da sinh truong tu khi gieo trong');

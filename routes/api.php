@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AnalyticsDataAPIController;
+use App\Http\Controllers\API\FarmPlantAPIController;
 use App\Http\Controllers\API\LocateAPIController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -96,8 +97,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
     Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
-    Route::put('management-agriculture/savePlantAgriculture/{id}', [AgriculturePlantAPIController::class, 'savePlantAgriculture']);
-    Route::get('management-agriculture/detail/{id}', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
+    Route::post('management-agriculture', [FarmPlantAPIController::class, 'save']);
+    Route::put('management-agriculture/{farm_plant_id}', [FarmPlantAPIController::class, 'update']);
+    Route::get('management-agriculture/detail', [AgriculturePlantAPIController::class, 'getPlantAgricultureDetail']);
     Route::get('farm', [FarmAPIController::class, 'index']);
     Route::get('farm/{farm}', [FarmAPIController::class, 'show']);
 
