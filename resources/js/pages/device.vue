@@ -247,7 +247,12 @@ export default {
         response = await this.getListDeviceAdmin()
       }
       if (response.status === 200) {
-        this.listDevice = response.data.data
+        this.listDevice = response.data.data.map(item => {
+          if (!item.farm_name) {
+            item.plot_name = ''
+          }
+          return item
+        })
         this.rows = this.listDevice.length
       } else {
         this.$Notice.error({title: 'Error ' + response.status,
@@ -276,8 +281,9 @@ export default {
       this.plot_id = ''
     },
     updateListPlotOfFarm() {
-      this.getListPlotOfFarm(this.farm_id)
       this.plot_id = ''
+      this.getListPlotOfFarm(this.farm_id)
+
     },
     cancel() {
       this.resetForm();
@@ -366,7 +372,10 @@ export default {
         // for user
         this.getListFarmOfCurrentUser()
         // Todo  Admin, user
-        this.getListPlotOfFarm(this.farm_id)
+        if (this.farm_id) {
+          this.getListPlotOfFarm(this.farm_id)
+        }
+
       }
 
 

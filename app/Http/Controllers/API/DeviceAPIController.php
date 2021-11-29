@@ -63,7 +63,17 @@ class DeviceAPIController extends AppBaseController
                 $device = DB::table('Devices')
                     ->leftJoin('DeviceTypes', 'Devices.DeviceTypeID',
                         '=', 'DeviceTypes.DeviceTypeID')
-                    ->select('Devices.*', 'DeviceTypes.DeviceType')->get();
+                    ->leftJoin('Plots',
+                        'Devices.PlotID', '=', 'Plots.PlotID')
+                    ->leftJoin('Farms',
+                        'Devices.FarmID', '=', 'Farms.FarmID')
+                    ->select('Devices.DeviceID',
+                        'Devices.DeviceName',
+                        'DeviceTypes.DeviceType',
+                        'Devices.Status',
+                        'Plots.name as plot_name',
+                        'Farms.name as farm_name'
+                    )->get();
             }
             return $this->sendResponse($device, 'Get device success');
         } catch (\Exception $ex) {
@@ -204,9 +214,12 @@ class DeviceAPIController extends AppBaseController
             $updated_at = Carbon::now();
 //            $device['DeviceTypeID'] = $data['DeviceTypeID'];
 //            $device['Status'] = $data['Status'];
-            $device['PlotID'] = isset($data['PlotID']) ? $data['PlotID'] : null;
-            $device['FarmID'] = isset($data['FarmID']) ? $data['FarmID'] : null;
-
+            if (isset($data['PlotID'])) {
+                $device['PlotID'] = $data['PlotID'];
+            }
+            if (isset($data['FarmID'])) {
+                $device['FarmID'] = $data['FarmID'];
+            }
             $updated_user = $user->email;
             $device['updated_at'] = $updated_at;
             $device['updated_user'] = $updated_user;
@@ -222,6 +235,7 @@ class DeviceAPIController extends AppBaseController
                     $device['DeviceName'] = $data['DeviceName'];
                     $device['user_id'] = $userId;
                 } else {
+                    $device['PlotID'] = isset($data['PlotID']) ? $data['PlotID'] : null;
                     $temp->where([
                         'user_id' => $userId
                     ]);
