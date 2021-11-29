@@ -30,22 +30,11 @@ class DeviceTypeSeeder extends Seeder
         );
         DB::table('DeviceTypes')->updateOrInsert(
             [
-                'DeviceTypeID' => 1,
-            ],
-            [
-//                'DeviceType' => 'Sensing',
-                'DeviceType' => 'Cảm biến',
-                'created_at' => Carbon::now(),
-                'created_user' => 'Admin',
-            ]
-        );
-        DB::table('DeviceTypes')->updateOrInsert(
-            [
                 'DeviceTypeID' => 2,
             ],
             [
 //                'DeviceType' => 'Sensing',
-                'DeviceType' => 'Cảm biến độ ẩm đất',
+                'DeviceType' => 'Máy bơm',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]
@@ -78,7 +67,7 @@ class DeviceTypeSeeder extends Seeder
             ],
             [
 //                'DeviceType' => 'Actuating',
-                'DeviceType' => 'Máy bơm',
+                'DeviceType' => 'Cảm biến độ ẩm đất',
                 'created_at' => Carbon::now(),
                 'created_user' => 'Admin',
             ]

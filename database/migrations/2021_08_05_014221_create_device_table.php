@@ -13,21 +13,13 @@ class CreateDeviceTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('Devices')) {
-            Schema::create('Devices', function (Blueprint $table) {
-                $table->unsignedBigInteger('DeviceID')->autoIncrement();
-                $table->string('DeviceName', 50)->nullable();
-                $table->unsignedBigInteger('DeviceTypeID')->nullable();
-                $table->unsignedBigInteger('user_id')->nullable();
-                $table->smallInteger('Status')->nullable();
-                $table->unsignedBigInteger('FarmID')->nullable();
-                $table->unsignedBigInteger('PlotID')->nullable();
-                $table->datetime('created_at')->useCurrent();
-                $table->string('created_user', 128)->nullable();
-                $table->dateTime('updated_at')->default(DB::raw('null on update CURRENT_TIMESTAMP'))->nullable();
-                $table->string('updated_user', 128)->nullable();
-            });
-        }
+        Schema::table('Devices', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->datetime('created_at')->useCurrent();
+            $table->string('created_user', 128)->nullable();
+            $table->dateTime('updated_at')->default(DB::raw('null on update CURRENT_TIMESTAMP'))->nullable();
+            $table->string('updated_user', 128)->nullable();
+        });
 
     }
 

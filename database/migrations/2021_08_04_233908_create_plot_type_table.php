@@ -14,16 +14,12 @@ class CreatePlotTypeTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('PlotTypes')) {
-            Schema::create('PlotTypes', function (Blueprint $table) {
-                $table->unsignedBigInteger('PlotTypeID')->autoIncrement();
-                $table->string('PlotType', 50);
-                $table->datetime('created_at')->useCurrent();
-                $table->string('created_user', 128)->nullable();
-                $table->dateTime('updated_at')->default(DB::raw('null on update CURRENT_TIMESTAMP'))->nullable();
-                $table->string('updated_user', 128)->nullable();
-            });
-        }
+        Schema::table('PlotTypes', function (Blueprint $table) {
+            $table->datetime('created_at')->useCurrent();
+            $table->string('created_user', 128)->nullable();
+            $table->dateTime('updated_at')->default(DB::raw('null on update CURRENT_TIMESTAMP'))->nullable();
+            $table->string('updated_user', 128)->nullable();
+        });
 
     }
 

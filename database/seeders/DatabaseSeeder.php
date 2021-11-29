@@ -14,15 +14,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            FarmTypeSeeder::class,
             DeviceTypeSeeder::class,
-            PlantTypeSeeder::class,
-            SoilTypeSeeder::class,
-            PlantStateSeeder::class,
+            FarmTypeSeeder::class,
             LocateSeeder::class,
+            PlantStateSeeder::class,
+            PlantTypeSeeder::class,
             PlotTypeSeeder::class,
             PlotSeeder::class,
-            SensingSeeder::class
+//            SensingSeeder::class,
+            SoilTypeSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

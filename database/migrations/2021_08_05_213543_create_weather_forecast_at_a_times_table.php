@@ -27,8 +27,6 @@ class CreateWeatherForecastAtATimesTable extends Migration
                 $table->tinyInteger('PrecipitationProbability')->nullable();
                 $table->float('RainValue')->nullable();
                 $table->tinyInteger('CloudCover')->nullable();
-                $table->timestamp('created_at')->useCurrent()->nullable();
-                $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
             });
         }
 
