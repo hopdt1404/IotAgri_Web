@@ -177,30 +177,47 @@ export default {
 
       columnsShow: [
         {
-          label: 'Name',
+          // label: 'Name',
+          label: 'Tên trang trại',
           key: 'name',
           sortable: true
         },
+        // {
+        //   label: 'Area',
+        //   key: 'Area',
+        //   sortable: true
+        // },
         {
-          label: 'Area',
-          key: 'Area',
-          sortable: true
-        },
-        {
-          label: 'Farm type',
+          // label: 'Farm type',
+          label: 'Loại trang trại',
           key: 'FarmType',
           sortable: true
         },
         {
-          label: 'Number devices',
-          key: 'number_device',
+          // label: 'Locate',
+          label: 'Vị trí',
+          key: 'LocateName',
           sortable: true
         },
         {
-          label: 'Number plant',
+          // label: 'Number plots',
+          label: 'Số khu vực',
+          key: 'number_plot',
+          sortable: true
+        },
+        {
+          // label: 'Number plant',
+          label: 'Số cây trồng',
           key: 'number_plant',
           sortable: true
-        }
+        },
+        {
+          // label: 'Number devices',
+          label: 'Số thiết bị',
+          key: 'number_device',
+          sortable: true
+        },
+
       ]
     }
   },

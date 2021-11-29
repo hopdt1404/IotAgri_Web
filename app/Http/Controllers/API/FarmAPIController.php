@@ -252,7 +252,6 @@ class FarmAPIController extends AppBaseController
     }
     public function getFarmAgricultureSetting(Request $request)
     {
-        Log::info('getFarmAgricultureSetting');
         $user = $request->user();
         try {
             $devices = DB::table('Devices')
@@ -261,11 +260,11 @@ class FarmAPIController extends AppBaseController
                     ['FarmID', '<>', 'null']
                 ])->groupBy('FarmID')
                 ->selectRaw('FarmID, COUNT(DeviceID) AS number_device');
-            $plant = DB::table('farm_plants')
+            $plant = DB::table('Plots')
                 ->where([
-                    'user_id' => $user->id,
+                    'Plots.status' => AppUtils::PLOT_STATUS_ACTIVATE
                 ])->groupBy('FarmID')
-                ->selectRaw('FarmID, count(plant_id) as number_plant');
+                ->selectRaw('FarmID, count(plant_id) as number_plant, count(PlotID) as number_plot');
 
             $farm = DB::table('Farms')
                 ->where(['UserID' => $user->id])
@@ -276,8 +275,27 @@ class FarmAPIController extends AppBaseController
                 'plants.FarmID', '=', 'Farms.FarmID' )
                 ->leftJoin('FarmTypes', 'Farms.FarmTypeID',
                     '=', 'FarmTypes.FarmTypeID')
-                ->select('Farms.*','Devices.number_device', 'plants.number_plant', 'FarmTypes.FarmType')
+                ->leftJoin('Locates',
+                'Farms.LocateID', '=', 'Locates.LocateID')
+                ->select('Farms.FarmID',
+                    'Farms.name',
+                    'Devices.number_device',
+                    'plants.number_plot',
+                    'plants.number_plant',
+                    'Locates.LocateName',
+                    'FarmTypes.FarmType')
                 ->get();
+            foreach ($farm as $item) {
+                if (!$item->number_device) {
+                    $item->number_device = 0;
+                }
+                if (!$item->number_plant) {
+                    $item->number_plant = 0;
+                }
+                if (!$item->number_plot) {
+                    $item->number_plot = 0;
+                }
+            }
             return $this->sendResponse($farm, 'Get farm agriculture setting success');
         } catch (\Exception $ex) {
             Log::error('FarmAPIController@getFarmAgricultureSetting:' . $ex->getMessage().$ex->getTraceAsString());
