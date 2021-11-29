@@ -32,7 +32,6 @@ class AgriculturePlantAPIController extends AppBaseController
         $data = $request->all();
         $user = $request->user();
         try {
-            $data['user_id'] = $user->id;
             $data['created_at'] = Carbon::now();
             $data['created_user'] = $user->email;
             $result['id'] = $this->model->insertGetId($data);
@@ -51,8 +50,8 @@ class AgriculturePlantAPIController extends AppBaseController
             $data['updated_user'] = $user->email;
             $this->model->where([
                 'id' => $id,
-                'user_id' => $user->id,
-                'FarmID' => $data['FarmID'],
+                'PlotID' => $data['PlotID'],
+                'plant_id' => $data['plant_id'],
                 'plant_state_id' => $data['plant_state_id']
             ])->update($data);
             return $this->sendSuccess('Success agriculture data');
@@ -69,10 +68,9 @@ class AgriculturePlantAPIController extends AppBaseController
         try {
 
             $result = $this->model->where([
-                'FarmID' => $id,
+                'PlotID' => $id,
                 'plant_id' => $data['plant_id'],
                 'plant_state_id' => $data['plant_state_id'],
-                'user_id' => $user->id,
             ])->first();
             return $this->sendResponse($result, 'Get agriculture plant detail success');
         } catch (\Exception $ex) {
@@ -85,15 +83,12 @@ class AgriculturePlantAPIController extends AppBaseController
     public function getPlantAgricultureManagement (Request $request)
     {
         $user = $request->user();
-
-
         try {
             // Todo: order by
             $farm = DB::table('Farms')
                 ->where([
                     'UserID' => $user->id
                 ])->select('name', 'FarmID', 'LocateID');
-//            $stateInfo =
             $farmPlant = DB::table('farm_plants')
                 ->where([
                     'user_id' => $user->id,

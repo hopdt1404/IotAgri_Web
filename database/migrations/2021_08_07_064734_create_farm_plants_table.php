@@ -16,9 +16,8 @@ class CreateFarmPlantsTable extends Migration
         if (!Schema::hasTable('farm_plants')) {
             Schema::create('farm_plants', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('FarmID')->nullable();
+                $table->unsignedBigInteger('PlotID')->nullable();
                 $table->unsignedBigInteger('plant_id')->nullable();
-                $table->unsignedBigInteger('user_id')->nullable();
                 $table->timestamp('start_time_season')->nullable()->comment('thoi gian bat dau vu mua');
                 $table->timestamp('end_time_season')->nullable()->comment('Thoi gian ket thuc vu mua');
                 $table->unsignedTinyInteger('current_plant_state')->nullable()->comment('Trang thai sinh truong hien tai');

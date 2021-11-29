@@ -26,7 +26,7 @@ class CreateAgriculturePlantAPIRequest extends FormRequest
         return [
             'plant_id' => 'required|numeric',
             'plant_state_id' => 'required|numeric',
-            'FarmID' => 'required|numeric',
+            'PlotID' => 'required|numeric',
             'growth_period_state' => 'nullable|numeric',
             'temperature' => 'nullable|numeric',
             'moisture' => 'nullable|numeric',

@@ -22,11 +22,38 @@
 
       <vs-popup name="setting-agriculture"
                 :active.sync="modal"
-                :title="$t('setting_agriculture_for') + ' ' + farmName"
+                :title="$t('setting_agriculture_for')"
                 icon-close="x"
                 @close="closePopup()"
       >
         <div class="dialog-content">
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="select_plant_id">{{ $t('farm') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-select id="select_plant_id"
+                               v-model="farm_id"
+                               :options="listFarmSelect"
+                               disabled="true"
+                />
+              </vs-col>
+            </vs-row>
+          </div>
+          <div class="dialog-item">
+            <vs-row>
+              <vs-col cols="12">
+                <label class="input-title" for="select_plant_id">{{ $t('plot') }}</label>
+              </vs-col>
+              <vs-col cols="12">
+                <b-form-select id="select_plant_id"
+                               v-model="plot_id"
+                               :options="listPlotOfFarmSelect"
+                               @change="getPlantOfFarm" />
+              </vs-col>
+            </vs-row>
+          </div>
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
@@ -150,6 +177,8 @@
 
 <script>
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
 
   components: {
@@ -165,6 +194,7 @@ export default {
       farmName: '',
       modal: false,
       farm_id: '',
+      plot_id: '',
       plant_id: '',
       plant_state_id: '',
       growth_period: '',
@@ -174,7 +204,8 @@ export default {
       note: '',
       listPlantState: [],
       listPlantOfFarm: [],
-
+      listPlotOfFarmSelect: [],
+      listFarmSelect: [],
       columnsShow: [
         {
           // label: 'Name',
@@ -227,6 +258,9 @@ export default {
     this.getPlantState()
   },
   methods: {
+    ...mapActions({
+      getListPlotOfFarmSelect: 'plot/getListPlotOfFarmSelect',
+    }),
     closePopup () {
       this.modal = false
       this.initTitlePopup()
@@ -252,41 +286,64 @@ export default {
       }
     },
     async myRowClickHandler (record, index) {
+      this.listFarmSelect = [{
+        text: record.name,
+        value: record.FarmID
+      }]
       this.farmName = record.name
       this.showModal()
       this.farm_id = record.FarmID
       const params = {
         FarmID: this.farm_id
       }
-      await this.getPlantOfFarm()
-      if (this.listPlantOfFarm.length && this.listPlantState.length) {
-        this.plant_id = this.listPlantOfFarm[0].value
-        this.plant_state_id = this.listPlantState[0].value
-        this.changePlantState()
+      this.getListPlotOfFarmSelectInfo(params)
+      // await this.getPlantOfFarm()
+      // if (this.listPlantOfFarm.length && this.listPlantState.length) {
+      //   this.plant_id = this.listPlantOfFarm[0].value
+      //   this.plant_state_id = this.listPlantState[0].value
+      //   this.changePlantState()
+      // }
+    },
+    async getListPlotOfFarmSelectInfo(params) {
+      const response = await this.getListPlotOfFarmSelect(params)
+      if (response) {
+        this.listPlotOfFarmSelect = response.map(element => {
+          let elementResult = {}
+          elementResult.value = element.PlotID
+          elementResult.text = element.name
+          return elementResult
+        })
+      } else {
+        this.$Notice.error({title: 'Error ' + response.status,
+          desc: response.statusText + '. ' + response.data.message})
       }
     },
     showModal () {
       this.modal = true
     },
     async getPlantOfFarm () {
-      const params = {
-        FarmID: this.farm_id
+      if (this.farm_id && this.plot_id) {
+        const params = {
+          FarmID: this.farm_id,
+          PlotID: this.plot_id
+        }
+        const response = await this.$store.dispatch('plant/getPlantOfFarm', params)
+        if (response.success === true) {
+          this.listPlantOfFarm = response.data.map((element) => {
+            const elementResult = {}
+            elementResult.value = element.id
+            elementResult.text = element.name
+            return elementResult
+          })
+        } else {
+          this.listPlantOfFarm = []
+          this.$Notice.error({
+            title: 'Error ' + response.status,
+            desc: response.statusText + '. ' + response.data.message
+          })
+        }
       }
-      const response = await this.$store.dispatch('plant/getPlantOfFarm', params)
-      if (response.success === true) {
-        this.listPlantOfFarm = response.data.map((element) => {
-          const elementResult = {}
-          elementResult.value = element.id
-          elementResult.text = element.name
-          return elementResult
-        })
-      } else {
-        this.listPlantOfFarm = []
-        this.$Notice.error({
-          title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message
-        })
-      }
+
     },
     initTitlePopup () {
       this.farmName = ''
@@ -325,7 +382,7 @@ export default {
       const params = {
         plant_id: this.plant_id,
         plant_state_id: this.plant_state_id,
-        FarmID: this.farm_id,
+        PlotID: this.plot_id,
         growth_period: this.growth_period,
         temperature: this.temperature,
         moisture: this.moisture,
@@ -384,6 +441,7 @@ export default {
       }
       this.farm_id = ''
       this.plant_id = ''
+      this.plot_id = ''
       this.plant_state_id = ''
       this.resetSubFromData()
     },
@@ -401,13 +459,14 @@ export default {
       }
     },
     changePlantState () {
-      if (this.plant_state_id && this.plant_id) {
+      if (this.plant_state_id && this.plant_id
+          && this.plot_id && this.farm_id) {
         this.getAgriculturePlantDetail()
       }
     },
     async getAgriculturePlantDetail () {
       const params = {
-        FarmID: this.farm_id,
+        PlotID: this.plot_id,
         plant_id: this.plant_id,
         plant_state_id: this.plant_state_id
       }

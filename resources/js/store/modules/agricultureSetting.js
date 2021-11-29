@@ -47,7 +47,7 @@ export const actions = {
     )
   },
   getAgriculturePlantDetail({ commit }, payload) {
-    return axios.get('/api/agriculture-plant/' + payload.FarmID, {params: payload}).then(
+    return axios.get('/api/agriculture-plant/' + payload.PlotID, {params: payload}).then(
       response => {
         return Promise.resolve(response.data);
       },

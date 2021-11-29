@@ -121,11 +121,11 @@ class PlantAPIController extends AppBaseController
         $data = $request->all();
         $user = $request->user();
         try {
-            $result = DB::table('farm_plants')->where([
+            $result = DB::table('Plots')->where([
                 'FarmID' => $data['FarmID'],
-                'user_id' => $user->id
-            ])->join('plants', 'plants.id', '=', 'farm_plants.plant_id')
-                ->select('farm_plants.plant_id as id', 'plants.name')->get();
+                'PlotID' => $data['PlotID']
+            ])->join('plants', 'plants.id', '=', 'Plots.plant_id')
+                ->select('Plots.plant_id as id', 'plants.name')->get();
             return $this->sendResponse($result, 'Success get plant of farm');
         } catch (Exception $ex) {
             Log::error('PlantAPIController@getPlantOfFarm:' . $ex->getMessage().$ex->getTraceAsString());
