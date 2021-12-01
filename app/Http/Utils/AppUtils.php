@@ -25,6 +25,14 @@ class AppUtils
     const FARM_STATUS_ACTIVATE = 1;
     const FARM_STATUS_DEACTIVATE = 0;
 
+    const UPDATED_USER_SYSTEM_NAME = 'System';
+
+    const PLANT_STATE_INFO_SPROUT = 1;
+    const PLANT_STATE_INFO_SEEDLING = 2;
+    const PLANT_STATE_INFO_VEGETATIVE = 3;
+    const PLANT_STATE_INFO_BUDDING = 4;
+    const PLANT_STATE_INFO_FLOWERING = 5;
+    const PLANT_STATE_INFO_RIPENING = 6;
 
 
 }

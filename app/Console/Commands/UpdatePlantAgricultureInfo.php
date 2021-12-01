@@ -23,6 +23,9 @@ class UpdatePlantAgricultureInfo extends Command
      * @var string
      */
     protected $description = 'UpdatePlantAgricultureInfo at ';
+    private $logger;
+//    private $timeSleep = 1*60*60; // 1 hour
+    private $timeSleep = 10; // 10 second
 
     /**
      * Create a new command instance.
@@ -31,6 +34,7 @@ class UpdatePlantAgricultureInfo extends Command
      */
     public function __construct()
     {
+        $this->logger = Log::channel("cron-daily");
         parent::__construct();
     }
 
@@ -41,80 +45,163 @@ class UpdatePlantAgricultureInfo extends Command
      */
     public function handle()
     {
-        Log::channel('cron-daily')->info('Started UpdatePlantAgricultureInfo Command');
+        $this->logger->info('Started UpdatePlantAgricultureInfo Command');
         try {
-            // Todo: check user_id, plant_id, farm_id in db
-            $ids = DB::table('farm_plants')->where([
-                'status' => AppUtils::FARM_PLANT_ACTIVATE_STATUS
-            ])->pluck('id');
-            if (count($ids)) {
-                $data = DB::table('farm_plants')
-                    ->whereIn('id', $ids)
-                    ->where('start_time_season', '<=', Carbon::now())
-                    ->get();
-                foreach ($data as $record) {
-                    if (isset($record->start_time_season) &&
-                        isset($record->total_growth_day)) {
-                        // calculate  farm_plants.total_growth_day
-                        $now = Carbon::now();
-                        $start_time_season = $record->start_time_season;
-                        $totalGrowthDay = $now->diffInDays($start_time_season);
-                        $setDataUpdate = [];
-                        $setDataUpdate['total_growth_day'] = $totalGrowthDay;
-                        $setDataUpdate['updated_at'] = Carbon::now();
-                        $setDataUpdate['updated_user'] = 'System';
-
-                        // calculate farm_plants.current_plant_state
-                        if (isset($record->current_plant_state)) {
-                            // get numberPlantState
-                            $numberPlantState = DB::table('plant_states')->count();
-                            // get agriculturePlant
-                            $agriculturePlant = DB::table('agriculture_plants')
-                                ->where([
-                                    'plant_id' => $record->plant_id,
-                                    'FarmID' => $record->FarmID,
-                                    'user_id' => $record->user_id,
-                                ])->orderBy('plant_state_id')
-                                // default orderBy acs
-                                ->distinct('plant_state_id')->get();
-                            $totalAgriculturePlantSetting = 0;
-                            $agriculturePlant = $agriculturePlant->all();
-                            $lastAgricultureIndex = 0;
-                            // process in growthPeriod
-                            for ($i = 0; $i < count($agriculturePlant); $i++) {
-                                $plantSetting = $agriculturePlant[$i];
-                                $currentGrowthDay = $totalGrowthDay - $totalAgriculturePlantSetting;
-                                $totalAgriculturePlantSetting += $plantSetting->growth_period;
-                                $lastAgricultureIndex = $i;
-                                if ($totalGrowthDay <= $totalAgriculturePlantSetting) {
-                                    $setDataUpdate['current_plant_state'] = $plantSetting->plant_state_id;
-                                    $setDataUpdate['current_growth_day'] = $currentGrowthDay;
-                                    break;
+            $i = 0;
+            while (true) {
+                $i++;
+                $this->logger->info(' State update times: ' . $i . " at " . Carbon::now()->format('Y-m-d h:i:s'));
+                $today = Carbon::today()->format('Y-m-d');
+                $farmPlot = DB::table('Farms')
+                    ->where([
+                        'Farms.Status' => AppUtils::FARM_STATUS_ACTIVATE,
+                        'Plots.status' => AppUtils::PLOT_STATUS_ACTIVATE
+                    ])
+                    ->join('Plots',
+                        'Plots.FarmID', '=', 'Farms.FarmID')
+                    ->select('Plots.PlotID',
+                        'Plots.FarmID');
+//                $tmp = $farmPlot->get();
+//                $this->logger->info('$tmp');
+//                $this->logger->info((array)$tmp);
+                $farmPlant = DB::table('farm_plants')
+                    ->whereIn('farm_plants.status', [
+                        AppUtils::FARM_PLANT_ACTIVATE_STATUS,
+                        AppUtils::FARM_PLANT_INIT_STATUS,
+                    ])
+                    ->joinSub($farmPlot, 'Plots',
+                        'farm_plants.PlotID', '=','Plots.PlotID')
+                    ->select(
+                        'farm_plants.id',
+                        'farm_plants.plant_id',
+                        'farm_plants.PlotID',
+                        'farm_plants.start_time_season',
+                        'farm_plants.end_time_season',
+                        'farm_plants.status',
+                    )->get();
+//                $this->logger->info('$farmPlant');
+//                $this->logger->info((array)$farmPlant);
+                if (count($farmPlant)) {
+                    foreach ($farmPlant as $data) {
+                        if (isset($data->end_time_season)) {
+                            if ($data->end_time_season < $today) {
+                                $infoUpdate['status'] = AppUtils::FARM_PLANT_END_SEASON_STATUS;
+                                $startTimeSeason = Carbon::parse($data->start_time_season);
+                                $endTimeSeason = Carbon::parse($data->end_time_season);
+                                $totalGrowthDay = $startTimeSeason->diffInDays($endTimeSeason);
+                                $infoUpdate['total_growth_day'] = $totalGrowthDay;
+                                $plantId = $data->plant_id;
+                                $plotId = $data->PlotID;
+                                $plantStateInfo = DB::table('agriculture_plants')
+                                    ->where([
+                                        'plant_id' => $plantId,
+                                        'PlotID' => $plotId
+                                    ])->select(
+                                        'agriculture_plants.plant_state_id',
+                                        'agriculture_plants.growth_period',
+                                    )->orderBy('agriculture_plants.plant_state_id')
+                                    ->get();
+                                $currentPlantState = 0;
+                                $currentGrowthDay = 0;
+                                for ($i = 0; $i < count($plantStateInfo); $i++) {
+                                    $plantState = $plantStateInfo[$i];
+                                    $currentPlantState = $plantState->plant_state_id;
+                                    if ($totalGrowthDay <= $plantState->growth_period) {
+                                        $currentGrowthDay = $plantState->growth_period - $totalGrowthDay;
+                                        break;
+                                    } else {
+                                        $totalGrowthDay -=  $plantState->growth_period;
+                                    }
                                 }
+                                $infoUpdate['current_plant_state'] = $currentPlantState;
+                                $infoUpdate['current_growth_day'] = $currentGrowthDay;
+                            } else {
+                                $infoUpdate = $this->updateFarmPlantInSeason(
+                                    $data->status,
+                                    $data->start_time_season,
+                                    $today,
+                                    $data->plant_id,
+                                    $data->PlotID
+                                );
+                                $id = $data->id;
+                                DB::table('farm_plants')->where([
+                                    'id' => $id
+                                ])->update($infoUpdate);
                             }
-                            // process if out of growthPeriod => update value, status,
-                            if (!isset($setDataUpdate['current_plant_state'])) {
-                                $plantSetting = $agriculturePlant[$lastAgricultureIndex];
-                                $setDataUpdate['current_plant_state'] = $plantSetting->plant_state_id;
-                                $setDataUpdate['current_growth_day'] = $plantSetting->growth_period;
-                                $setDataUpdate['status'] = AppUtils::FARM_PLANT_END_SEASON_STATUS;
-                                $setDataUpdate['total_growth_day'] = $totalAgriculturePlantSetting;
+                        } else {
+                            // Only has startTimeSeason
+                            if ($data->start_time_season <= $today) {
+                                $infoUpdate = $this->updateFarmPlantInSeason(
+                                    $data->status,
+                                    $data->start_time_season,
+                                    $today,
+                                    $data->plant_id,
+                                    $data->PlotID
+                                );
                             }
-
                         }
-                        DB::table('farm_plants')
-                            ->where('id', $record->id)
-                            ->update($setDataUpdate);
+                        if (isset($infoUpdate)) {
+                            $infoUpdate['updated_at'] = Carbon::now();
+                            $infoUpdate['updated_user'] = AppUtils::UPDATED_USER_SYSTEM_NAME;
+                            $id = $data->id;
+                            DB::table('farm_plants')->where([
+                                'id' => $id
+                            ])->update($infoUpdate);
+                            $this->logger->info('$infoUpdate');
+                            $this->logger->info($infoUpdate);
+                        }
+
+                        $this->logger->info('$data');
+                        $this->logger->info((array)$data);
                     }
                 }
+                $this->logger->info('Done update times: ' . $i . " at " . Carbon::now()->format('Y-m-d h:i:s'));
+                sleep($this->timeSleep);
             }
-            Log::channel('cron-daily')->info('Finished UpdatePlantAgricultureInfo Command');
+
+            $this->logger->info('Finished UpdatePlantAgricultureInfo Command');
         } catch (\Exception $e) {
-            Log::channel('cron-daily')->error('Exception UpdatePlantAgricultureInfo Command: ');
-            Log::channel('cron-daily')->error($e->getMessage() . $e->getTraceAsString());
+            $this->logger->error('Exception UpdatePlantAgricultureInfo Command: ');
+            $this->logger->error($e->getMessage() . $e->getTraceAsString());
             throw $e;
         }
 
 
+    }
+
+    public function updateFarmPlantInSeason($status, $startTimeSeason, $endTimeCompare, $plantId, $plotId) {
+        if ($status != AppUtils::FARM_PLANT_ACTIVATE_STATUS) {
+            $infoUpdate['status'] = AppUtils::FARM_PLANT_ACTIVATE_STATUS;
+        }
+        $startTimeSeason = Carbon::parse($startTimeSeason);
+        $endTimeSeason = Carbon::parse($endTimeCompare);
+        $totalGrowthDay = $startTimeSeason->diffInDays($endTimeSeason);
+        $infoUpdate['total_growth_day'] = $totalGrowthDay;
+        $plantStateInfo = DB::table('agriculture_plants')
+            ->where([
+                'plant_id' => $plantId,
+                'PlotID' => $plotId
+            ])->select(
+                'agriculture_plants.plant_state_id',
+                'agriculture_plants.growth_period',
+            )->orderBy('agriculture_plants.plant_state_id')
+            ->get();
+        $currentPlantState = 0;
+        $currentGrowthDay = 0;
+        for ($i = 0; $i < count($plantStateInfo); $i++) {
+            $plantState = $plantStateInfo[$i];
+            $currentPlantState = $plantState->plant_state_id;
+            if ($totalGrowthDay <= $plantState->growth_period) {
+                $currentGrowthDay = $plantState->growth_period - $totalGrowthDay;
+                break;
+            } else {
+                $totalGrowthDay -=  $plantState->growth_period;
+            }
+        }
+        $infoUpdate['current_plant_state'] = $currentPlantState;
+        $infoUpdate['current_growth_day'] = $currentGrowthDay;
+        $this->logger->info('$infoUpdate');
+        $this->logger->info($infoUpdate);
+        return $infoUpdate;
     }
 }

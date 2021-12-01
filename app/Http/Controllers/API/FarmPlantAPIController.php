@@ -13,6 +13,10 @@ class FarmPlantAPIController extends AppBaseController
 {
     public function save(SavePlantAgricultureAPIRequest $request) {
         $data = $request->all();
+        if (isset($data['end_time_season']) &&
+            $this->invalidTimeOfSeason($data['start_time_season'], $data['end_time_season'])) {
+            return $this->sendError('Update farm plant error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         try {
             DB::table('farm_plants')->insert($data);
 
@@ -27,6 +31,10 @@ class FarmPlantAPIController extends AppBaseController
     {
         $data = $request->all();
         try {
+            if (isset($data['end_time_season']) &&
+                $this->invalidTimeOfSeason($data['start_time_season'], $data['end_time_season'])) {
+                return $this->sendError('Update farm plant error', Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             DB::table('farm_plants')
                 ->where([
                     'id' => $id,
@@ -38,5 +46,8 @@ class FarmPlantAPIController extends AppBaseController
             Log::error('FarmPlantAPIController@save:' . $ex->getMessage().$ex->getTraceAsString());
             return $this->sendError('Update farm plant error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+    public function invalidTimeOfSeason($startTimeSeason, $endTimeSeason) {
+        return $startTimeSeason > $endTimeSeason;
     }
 }
