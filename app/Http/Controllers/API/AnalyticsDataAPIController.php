@@ -66,7 +66,8 @@ class AnalyticsDataAPIController extends AppBaseController
                 }
             }
             $type = $data['type'];
-            $dataSevenDays = $this->analyticDataSevenDayNearest($deviceID, $plotId, $date, $type, $analyticByFarm, $listPlotId);
+
+            $dataSevenDays = $this->analyticDataSevenDayNearest($plotId, $deviceID, $date, $type, $analyticByFarm, $listPlotId);
             if ($dataSevenDays['success']) {
                 $dataSevenDays = $dataSevenDays['data'];
                 return $this->sendResponse([
@@ -127,8 +128,8 @@ class AnalyticsDataAPIController extends AppBaseController
                 $columnSelect[] = DB::raw('round(AVG(Humidity), 1) as Humidity');
                 $columnPluck = 'Humidity';
             } elseif ($type == AppUtils::ANALYTIC_DATA_TYPE_LIGHT_LEVEL) {
-                $columnSelect[] = DB::raw('round(AVG(Humidity), 1) as LightLevel');
-                $columnPluck = 'Humidity';
+                $columnSelect[] = DB::raw('round(AVG(LightLevel), 1) as LightLevel');
+                $columnPluck = 'LightLevel';
             } else {
                 // default AppUtils::ANALYTIC_DATA_TYPE_TEMPERATURE
                 $columnSelect[] = DB::raw('round(AVG(Temperature), 1) as Temperature');
@@ -141,14 +142,9 @@ class AnalyticsDataAPIController extends AppBaseController
             $xAxis = [];
             $data = [];
             for ($i = $daySubtract; $i >= 0; $i-- ) {
-                if ($i == 0) {
-                    $xAxis[] = 'Hôm nay';
-                    $currentDayString = $today;
-                } else {
-                    $currentDay = Carbon::parse($today)->subDays($i);
-                    $xAxis[] = ucfirst($currentDay->dayName);
-                    $currentDayString = $currentDay->format('Y-m-d');
-                }
+                $currentDay = Carbon::parse($today)->subDays($i);
+                $currentDayString = $currentDay->format('Y-m-d');
+                $xAxis[]  = $currentDayString;
                 $resultCurrentDay = $result->firstWhere('dateMeasurement', $currentDayString);
                 if ($resultCurrentDay) {
                     $data[] = $resultCurrentDay->$columnPluck;
