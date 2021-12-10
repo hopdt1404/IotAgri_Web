@@ -24,6 +24,7 @@ class GetAgriculturePlantDetailAPIRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'nullable|numeric',
             'plant_id' => 'required|numeric',
             'plant_state_id' => 'required|numeric',
             'PlotID' => 'required|numeric'

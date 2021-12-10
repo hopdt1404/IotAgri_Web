@@ -63,17 +63,21 @@ class AgriculturePlantAPIController extends AppBaseController
         }
     }
 
-    public function show(GetAgriculturePlantDetailAPIRequest $request, $id)
+    public function showInfo(GetAgriculturePlantDetailAPIRequest $request)
     {
-        $user = $request->user();
         $data = $request->all();
         try {
-
             $result = $this->model->where([
-                'PlotID' => $id,
+                'PlotID' => $data['PlotID'],
                 'plant_id' => $data['plant_id'],
                 'plant_state_id' => $data['plant_state_id'],
-            ])->first();
+            ]);
+            if (isset($data['id']) && $data['id']) {
+                $result->where([
+                    'id' => $data['id']
+                ]);
+            }
+            $result = $result->first();
             return $this->sendResponse($result, 'Get agriculture plant detail success');
         } catch (\Exception $ex) {
             Log::error('AgriculturePlantAPIController@show:' . $ex->getMessage().$ex->getTraceAsString());

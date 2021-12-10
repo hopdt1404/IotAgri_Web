@@ -36,7 +36,7 @@
                 <b-form-select id="select_plant_id"
                                v-model="farm_id"
                                :options="listFarmSelect"
-                               disabled="true"
+                               disabled
                 />
               </vs-col>
             </vs-row>
@@ -260,6 +260,8 @@ export default {
   methods: {
     ...mapActions({
       getListPlotOfFarmSelect: 'plot/getListPlotOfFarmSelect',
+      getPlantAgricultureDetail: 'agricultureSetting/getAgriculturePlantDetail',
+
     }),
     closePopup () {
       this.modal = false
@@ -470,24 +472,21 @@ export default {
         plant_id: this.plant_id,
         plant_state_id: this.plant_state_id
       }
-      const response = await this.$store.dispatch('agricultureSetting/getAgriculturePlantDetail', params)
-      if (response.success === true) {
-        const data = response.data
-        if (data) {
-          this.id = data.id
-          this.growth_period = data.growth_period
-          this.temperature = data.temperature
-          this.moisture = data.moisture
-          this.light = data.light
-          this.note = data.note
-        } else {
-          this.resetSubFromData()
-        }
+      const response = await this.getPlantAgricultureDetail(params)
+      if (response) {
+        const data = response
+        this.id = data.id
+        this.growth_period = data.growth_period
+        this.temperature = data.temperature
+        this.moisture = data.moisture
+        this.light = data.light
+        this.note = data.note
       } else {
-        this.$Notice.error({
-          title: 'Error ' + response.status,
-          desc: response.statusText + '. ' + response.data.message
-        })
+        // this.$Notice.error({
+        //   title: 'Error ' + response.status,
+        //   desc: response.statusText + '. ' + response.data.message
+        // })
+        this.resetSubFromData()
       }
     }
 

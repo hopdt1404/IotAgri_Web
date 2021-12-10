@@ -66,6 +66,20 @@ export const actions = {
         return Promise.reject(false)
       })
   },
+  async getAgriculturePlantDetail ({ commit }, payload) {
+    return agricultureSettingService.getAgriculturePlantDetail(payload)
+      .then(response => {
+        return Promise.resolve(response.data)
+      },
+      () => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
+      })
+      .catch(() => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
+      })
+  },
   async savePlantAgriculture ({ commit }, payload) {
     try {
       return await axios.put('/api/management-agriculture/savePlantAgriculture/' + payload.id, payload.body)

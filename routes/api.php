@@ -95,7 +95,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('plant/getPlantSettingFarm', [PlantAPIController::class, 'getPlantSettingFarm']);
     Route::get('plant/getPlantAssignOfDevice', [PlantAPIController::class, 'getPlantAssignOfDevice']);
 
+    Route::get('agriculture-plant/detail', [AgriculturePlantAPIController::class, 'showInfo']);
     Route::resource('agriculture-plant', AgriculturePlantAPIController::class);
+
     Route::get('management-agriculture', [AgriculturePlantAPIController::class, 'getPlantAgricultureManagement']);
     Route::post('management-agriculture', [FarmPlantAPIController::class, 'save']);
     Route::put('management-agriculture/{farm_plant_id}', [FarmPlantAPIController::class, 'update']);
