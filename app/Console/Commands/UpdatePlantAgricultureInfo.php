@@ -83,7 +83,9 @@ class UpdatePlantAgricultureInfo extends Command
 //                $this->logger->info((array)$farmPlant);
                 if (count($farmPlant)) {
                     foreach ($farmPlant as $data) {
-                        if (isset($data->end_time_season)) {
+                        // not set end_time_season and end_time_season < today => dac biet (start - end)
+
+                        if (isset($data->end_time_season) ) {
                             if ($data->end_time_season < $today) {
                                 $infoUpdate['status'] = AppUtils::FARM_PLANT_END_SEASON_STATUS;
                                 $startTimeSeason = Carbon::parse($data->start_time_season);
@@ -147,12 +149,12 @@ class UpdatePlantAgricultureInfo extends Command
                             DB::table('farm_plants')->where([
                                 'id' => $id
                             ])->update($infoUpdate);
-                            $this->logger->info('$infoUpdate');
-                            $this->logger->info($infoUpdate);
+//                            $this->logger->info('$infoUpdate');
+//                            $this->logger->info($infoUpdate);
                         }
 
-                        $this->logger->info('$data');
-                        $this->logger->info((array)$data);
+//                        $this->logger->info('$data');
+//                        $this->logger->info((array)$data);
                     }
                 }
                 $this->logger->info('Done update times: ' . $i . " at " . Carbon::now()->format('Y-m-d h:i:s'));
@@ -186,18 +188,39 @@ class UpdatePlantAgricultureInfo extends Command
                 'agriculture_plants.growth_period',
             )->orderBy('agriculture_plants.plant_state_id')
             ->get();
+//        $this->logger->info('$plantStateInfo');
+//        $this->logger->info($plantStateInfo);
         $currentPlantState = 0;
         $currentGrowthDay = 0;
-        for ($i = 0; $i < count($plantStateInfo); $i++) {
-            $plantState = $plantStateInfo[$i];
+        $stopCondition = false;
+        $numberPlantState = count($plantStateInfo);
+//        $this->logger->info('$numberPlantState');
+//        $this->logger->info($numberPlantState);
+        $index = 0;
+
+        while ($stopCondition == false && $index < $numberPlantState) {
+            $plantState = $plantStateInfo[$index];
             $currentPlantState = $plantState->plant_state_id;
+//            $this->logger->info('$plantState');
+//            $this->logger->info((array)$plantState);
+//            $this->logger->info('$currentGrowthDay');
+//            $this->logger->info($currentGrowthDay);
+//            $this->logger->info('$totalGrowthDay');
+//            $this->logger->info($totalGrowthDay);
+
             if ($totalGrowthDay <= $plantState->growth_period) {
                 $currentGrowthDay = $plantState->growth_period - $totalGrowthDay;
-                break;
+                $stopCondition = true;
             } else {
                 $totalGrowthDay -=  $plantState->growth_period;
             }
+//            $this->logger->info('$totalGrowthDay After');
+//            $this->logger->info($totalGrowthDay);
+
+            $index++;
         }
+//        $this->logger->info('$index');
+//        $this->logger->info($index);
         $infoUpdate['current_plant_state'] = $currentPlantState;
         $infoUpdate['current_growth_day'] = $currentGrowthDay;
         $this->logger->info('$infoUpdate');
