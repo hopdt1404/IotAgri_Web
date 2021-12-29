@@ -69,7 +69,7 @@ class PlantStateSeeder extends Seeder
             ],
             [
 //                'name' => 'Flowering',
-                'name' => 'Ra quả/trái',
+                'name' => 'Ra quả',
                 'note' => 'https://www.saferbrand.com/articles/plant-growth-stages',
                 'created_at' => Carbon::now()->format('Y-m-d h:i:s'),
                 'created_user' => 'Admin',

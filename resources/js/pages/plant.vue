@@ -261,7 +261,7 @@
           <div class="dialog-item">
             <vs-row>
               <vs-col cols="12">
-                <label class="input-title" for="growth_period_state">{{ $t('growth_period_state') + ' day(s)'}}</label>
+                <label class="input-title" for="growth_period_state">{{ $t('growth_period_state') + $t('growth_period_unit') }}</label>
               </vs-col>
               <vs-col cols="12">
                 <Input id="growth_period_state"

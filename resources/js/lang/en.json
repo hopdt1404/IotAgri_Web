@@ -105,6 +105,7 @@
   "plot": "Area",
   "date_analytics": "Date analytics",
   "analytic_data": "Analytic data",
+  "growth_period_unit": " day(s)",
   "avg_data_for_plot_by_day": "Avg data for area by day",
   "avg_data_7_day_nearest": "Avg data 7 data nearest",
   "analytics_data_type": "Data type",
