@@ -1,0 +1,59 @@
+Group cloumns (create_user, create_at, update_at, update_user)
+
+Table:
+1: Farms
+Farms.name => nvarchar 128
+Farms.info => Text
+Farms.create_user => nvarchar 128
+Farms.create_at => datetime
+Farms.update_user => nvarchar 128
+Farms.update_at => datetime
+
+( Locates, FarmTypes)
+2: Plots
+
+Plots.name => nvarchar 128
+Plots.status => int
+Plots.create_user => nvarchar 128
+Plots.create_at => datetime
+Plots.update_user => nvarchar 128
+Plots.update_at => datetime
+Plots.plant_id => int (null able)
+
+3: Devices
+
+Devices.user_id => Bigint
+Devices.create_at => datetime
+Devices.update_user => nvarchar 128
+Devices.update_at => datetime
+Devices.plant_id => int (null able)
+
+(DeviceTypes)
+
+4: Plants
+Plants.id => Big int
+Plants.name => string (50 -> 128)
+Plants.plant_type_id => int unsign
+Plants.growth_period => string (50 -> 128)
+Plants.planting_time => Text
+Plants.plant_density => string 255
+Plants.width_bed => string 255
+Plants.height_bed => string 255
+Plants.row_spacing => string 255
+Plants.tree_spacing => string 255
+Plants.soil_type_id => int unsign
+Plants.info => Text
+Plants.create_at => datetime
+Plants.update_user => nvarchar 128
+Plants.update_at => datetime
+Plants.plant_id => int (null able)
+
+(plant_types, soil_types)
+
+
+
+
+
+
+
+

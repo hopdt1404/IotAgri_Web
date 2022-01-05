@@ -13,6 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            DeviceTypeSeeder::class,
+            FarmTypeSeeder::class,
+            LocateSeeder::class,
+            PlantStateSeeder::class,
+            PlantTypeSeeder::class,
+            PlotTypeSeeder::class,
+            PlotSeeder::class,
+//            SensingSeeder::class,
+            SoilTypeSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }

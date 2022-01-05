@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -50,7 +50,23 @@ return [
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
+            'tap'    => [App\Logging\CustomFilenames::class],
             'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+        'cron-daily' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel-cron.log'),
+            'tap'    => [App\Logging\CustomFilenames::class],
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
+        'logstash' => [
+            'driver' => 'daily',
+            'tap' => [App\Logging\CustomFilenames::class],
+            'path' => storage_path('logs/logstash.log'),
+            'level' => 'debug',
             'days' => 14,
         ],
 

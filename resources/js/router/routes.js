@@ -22,6 +22,41 @@ export default [
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
     ]
   },
+  {
+    path: '/farm',
+    name: 'farm',
+    component: page('farm')
+  },
+  {
+    path: '/management-area-in-farm/:farm_id',
+    name: 'management-area-in-farm',
+    component: page('managementAreaInFarm')
+  },
+  {
+    path: '/device',
+    name: 'device',
+    component: page('device')
+  },
+  {
+    path: '/plant',
+    name: 'plant',
+    component: page('plant')
+  },
+  {
+    path: '/setting-agriculture',
+    name: 'setting_agriculture',
+    component: page('agricultureSetting')
+  },
+  {
+    path: '/management-agriculture',
+    name: 'management_agriculture',
+    component: page('managementAgriculture')
+  },
+  {
+    path: '/analytics-data',
+    name: 'analytics_data',
+    component: page('analyticsData')
+  },
 
   { path: '*', component: page('errors/404.vue') }
 ]

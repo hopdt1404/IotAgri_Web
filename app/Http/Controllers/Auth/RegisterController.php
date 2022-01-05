@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -62,6 +63,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        DB::transaction(function () use ($data) {
+            $userInfo = [
+                'UserName' => $data['name'],
+                'Email' => $data['email'],
+                'UPassword' => md5($data['password']),
+            ];
+            DB::table('Users')->updateOrInsert([
+                'UserName' => $data['name'],
+                'Email' => $data['email'],
+            ], $userInfo);
+
+
+        });
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

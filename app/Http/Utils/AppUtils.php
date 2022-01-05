@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Utils;
+
+
+class AppUtils
+{
+    const FARM_PLANT_DEACTIVATE_STATUS = -1;
+    const FARM_PLANT_INIT_STATUS = 0;
+    const FARM_PLANT_ACTIVATE_STATUS = 1;
+    const FARM_PLANT_END_SEASON_STATUS = 2;
+
+    const GROUP_USER = 0;
+    const GROUP_ADMIN = 1;
+
+    const PLOT_STATUS_DEACTIVATE = -1;
+    const PLOT_STATUS_INIT = 0;
+    const PLOT_STATUS_ACTIVATE = 1;
+
+    const ANALYTIC_DATA_TYPE_SOIL_MOISTURE = 1;
+    const ANALYTIC_DATA_TYPE_HUMIDITY = 2;
+    const ANALYTIC_DATA_TYPE_TEMPERATURE = 3;
+    const ANALYTIC_DATA_TYPE_LIGHT_LEVEL = 4;
+
+    const FARM_STATUS_ACTIVATE = 1;
+    const FARM_STATUS_DEACTIVATE = 0;
+
+    const UPDATED_USER_SYSTEM_NAME = 'System';
+
+    const PLANT_STATE_INFO_SPROUT = 1;
+    const PLANT_STATE_INFO_SEEDLING = 2;
+    const PLANT_STATE_INFO_VEGETATIVE = 3;
+    const PLANT_STATE_INFO_BUDDING = 4;
+    const PLANT_STATE_INFO_FLOWERING = 5;
+    const PLANT_STATE_INFO_RIPENING = 6;
+
+
+}

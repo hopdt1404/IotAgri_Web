@@ -84,6 +84,7 @@ return [
 
     'locales' => [
         'en' => 'EN',
+        'vi' => 'vi',
         'es' => 'ES',
         'fr' => 'FR',
         'pt-BR' => 'BR',
@@ -235,6 +236,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // laravelgenerator
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Flash'     => Laracasts\Flash\Flash::class,
     ],
 
 ];
