@@ -16,27 +16,27 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->updateOrInsert(
-            [
-                'id' => 1,
-            ],
-            [
-                'name' => 'admin',
-                'email' => 'admin@iotagriculture.com',
-                'password' => bcrypt('123456'),
-                'group_user_id' => 1,
-            ]
-        );
-        DB::table('Users')->updateOrInsert(
-            [
-                'UserID' => 1,
-            ],
-            [
-                'UserName' => 'admin',
-                'Email' => 'admin@iotagriculture.com',
-                'UPassword' => md5('123456')
-            ]
-        );
+//        DB::table('users')->updateOrInsert(
+//            [
+//                'id' => 1,
+//            ],
+//            [
+//                'name' => 'admin',
+//                'email' => 'admin@iotagriculture.com',
+//                'password' => bcrypt('123456'),
+//                'group_user_id' => 1,
+//            ]
+//        );
+//        DB::table('Users')->updateOrInsert(
+//            [
+//                'UserID' => 1,
+//            ],
+//            [
+//                'UserName' => 'admin',
+//                'Email' => 'admin@iotagriculture.com',
+//                'UPassword' => md5('123456')
+//            ]
+//        );
 
     }
 }

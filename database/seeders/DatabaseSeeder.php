@@ -16,12 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DeviceTypeSeeder::class,
             FarmTypeSeeder::class,
-            LocateSeeder::class,
+//            LocateSeeder::class,
             PlantStateSeeder::class,
             PlantTypeSeeder::class,
             PlotTypeSeeder::class,
-            PlotSeeder::class,
-//            SensingSeeder::class,
+//            PlotSeeder::class,
             SoilTypeSeeder::class,
             UserSeeder::class,
         ]);
