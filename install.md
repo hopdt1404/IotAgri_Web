@@ -5,6 +5,7 @@ Requirement:
 - Php: php >= 8.0
 - Mysql: mysql >= 8.0
 - Git: git version >= 2.x
+- Nodejs version: v12.21.0 ** (check project can run with other LTS version Nodejs)
 
 *** Recommend: 
 Install XAMPP 
@@ -15,8 +16,8 @@ Install XAMPP
 ###### Run Project
 Clone code project:
 ```bash
-git clone https://github.com/hopdt1404/SPA_IotAgri
-cd SPA_IotAgri
+git clone https://github.com/hopdt1404/IotAgri_Web
+cd IotAgri_Web
 npm install
 composer install
 npm run watch
@@ -25,10 +26,6 @@ php artisan serve
 
 
 ### Install project Agriculture
-
-+ Research: Topic: MQTT
-
-+ I18n: https://viblo.asia/p/vuejs-da-ngon-ngu-trong-ung-dung-vue-6J3Zg2wLKmB
 
 
 + Chart: https://echarts.apache.org/v4/en/option.html#title
